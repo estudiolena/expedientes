@@ -869,6 +869,7 @@ async function initApp(user) {
   document.getElementById('btn-login').innerHTML = 'Ingresar al sistema';
   document.getElementById('btn-login').disabled = false;
   renderDashboard();
+  abrirExpedienteDeUrl();
 }
 
 sb.auth.getSession().then(({data:{session}}) => { if(session?.user) initApp(session.user); });
@@ -1039,6 +1040,21 @@ function showDetailView(e) {
       </div>
     </div>
 
+    <div class="full-card" style="border-left:4px solid var(--gold)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:10px">
+        <div class="detail-card-title" style="margin-bottom:0">⚖️ Estado del juicio</div>
+        <select id="etapa-sel-${e.id}" onchange="guardarEtapa('${e.id}')" style="background:var(--white);border:1.5px solid var(--g200);border-radius:var(--r);padding:8px 12px;font-family:inherit;font-size:13px;font-weight:600;color:var(--navy);outline:none;cursor:pointer">
+          ${ETAPAS_JUICIO.map(op=>`<option value="${op}" ${e.etapa===op?'selected':''}>${op||'— Sin definir —'}</option>`).join('')}
+        </select>
+      </div>
+      <div style="margin-bottom:12px">
+        <label style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--g600);font-weight:700;margin-bottom:5px">👤 ¿Quién nos pasó el caso? <span style="text-transform:none;font-weight:500;color:var(--g400)">(para la comisión al cobrar)</span></label>
+        <input id="referido-${e.id}" value="${h(e.referido||'')}" onchange="guardarReferido('${e.id}')" placeholder="Ej.: Juan Pérez 10%, redes sociales, amigo de Pablo..." style="width:100%;background:var(--white);border:1.5px solid var(--g200);border-radius:var(--r);padding:10px 13px;font-family:inherit;font-size:14px;color:var(--g800);outline:none;box-sizing:border-box">
+      </div>
+      <textarea id="notas-txt-${e.id}" placeholder="Escribí acá: notas del caso, estrategia, próximos pasos, recordatorios..." style="width:100%;min-height:110px;background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--r);padding:12px 14px;font-family:inherit;font-size:14px;color:var(--g800);line-height:1.6;resize:vertical;outline:none;box-sizing:border-box">${h(e.notas||'')}</textarea>
+      <div style="text-align:right;margin-top:8px"><button class="btn btn-gold btn-sm" onclick="guardarNotas('${e.id}')">Guardar notas</button></div>
+    </div>
+
     <div class="detail-grid">
       <div class="detail-card">
         <div class="detail-card-title">Damnificado</div>
@@ -1140,6 +1156,21 @@ function showDetailView(e) {
           Descargar carpeta
         </button>
       </div>
+    </div>
+
+    <div class="full-card" id="resumen-card-${e.id}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <div class="detail-card-title" style="margin-bottom:0">📋 Resumen de la carpeta</div>
+        <div style="display:flex;gap:7px">
+          <button class="btn btn-outline btn-sm" onclick="generarResumen('${e.id}')">↻ Generar automático</button>
+          <button class="btn btn-gold btn-sm" onclick="guardarResumen('${e.id}')">Guardar</button>
+        </div>
+      </div>
+      <textarea id="resumen-txt-${e.id}" style="width:100%;min-height:130px;background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--r);padding:12px 14px;font-family:inherit;font-size:14px;color:var(--g800);line-height:1.6;resize:vertical;outline:none;box-sizing:border-box" placeholder="Tocá «Generar automático» para crear un resumen de la carpeta a partir de los datos cargados, o escribilo a mano.">${h(e.resumen||'')}</textarea>
+      <div style="margin-top:22px">
+        <div class="detail-card-title" style="margin-bottom:10px">Datos del cliente que faltan cargar</div>
+        <div id="faltantes-${e.id}">${renderFaltantes(e)}</div>
+      </div>
     </div>`;
 
   setTimeout(() => renderCalExp(e), 0);
@@ -1169,6 +1200,132 @@ async function cargarFotosExp(e) {
 function df(label, val) {
   if(!val) return '';
   return `<div class="detail-field"><div class="field-label">${label}</div><div class="field-value">${h(val)}</div></div>`;
+}
+
+// ── ESTADO DEL JUICIO ──
+const ETAPAS_JUICIO = ['', 'Consulta inicial','Mediación previa (Ley 13.951)','Demanda a iniciar','Demanda presentada','Traslado / Contestación','Etapa probatoria','Alegatos','Sentencia 1ª instancia','Apelación (Cámara)','Ejecución de sentencia','Concluido','Archivado'];
+async function guardarEtapa(id){
+  const sel = document.getElementById('etapa-sel-'+id); if(!sel) return;
+  const {error} = await sb.from('expedientes').update({etapa: sel.value}).eq('id', id);
+  if(error){ showToast('Error al guardar la etapa', true); return; }
+  const e = expedientes.find(x=>x.id===id); if(e) e.etapa = sel.value;
+  showToast('Etapa actualizada ✓');
+}
+async function guardarNotas(id){
+  const ta = document.getElementById('notas-txt-'+id); if(!ta) return;
+  const {error} = await sb.from('expedientes').update({notas: ta.value}).eq('id', id);
+  if(error){ showToast('Error al guardar las notas', true); return; }
+  const e = expedientes.find(x=>x.id===id); if(e) e.notas = ta.value;
+  showToast('Notas guardadas ✓');
+}
+async function guardarReferido(id){
+  const inp = document.getElementById('referido-'+id); if(!inp) return;
+  const {error} = await sb.from('expedientes').update({referido: inp.value}).eq('id', id);
+  if(error){ showToast('Error al guardar', true); return; }
+  const e = expedientes.find(x=>x.id===id); if(e) e.referido = inp.value;
+  showToast('Guardado ✓');
+}
+async function toggleDoc(id, docId){
+  const e = expedientes.find(x=>x.id===id); if(!e) return;
+  const docs = Object.assign({}, e.docs_adjuntos||{});
+  docs[docId] = !docs[docId];
+  const {error} = await sb.from('expedientes').update({docs_adjuntos: docs}).eq('id', id);
+  if(error){ showToast('Error al guardar', true); return; }
+  e.docs_adjuntos = docs;
+  const cont = document.getElementById('faltantes-'+id);
+  if(cont) cont.innerHTML = renderFaltantes(e);
+}
+
+// ── RESUMEN + REQUISITOS PARA DEMANDAR ──
+function _lleno(v){ return v!==null && v!==undefined && String(v).trim()!==''; }
+// Requisitos mínimos para iniciar una demanda de daños (excluye opcionales: 2da víctima, testigos, familiares).
+const GRUPOS_DEMANDA = [
+  ['Actor (cliente)', [['dni','DNI'],['edad','Edad'],['domicilio','Domicilio real'],['tel','Teléfono']]],
+  ['Demandado', [['demandado','Nombre del demandado'],['demandado_dom','Domicilio del demandado'],['vehiculo','Vehículo'],['dominio','Dominio / patente']]],
+  ['Aseguradora (citación en garantía)', [['seguro','Compañía de seguros'],['poliza','N° de póliza']]],
+  ['El hecho', [['fecha','Fecha del hecho'],['lugar','Lugar del hecho'],['mecanica','Mecánica del accidente']]],
+  ['Daños', [['lesiones','Lesiones acreditadas']]]
+];
+const DOCS_DEMANDA = [
+  {id:'dni', label:'Copia de DNI del cliente'},
+  {id:'mediacion', label:'Acta de cierre de mediación (Ley 13.951)'},
+  {id:'historia', label:'Historia clínica / certificados médicos'},
+  {id:'fotos', label:'Fotos del accidente y del vehículo'}
+];
+function _itemFalta(ok,label){
+  return '<div style="display:flex;align-items:center;gap:9px;font-size:13px;color:'+(ok?'var(--g400)':'var(--g800)')+'">'
+    + '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;flex-shrink:0;font-size:11px;font-weight:700;'
+    + (ok?'background:var(--green-light);color:var(--green)':'background:var(--red-light);color:var(--red)')+'">'+(ok?'✓':'!')+'</span>'
+    + '<span style="'+(ok?'text-decoration:line-through':'font-weight:600')+'">'+label+'</span></div>';
+}
+function renderFaltantes(e){
+  let totalReq=0, completos=0, html='';
+  GRUPOS_DEMANDA.forEach(([titulo,campos])=>{
+    html += '<div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);font-weight:700;margin:14px 0 6px">'+titulo+'</div><div style="display:flex;flex-direction:column;gap:6px">';
+    campos.forEach(([k,label])=>{ totalReq++; const ok=_lleno(e[k]); if(ok) completos++; html += _itemFalta(ok,label); });
+    html += '</div>';
+  });
+  const causaOk = _lleno(e.ufi)||_lleno(e.ipp)||_lleno(e.comisaria);
+  html += '<div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);font-weight:700;margin:14px 0 6px">Causa penal <span style="text-transform:none;font-weight:500;color:var(--g400)">(opcional — suma como prueba)</span></div>';
+  html += '<div style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--g600)"><span style="width:18px;height:18px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;'+(causaOk?'background:var(--green-light);color:var(--green)':'background:var(--g100);color:var(--g400)')+';font-size:11px;font-weight:700">'+(causaOk?'✓':'○')+'</span><span>UFI, IPP o Comisaría</span></div>';
+  const faltan = totalReq - completos;
+  const cab = '<div style="font-size:13px;color:var(--g600);margin-bottom:4px">'+completos+' de '+totalReq+' requisitos cargados'+(faltan===0?' — lista para demandar ✅':' — faltan '+faltan)+'</div>';
+  let docs = '<div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);font-weight:700;margin:16px 0 6px">Documentación a adjuntar <span style="text-transform:none;font-weight:500;color:var(--g400)">(tocá para marcar las que ya tenés)</span></div><div style="display:flex;flex-direction:column;gap:5px">';
+  const marc = e.docs_adjuntos||{};
+  DOCS_DEMANDA.forEach(d=>{
+    const ok = !!marc[d.id];
+    docs += '<div onclick="toggleDoc(\''+e.id+'\',\''+d.id+'\')" style="display:flex;align-items:center;gap:9px;font-size:13px;cursor:pointer;color:'+(ok?'var(--g400)':'var(--g800)')+'">'
+      + '<span style="width:18px;height:18px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:5px;border:1.5px solid '+(ok?'var(--green)':'var(--g200)')+';background:'+(ok?'var(--green-light)':'var(--white)')+';color:var(--green);font-size:11px;font-weight:700">'+(ok?'✓':'')+'</span>'
+      + '<span style="'+(ok?'text-decoration:line-through':'')+'">'+d.label+'</span></div>';
+  });
+  docs += '</div>';
+  return cab + html + docs;
+}
+function generarResumen(id){
+  const e = expedientes.find(x=>x.id===id); if(!e) return;
+  const partes = [];
+  let cli = 'Damnificado: '+(e.nombre||'(sin nombre)');
+  if(_lleno(e.dni)) cli += ', DNI '+e.dni;
+  if(_lleno(e.edad)) cli += ', '+e.edad+' años';
+  if(_lleno(e.domicilio)) cli += ', con domicilio en '+e.domicilio;
+  partes.push(cli+'.');
+  let hecho = '';
+  if(_lleno(e.fecha)) hecho += 'El hecho ocurrió el '+e.fecha+(_lleno(e.hora)?' a las '+e.hora+' hs':'');
+  if(_lleno(e.lugar)) hecho += (hecho?' en ':'Lugar del hecho: ')+e.lugar;
+  if(hecho) partes.push(hecho+'.');
+  if(_lleno(e.mecanica)) partes.push('Mecánica: '+String(e.mecanica).trim()+(String(e.mecanica).trim().endsWith('.')?'':'.'));
+  if(_lleno(e.lesiones)) partes.push('Lesiones: '+String(e.lesiones).trim()+(String(e.lesiones).trim().endsWith('.')?'':'.'));
+  let dem = '';
+  if(_lleno(e.demandado)) dem += 'Demandado: '+e.demandado+(_lleno(e.demandado_dni)?' (DNI '+e.demandado_dni+')':'');
+  if(_lleno(e.vehiculo)) dem += (dem?', vehículo ':'Vehículo del demandado: ')+e.vehiculo+(_lleno(e.dominio)?' (dominio '+e.dominio+')':'');
+  if(dem) partes.push(dem+'.');
+  if(_lleno(e.seguro)) partes.push('Aseguradora: '+e.seguro+(_lleno(e.poliza)?', póliza N° '+e.poliza:'')+'.');
+  let jud = '';
+  if(_lleno(e.ufi)) jud += 'UFI '+e.ufi+' ';
+  if(_lleno(e.ipp)) jud += 'IPP '+e.ipp+' ';
+  if(_lleno(e.comisaria)) jud += '— Comisaría '+e.comisaria;
+  if(jud.trim()) partes.push('Causa penal: '+jud.trim()+'.');
+  if(_lleno(e.estado)) partes.push('Estado del expediente: '+e.estado+'.');
+  const ta = document.getElementById('resumen-txt-'+id);
+  if(ta) ta.value = partes.join(' ');
+  showToast('Resumen generado — revisalo y guardá ✓');
+}
+async function guardarResumen(id){
+  const ta = document.getElementById('resumen-txt-'+id); if(!ta) return;
+  const texto = ta.value;
+  const {error} = await sb.from('expedientes').update({resumen: texto}).eq('id', id);
+  if(error){ showToast('Error al guardar el resumen: '+error.message, true); return; }
+  const e = expedientes.find(x=>x.id===id); if(e) e.resumen = texto;
+  showToast('Resumen guardado ✓');
+}
+function abrirExpedienteDeUrl(){
+  try{
+    const id = new URLSearchParams(window.location.search).get('exp');
+    if(!id) return;
+    const e = expedientes.find(x=>x.id===id);
+    if(e) showDetailView(e);
+    else showToast('No se encontró el expediente vinculado', true);
+  }catch(err){}
 }
 
 // ── CRUD EXP ──
