@@ -1,0 +1,2033 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lena & Asociados</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --navy:#0f1f3d;--navy-mid:#1a3260;--navy-light:#243d75;
+  --gold:#c9a84c;--gold-light:#e8c96a;--gold-pale:#f5ecd0;
+  --cream:#faf8f3;--white:#ffffff;
+  --g50:#f8f7f4;--g100:#eeece6;--g200:#d8d5cc;--g400:#9a9690;--g600:#5a5750;--g800:#2e2c28;
+  --red:#c0392b;--red-light:#fdf0ee;--green:#1a6b4a;--green-light:#eaf4ef;
+  --r:10px;--rl:16px;--sh:0 2px 12px rgba(15,31,61,.10);--shl:0 8px 32px rgba(15,31,61,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--g800);min-height:100vh;font-size:15px}
+
+/* LOGIN */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 60%,#1e4080 100%)}
+.login-card{background:var(--white);border-radius:20px;padding:48px 44px;width:100%;max-width:420px;box-shadow:0 24px 64px rgba(0,0,0,.3)}
+.login-logo-title{font-family:'DM Serif Display',serif;font-size:26px;color:var(--navy);text-align:center}
+.login-logo-gold{color:var(--gold)}
+.login-divider{width:40px;height:2px;background:var(--gold);margin:14px auto}
+.login-logo-sub{font-size:12px;color:var(--g400);letter-spacing:.1em;text-transform:uppercase;text-align:center;margin-bottom:28px}
+.login-error{background:var(--red-light);color:var(--red);font-size:13px;padding:10px 14px;border-radius:8px;margin-bottom:14px;display:none}
+
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;width:260px;height:100vh;background:var(--navy);display:flex;flex-direction:column;z-index:100;transition:transform .25s}
+.sidebar-logo{padding:24px 22px 16px;border-bottom:1px solid rgba(201,168,76,.2)}
+.logo-title{font-family:'DM Serif Display',serif;color:var(--gold);font-size:17px}
+.logo-sub{color:rgba(255,255,255,.4);font-size:10px;margin-top:3px;letter-spacing:.08em;text-transform:uppercase}
+.sidebar-nav{padding:12px;flex:1;overflow-y:auto}
+.nav-label{color:rgba(255,255,255,.3);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:0 12px;margin:14px 0 5px}
+.nav-btn{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.6);font-family:'DM Sans',sans-serif;font-size:14px;border-radius:8px;transition:all .15s;text-align:left}
+.nav-btn:hover{background:rgba(255,255,255,.07);color:white}
+.nav-btn.active{background:rgba(201,168,76,.15);color:var(--gold-light)}
+.sidebar-footer{padding:12px;border-top:1px solid rgba(255,255,255,.08)}
+.user-badge{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.05);border-radius:8px}
+.user-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;flex-shrink:0}
+.av-jefe{background:var(--gold);color:var(--navy)}
+.av-aso{background:var(--navy-light);color:white}
+.av-sec{background:#6b4a9a;color:white}
+.rb-sec{background:rgba(107,74,154,.25);color:#c4a8ff}
+.user-name{color:white;font-size:13px;font-weight:500}
+.role-badge{display:inline-flex;font-size:10px;padding:1px 7px;border-radius:10px;font-weight:600;margin-top:2px}
+.rb-jefe{background:rgba(201,168,76,.25);color:var(--gold-light)}
+.rb-aso{background:rgba(255,255,255,.1);color:rgba(255,255,255,.6)}
+
+/* HAMBURGER */
+.hamburger{display:none;position:fixed;top:14px;left:14px;z-index:300;background:var(--navy);border:none;border-radius:8px;width:40px;height:40px;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--sh)}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:149}
+.backdrop.open{display:block}
+
+/* MAIN */
+.main{margin-left:260px;min-height:100vh}
+.topbar{background:var(--white);border-bottom:1px solid var(--g100);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy)}
+.content{padding:32px}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:var(--white);border:1px solid var(--g100);border-radius:var(--rl);padding:20px 22px;box-shadow:var(--sh)}
+.stat-card.accent{border-left:3px solid var(--gold)}
+.stat-label{color:var(--g400);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.stat-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--navy);line-height:1}
+.stat-sub{color:var(--g400);font-size:12px;margin-top:4px}
+
+/* CARDS & TABLES */
+.card{background:var(--white);border:1px solid var(--g100);border-radius:var(--rl);box-shadow:var(--sh);overflow:hidden}
+.card-header{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-bottom:1px solid var(--g100)}
+.card-title{font-weight:600;font-size:15px;color:var(--navy)}
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--g50);padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--g400);letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--g100)}
+tbody tr{border-bottom:1px solid var(--g100);transition:background .1s;cursor:pointer}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--g50)}
+td{padding:12px 16px;font-size:14px}
+.exp-num{font-family:'DM Serif Display',serif;color:var(--navy);font-size:15px}
+.client-name{font-weight:500}
+.client-sub{color:var(--g400);font-size:12px;margin-top:2px}
+.full-card{background:var(--white);border:1px solid var(--g100);border-radius:var(--rl);box-shadow:var(--sh);padding:20px 22px;margin-bottom:14px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:500}
+.badge-navy{background:rgba(15,31,61,.08);color:var(--navy)}
+.badge-gold{background:rgba(201,168,76,.15);color:#7a5c1a}
+.badge-green{background:var(--green-light);color:var(--green)}
+.badge-red{background:var(--red-light);color:var(--red)}
+.badge-gray{background:var(--g100);color:var(--g600)}
+.badge-purple{background:rgba(107,74,154,.15);color:#6b4a9a}
+
+/* BUTTONS */
+.btn{padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:7px}
+.btn-primary{background:var(--navy);color:white}
+.btn-primary:hover{background:var(--navy-mid)}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold:hover{background:var(--gold-light)}
+.btn-outline{background:transparent;border:1.5px solid var(--g200);color:var(--g600)}
+.btn-outline:hover{border-color:var(--g400);color:var(--g800)}
+.btn-danger{background:var(--red);color:white}
+.btn-danger:hover{background:#a93226}
+.btn-green{background:var(--green);color:white}
+.btn-green:hover{background:#145c3d}
+.btn-sm{padding:6px 12px;font-size:13px}
+.btn-full{width:100%;justify-content:center}
+
+/* FORMS */
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:2px}
+label{font-size:12px;font-weight:600;color:var(--g600);letter-spacing:.04em;text-transform:uppercase}
+input,select,textarea{padding:9px 12px;border:1.5px solid var(--g200);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--g800);background:var(--white);outline:none;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--navy-mid)}
+textarea{resize:vertical;min-height:80px;line-height:1.5}
+.form-section{margin-bottom:22px}
+.form-section-title{font-size:11px;font-weight:600;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--gold-pale)}
+.form-grid{display:grid;gap:12px}
+.cols-2{grid-template-columns:1fr 1fr}
+.cols-3{grid-template-columns:1fr 1fr 1fr}
+
+/* SEARCH */
+.search-bar{display:flex;gap:10px;margin-bottom:20px;align-items:center;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-input{width:100%;padding:10px 16px 10px 40px;border:1.5px solid var(--g200);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;background:var(--white);outline:none}
+.search-input:focus{border-color:var(--navy-mid)}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--g400);pointer-events:none}
+
+/* MODALS */
+.overlay{display:none;position:fixed;inset:0;background:rgba(10,20,40,.55);z-index:200;align-items:flex-start;justify-content:center;padding:28px 16px;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:var(--white);border-radius:var(--rl);width:100%;max-width:760px;box-shadow:var(--shl);animation:slideUp .2s ease;margin:auto}
+.modal-sm{max-width:480px}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--g100)}
+.modal-title{font-family:'DM Serif Display',serif;font-size:19px;color:var(--navy)}
+.modal-body{padding:24px}
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;padding:16px 24px;border-top:1px solid var(--g100);background:var(--g50);border-radius:0 0 var(--rl) var(--rl)}
+.close-btn{background:none;border:none;cursor:pointer;color:var(--g400);padding:4px;border-radius:6px;display:flex;align-items:center}
+.close-btn:hover{background:var(--g100);color:var(--g800)}
+
+/* DETAIL */
+.detail-view{display:none}
+.detail-view.open{display:block}
+.list-view.hidden{display:none}
+.detail-back{display:flex;align-items:center;gap:8px;color:var(--g600);font-size:14px;background:none;border:none;cursor:pointer;padding:0;margin-bottom:18px;font-family:'DM Sans',sans-serif}
+.detail-back:hover{color:var(--navy)}
+.detail-header{background:var(--navy);border-radius:var(--rl);padding:24px 28px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px}
+.detail-exp-num{font-family:'DM Serif Display',serif;color:var(--gold);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.detail-name{font-family:'DM Serif Display',serif;color:white;font-size:24px}
+.detail-meta{display:flex;gap:14px;margin-top:8px;flex-wrap:wrap}
+.detail-meta-item{color:rgba(255,255,255,.5);font-size:13px}
+.detail-meta-item span{color:rgba(255,255,255,.85)}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.detail-card{background:var(--white);border:1px solid var(--g100);border-radius:var(--rl);padding:18px 20px;box-shadow:var(--sh)}
+.detail-card-title{font-size:11px;font-weight:600;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--gold-pale)}
+.detail-field{margin-bottom:10px}
+.detail-field:last-child{margin-bottom:0}
+.field-label{font-size:11px;color:var(--g400);font-weight:500;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.field-value{font-size:14px;color:var(--g800)}
+.mecanica-text{background:var(--g50);border:1px solid var(--g100);border-radius:8px;padding:12px;font-size:14px;line-height:1.6;white-space:pre-wrap}
+
+/* GASTOS */
+.gasto-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--g100)}
+.gasto-row:last-child{border-bottom:none}
+.gasto-desc{flex:1;font-size:14px}
+.gasto-monto{font-weight:600;color:var(--navy);font-size:14px;min-width:100px;text-align:right}
+.gasto-fecha{color:var(--g400);font-size:12px;min-width:90px}
+.add-gasto-form{display:grid;grid-template-columns:1fr 130px 120px auto;gap:8px;margin-top:12px;align-items:end}
+
+/* ARCHIVOS */
+.dropzone{border:2px dashed var(--g200);border-radius:12px;padding:22px;text-align:center;transition:all .2s;cursor:pointer;background:var(--g50);margin-bottom:14px}
+.dropzone:hover,.dz-active{border-color:var(--gold);background:var(--gold-pale)}
+.archivos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.arch-item{border:1.5px solid var(--g100);border-radius:10px;overflow:hidden;background:var(--white);position:relative}
+.arch-item:hover .arch-del{opacity:1}
+.arch-preview{width:100%;height:88px;display:flex;align-items:center;justify-content:center;background:var(--g50);overflow:hidden}
+.arch-preview img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
+.lightbox{display:none;position:fixed;inset:0;background:rgba(8,15,30,.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column;padding:24px;box-sizing:border-box}
+.lightbox.open{display:flex}
+.lightbox img{max-width:95vw;max-height:82vh;object-fit:contain;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.lightbox-caption{color:rgba(255,255,255,.85);font-size:13px;margin-top:14px;text-align:center;max-width:90vw;word-break:break-word}
+.lightbox-close{position:absolute;top:18px;right:18px;width:42px;height:42px;border-radius:50%;border:none;background:rgba(255,255,255,.12);color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.lightbox-close:hover{background:rgba(255,255,255,.25)}
+.arch-info{padding:7px 9px;border-top:1px solid var(--g100)}
+.arch-name{font-size:11px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arch-meta{font-size:10px;color:var(--g400);margin-top:1px}
+.arch-del{position:absolute;top:5px;right:5px;background:rgba(192,57,43,.9);border:none;cursor:pointer;color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s}
+.arch-filtro{background:var(--g100);border:none;cursor:pointer;padding:4px 11px;border-radius:20px;font-size:12px;font-weight:500;color:var(--g600);font-family:'DM Sans',sans-serif;transition:all .15s}
+.arch-filtro:hover{background:var(--g200)}
+.arch-filtro.active{background:var(--navy);color:white}
+.delete-btn{background:none;border:none;cursor:pointer;color:var(--g400);padding:4px;border-radius:4px;transition:color .15s}
+.delete-btn:hover{color:var(--red)}
+
+/* CALENDARIO */
+.cal-wrap{background:var(--white);border:1px solid var(--g100);border-radius:var(--rl);box-shadow:var(--sh);overflow:hidden;margin-bottom:16px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:var(--navy)}
+.cal-month{font-family:'DM Serif Display',serif;font-size:16px;color:white}
+.cal-nav-btn{background:rgba(255,255,255,.12);border:none;cursor:pointer;color:white;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center}
+.cal-nav-btn:hover{background:rgba(255,255,255,.22)}
+.cal-days-head{display:grid;grid-template-columns:repeat(7,1fr);background:var(--g50);border-bottom:1px solid var(--g100)}
+.cal-day-name{text-align:center;padding:7px 0;font-size:10px;font-weight:600;color:var(--g400);text-transform:uppercase}
+.cal-cells{display:grid;grid-template-columns:repeat(7,1fr)}
+.cal-cell{min-height:62px;border-right:1px solid var(--g100);border-bottom:1px solid var(--g100);padding:4px;cursor:pointer;transition:background .1s}
+.cal-cell:nth-child(7n){border-right:none}
+.cal-cell:hover{background:var(--g50)}
+.cal-cell.other .cal-num{color:var(--g200)}
+.cal-cell.today{background:rgba(201,168,76,.07)}
+.cal-cell.today .cal-num{background:var(--gold);color:var(--navy);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-weight:600}
+.cal-num{font-size:12px;font-weight:500;color:var(--g600);width:22px;height:22px;display:flex;align-items:center;justify-content:center;margin-bottom:2px}
+.cal-ev{font-size:10px;font-weight:500;padding:2px 4px;border-radius:3px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-ev-g{background:rgba(15,31,61,.1);color:var(--navy)}
+.cal-ev-e{background:rgba(201,168,76,.2);color:#6b4a10}
+.ev-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--g100)}
+.ev-item:last-child{border-bottom:none}
+.ev-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.ev-info{flex:1}
+.ev-title-t{font-size:14px;font-weight:500}
+.ev-meta-t{font-size:12px;color:var(--g400);margin-top:2px}
+.ev-exp-tag{display:inline-block;background:var(--gold-pale);color:#7a5c1a;font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-top:3px}
+
+/* MIEMBROS */
+.member-card{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--white);border:1px solid var(--g100);border-radius:var(--r);margin-bottom:10px;box-shadow:var(--sh);flex-wrap:wrap}
+.member-info{flex:1}
+.member-name{font-size:14px;font-weight:600;color:var(--navy)}
+.member-email{font-size:12px;color:var(--g400);margin-top:2px}
+
+/* RENTABILIDAD */
+.rent-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.rent-kpi{background:var(--white);border:1px solid var(--g100);border-radius:var(--rl);padding:18px 20px;box-shadow:var(--sh)}
+.rent-kpi.gr{border-left:3px solid var(--green)}
+.rent-kpi.rd{border-left:3px solid var(--red)}
+.rent-kpi.gd{border-left:3px solid var(--gold)}
+.rent-kpi.nv{border-left:3px solid var(--navy)}
+.rent-kpi-label{font-size:11px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}
+.rent-kpi-value{font-family:'DM Serif Display',serif;font-size:24px;line-height:1;color:var(--navy)}
+.rent-kpi-sub{font-size:11px;color:var(--g400);margin-top:4px}
+.rent-bars{display:flex;flex-direction:column;gap:9px}
+.rent-bar-row{display:flex;align-items:center;gap:10px}
+.rent-bar-label{font-size:12px;color:var(--g600);min-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rent-bar-track{flex:1;height:9px;background:var(--g100);border-radius:10px;overflow:hidden}
+.rent-bar-fill{height:100%;border-radius:10px;transition:width .4s}
+.rent-bar-val{font-size:12px;font-weight:600;color:var(--navy);min-width:110px;text-align:right}
+
+/* INDEMNIZACIÓN */
+.indem-btn{background:var(--green);color:white;border:none;border-radius:8px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.indem-btn:hover{background:#145c3d}
+.indem-edit{background:var(--gold);color:var(--navy)}
+.indem-edit:hover{background:var(--gold-light)}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:44px 24px;color:var(--g400)}
+.empty-title{font-size:15px;font-weight:500;color:var(--g600);margin-bottom:5px}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:white;padding:11px 18px;border-radius:10px;font-size:14px;font-weight:500;box-shadow:var(--shl);z-index:999;display:none;align-items:center;gap:8px}
+.toast.show{display:flex}
+
+/* LOADING */
+.loading-overlay{position:fixed;inset:0;background:rgba(15,31,61,.6);align-items:center;justify-content:center;z-index:998;display:none}
+.loading-overlay.show{display:flex}
+.loading-box{background:white;border-radius:14px;padding:26px 34px;display:flex;align-items:center;gap:14px;font-size:15px;color:var(--navy);font-weight:500}
+.spinner{width:18px;height:18px;border:2px solid rgba(15,31,61,.15);border-top-color:var(--navy);border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
+.spinner-w{border-color:rgba(255,255,255,.3);border-top-color:white}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* DASHBOARD LAYOUT */
+.dash-cols{display:grid;grid-template-columns:1fr 320px;gap:16px;margin-top:16px}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hamburger{display:flex}
+  .sidebar{transform:translateX(-100%);z-index:150}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .topbar{padding:0 14px 0 60px;height:56px}
+  .content{padding:14px}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .stat-value{font-size:22px}
+  .dash-cols{grid-template-columns:1fr}
+  .detail-grid{grid-template-columns:1fr}
+  .detail-header{flex-direction:column}
+  .cols-2,.cols-3{grid-template-columns:1fr}
+  .add-gasto-form{grid-template-columns:1fr 1fr}
+  .add-gasto-form>div:last-child{grid-column:span 2}
+  .modal{max-width:100%;border-radius:var(--rl) var(--rl) 0 0;position:fixed;bottom:0;left:0;right:0;max-height:90vh;overflow-y:auto;margin:0}
+  .overlay{padding:0;align-items:flex-end}
+  .rent-kpi-grid{grid-template-columns:1fr 1fr}
+  .toast{left:14px;right:14px;bottom:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo-title">Lena <span class="login-logo-gold">&</span> Asociados</div>
+    <div class="login-divider"></div>
+    <div class="login-logo-sub">Sistema de Expedientes</div>
+    <div class="login-error" id="login-error"></div>
+    <div class="form-group" style="margin-bottom:14px"><label>Email</label><input type="email" id="login-email" placeholder="tu@email.com" autocomplete="email"></div>
+    <div class="form-group" style="margin-bottom:18px"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••••"></div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()" id="btn-login">Ingresar al sistema</button>
+  </div>
+</div>
+
+<!-- HAMBURGER -->
+<button class="hamburger" onclick="toggleSidebar()" id="hamburger-btn">
+  <svg width="20" height="20" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+<div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
+
+<!-- APP -->
+<div id="app-shell" style="display:none">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-title">Lena & Asociados</div>
+      <div class="logo-sub">Accidentes de Tránsito</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-label">Principal</div>
+      <button class="nav-btn active" onclick="showView('dashboard')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Inicio
+      </button>
+      <button class="nav-btn" onclick="showView('expedientes')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Expedientes
+      </button>
+      <div class="nav-label">Gestión</div>
+      <button class="nav-btn" onclick="showView('gastos')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Gastos
+      </button>
+      <button class="nav-btn" onclick="showView('calendario')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Calendario
+      </button>
+      <div class="nav-label jefe-only" style="display:none">Administración</div>
+      <button class="nav-btn jefe-only" style="display:none" onclick="showView('rentabilidad')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Rentabilidad
+      </button>
+      <button class="nav-btn jefe-only" style="display:none" onclick="showView('equipo')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Equipo
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-badge">
+        <div class="user-avatar" id="sidebar-avatar">BB</div>
+        <div>
+          <div class="user-name" id="sidebar-name">—</div>
+          <div class="role-badge" id="sidebar-role">—</div>
+        </div>
+      </div>
+      <button class="btn btn-outline btn-sm btn-full" style="margin-top:10px" onclick="doLogout()">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- DASHBOARD -->
+    <div id="view-dashboard">
+      <div class="topbar"><div class="topbar-title">Panel de control</div><button class="btn btn-gold" onclick="openExpModal()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nueva carpeta</button></div>
+      <div class="content">
+        <div class="stats-grid">
+          <div class="stat-card accent"><div class="stat-label">Total expedientes</div><div class="stat-value" id="st-total">0</div><div class="stat-sub">en el sistema</div></div>
+          <div class="stat-card"><div class="stat-label">En curso</div><div class="stat-value" id="st-curso" style="color:var(--gold)">0</div><div class="stat-sub">activos</div></div>
+          <div class="stat-card"><div class="stat-label">Concluidos</div><div class="stat-value" id="st-conc" style="color:var(--green)">0</div><div class="stat-sub">cerrados</div></div>
+          <div class="stat-card"><div class="stat-label">Total gastos</div><div class="stat-value" id="st-gastos" style="font-size:22px">$0</div><div class="stat-sub">registrados</div></div>
+        </div>
+        <div class="dash-cols">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Últimas carpetas</div><button class="btn btn-outline btn-sm" onclick="showView('expedientes')">Ver todas</button></div>
+            <table><thead><tr><th>Expediente</th><th>Cliente</th><th>Demandado</th><th>Estado</th></tr></thead><tbody id="dash-tbody"></tbody></table>
+          </div>
+          <div>
+            <div class="full-card" style="margin-bottom:0">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-weight:600;font-size:14px;color:var(--navy)">Próximos eventos</div><button class="btn btn-gold btn-sm" onclick="showView('calendario')">Ver calendario</button></div>
+              <div id="proximos-list"><div style="color:var(--g400);font-size:13px;text-align:center;padding:14px">Sin eventos próximos</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPEDIENTES -->
+    <div id="view-expedientes" style="display:none">
+      <div class="topbar"><div class="topbar-title">Expedientes</div><div style="display:flex;gap:10px;align-items:center"><button class="btn btn-outline btn-sm jefe-only" id="btn-buscar-por-asoc" style="display:none" onclick="toggleBuscarPorAsoc()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Buscar por asociado</button><button class="btn btn-gold" onclick="openExpModal()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nueva carpeta</button></div></div>
+      <div class="content">
+        <div class="list-view" id="exp-list">
+          <!-- Panel buscar por asociado (solo jefe) -->
+          <div id="panel-buscar-asoc" style="display:none;background:var(--white);border:1.5px solid var(--gold);border-radius:var(--rl);padding:16px 20px;margin-bottom:16px;box-shadow:var(--sh)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <div style="font-weight:600;font-size:14px;color:var(--navy);display:flex;align-items:center;gap:8px"><svg width="15" height="15" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Filtrar por asociado</div>
+              <button onclick="limpiarFiltroAsoc()" style="font-size:12px;color:var(--g400);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif">✕ Limpiar</button>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap" id="asoc-chips"></div>
+          </div>
+          <div class="search-bar">
+            <div class="search-wrap"><svg class="search-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="search-input" placeholder="Nombre, DNI, demandado, dominio..." id="search-q" oninput="renderExp()"></div>
+            <input style="padding:10px 13px;border:1.5px solid var(--g200);border-radius:8px;font-size:14px;background:white;font-family:'DM Sans',sans-serif;width:160px" placeholder="Filtrar por seguro" id="search-seg" oninput="renderExp()">
+            <select style="padding:10px 13px;border:1.5px solid var(--g200);border-radius:8px;font-size:14px;background:white;font-family:'DM Sans',sans-serif" onchange="filtroEstado=this.value;renderExp()">
+              <option value="">Todos los estados</option><option>En trámite</option><option>Mediación</option><option>Juicio</option><option>Concluido</option>
+            </select>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Carpetas</div><span class="badge badge-navy" id="exp-count">0</span></div>
+            <table><thead><tr><th>N° Exp.</th><th>Cliente</th><th>Demandado</th><th>Seguro</th><th>Fecha</th><th>Estado</th><th>Abogado</th></tr></thead><tbody id="exp-tbody"></tbody></table>
+          </div>
+        </div>
+        <div class="detail-view" id="exp-detail"></div>
+      </div>
+    </div>
+
+    <!-- GASTOS -->
+    <div id="view-gastos" style="display:none">
+      <div class="topbar"><div class="topbar-title">Gastos del estudio</div></div>
+      <div class="content">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Todos los gastos</div><span class="badge badge-navy" id="gastos-total">Total: $0</span></div>
+          <table><thead><tr><th>Expediente</th><th>Cliente</th><th>Descripción</th><th>Fecha</th><th>Monto</th></tr></thead><tbody id="gastos-tbody"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALENDARIO -->
+    <div id="view-calendario" style="display:none">
+      <div class="topbar"><div class="topbar-title">Calendario</div><button class="btn btn-gold" onclick="openEventoModal()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nuevo evento</button></div>
+      <div class="content"><div id="cal-global-wrap"></div><div class="full-card"><div style="font-weight:600;font-size:14px;color:var(--navy);margin-bottom:12px">Eventos del mes</div><div id="cal-global-lista"></div></div></div>
+    </div>
+
+    <!-- RENTABILIDAD -->
+    <div id="view-rentabilidad" style="display:none">
+      <div class="topbar">
+        <div class="topbar-title">Rentabilidad</div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <select id="rent-mes" onchange="renderRentabilidad()" style="padding:8px 12px;border:1.5px solid var(--g200);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;background:white">
+            <option value="0">Enero</option><option value="1">Febrero</option><option value="2">Marzo</option>
+            <option value="3">Abril</option><option value="4">Mayo</option><option value="5">Junio</option>
+            <option value="6">Julio</option><option value="7">Agosto</option><option value="8">Septiembre</option>
+            <option value="9">Octubre</option><option value="10">Noviembre</option><option value="11">Diciembre</option>
+          </select>
+          <select id="rent-anio" onchange="renderRentabilidad()" style="padding:8px 12px;border:1.5px solid var(--g200);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;background:white"></select>
+        </div>
+      </div>
+      <div class="content" id="rent-content"></div>
+    </div>
+
+    <!-- EQUIPO -->
+    <div id="view-equipo" style="display:none">
+      <div class="topbar"><div class="topbar-title">Equipo</div><button class="btn btn-gold" onclick="openCrearUserModal()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Agregar miembro</button></div>
+      <div class="content"><div id="equipo-list"></div></div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL NUEVA CARPETA -->
+<div class="overlay" id="ov-exp" onclick="if(event.target.id==='ov-exp')closeExpModal()">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Nueva carpeta</div><button class="close-btn" onclick="closeExpModal()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+
+      <div class="form-section"><div class="form-section-title">Víctima 1</div>
+        <div class="form-grid cols-2">
+          <div class="form-group" style="grid-column:span 2"><label>Nombre y apellido</label><input id="f-nombre" placeholder="Apellido y nombre completo"></div>
+          <div class="form-group"><label>DNI</label><input id="f-dni" placeholder="23.523.970"></div>
+          <div class="form-group"><label>Edad</label><input id="f-edad" placeholder="51"></div>
+          <div class="form-group"><label>Fecha de nacimiento</label><input type="date" id="f-fecha-nac"></div>
+          <div class="form-group"><label>Estado civil</label><select id="f-estado-civil"><option value="">—</option><option>Soltero/a</option><option>Casado/a</option><option>Divorciado/a</option><option>Viudo/a</option><option>Unión convivencial</option></select></div>
+          <div class="form-group"><label>Nacionalidad</label><input id="f-nacionalidad" placeholder="Argentina"></div>
+          <div class="form-group"><label>Teléfono</label><input id="f-tel" placeholder="11 4567-8901"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Domicilio</label><input id="f-domicilio" placeholder="Calle, número, localidad"></div>
+          <div class="form-group"><label>Cónyuge</label><input id="f-conyuge" placeholder="Nombre completo"></div>
+          <div class="form-group"><label>DNI cónyuge</label><input id="f-conyuge-dni"></div>
+          <div class="form-group"><label>Padre</label><input id="f-padre"></div>
+          <div class="form-group"><label>DNI padre</label><input id="f-padre-dni"></div>
+          <div class="form-group"><label>Madre</label><input id="f-madre"></div>
+          <div class="form-group"><label>DNI madre</label><input id="f-madre-dni"></div>
+          <div class="form-group"><label>Email</label><input type="email" id="f-email" placeholder="correo@email.com"></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Víctima 2 (si corresponde)</div>
+        <div class="form-grid cols-2">
+          <div class="form-group" style="grid-column:span 2"><label>Nombre y apellido</label><input id="f-v2-nombre" placeholder="Apellido y nombre completo"></div>
+          <div class="form-group"><label>DNI</label><input id="f-v2-dni"></div>
+          <div class="form-group"><label>Edad</label><input id="f-v2-edad"></div>
+          <div class="form-group"><label>Fecha de nacimiento</label><input type="date" id="f-v2-fecha-nac"></div>
+          <div class="form-group"><label>Estado civil</label><select id="f-v2-estado-civil"><option value="">—</option><option>Soltero/a</option><option>Casado/a</option><option>Divorciado/a</option><option>Viudo/a</option><option>Unión convivencial</option></select></div>
+          <div class="form-group"><label>Nacionalidad</label><input id="f-v2-nacionalidad"></div>
+          <div class="form-group"><label>Teléfono</label><input id="f-v2-tel"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Domicilio</label><input id="f-v2-domicilio"></div>
+          <div class="form-group"><label>Cónyuge</label><input id="f-v2-conyuge"></div>
+          <div class="form-group"><label>DNI cónyuge</label><input id="f-v2-conyuge-dni"></div>
+          <div class="form-group"><label>Padre</label><input id="f-v2-padre"></div>
+          <div class="form-group"><label>Madre</label><input id="f-v2-madre"></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Demandado</div>
+        <div class="form-grid cols-2">
+          <div class="form-group" style="grid-column:span 2"><label>Nombre y apellido</label><input id="f-demandado" placeholder="Apellido y nombre completo"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Domicilio</label><input id="f-demandado-dom" placeholder="Calle, número, localidad"></div>
+          <div class="form-group"><label>Teléfono</label><input id="f-demandado-tel"></div>
+          <div class="form-group"><label>DNI</label><input id="f-demandado-dni"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Titular de póliza</label><input id="f-titular-poliza" placeholder="Nombre del titular de la póliza"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Domicilio titular póliza</label><input id="f-titular-dom" placeholder="Domicilio del titular"></div>
+          <div class="form-group"><label>Teléfono titular</label><input id="f-titular-tel"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Titular del vehículo</label><input id="f-titular-vehiculo" placeholder="Nombre del titular registral del vehículo"></div>
+          <div class="form-group"><label>Vehículo</label><input id="f-vehiculo" placeholder="Marca y modelo"></div>
+          <div class="form-group"><label>Dominio / Patente</label><input id="f-dominio" placeholder="ABC 123"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Cía. de seguros</label><input id="f-seguro" placeholder="Nombre de la aseguradora"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Domicilio aseguradora</label><input id="f-seguro-dom"></div>
+          <div class="form-group"><label>Teléfono aseguradora</label><input id="f-seguro-tel"></div>
+          <div class="form-group"><label>N° de póliza</label><input id="f-poliza"></div>
+          <div class="form-group"><label>STRO</label><input id="f-stro" placeholder="30.13.02"></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Testigos del hecho</div>
+        <div class="form-grid cols-2">
+          <div class="form-group"><label>Testigo 1</label><input id="f-testigo-h1" placeholder="Nombre y datos"></div>
+          <div class="form-group"><label>Testigo 2</label><input id="f-testigo-h2" placeholder="Nombre y datos"></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Testigos del beneficio</div>
+        <div class="form-grid cols-3">
+          <div class="form-group"><label>Testigo 1</label><input id="f-testigo-b1"></div>
+          <div class="form-group"><label>Testigo 2</label><input id="f-testigo-b2"></div>
+          <div class="form-group"><label>Testigo 3</label><input id="f-testigo-b3"></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Contacto en Cía.</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Nombre y datos del contacto</label><input id="f-contacto-cia" placeholder="Nombre, teléfono, email del contacto en la aseguradora"></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Mecánica del hecho</div>
+        <div class="form-grid">
+          <div class="form-grid cols-3">
+            <div class="form-group"><label>Fecha del accidente</label><input type="date" id="f-fecha"></div>
+            <div class="form-group"><label>Hora</label><input type="time" id="f-hora"></div>
+            <div class="form-group"><label>Lugar</label><input id="f-lugar" placeholder="Calle y altura / intersección"></div>
+          </div>
+          <div class="form-group"><label>Mecánica del hecho</label><textarea id="f-mecanica" placeholder="Describí cómo ocurrió el accidente, condiciones de la vía, vehículos involucrados..."></textarea></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Revisación médica y lesiones</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Revisación médica</label><input id="f-revision-medica" placeholder="Médico/institución que realizó la revisación"></div>
+          <div class="form-group"><label>Lesiones</label><textarea id="f-lesiones" placeholder="Descripción de las lesiones sufridas..." style="min-height:70px"></textarea></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Datos judiciales</div>
+        <div class="form-grid cols-2">
+          <div class="form-group"><label>UFI</label><input id="f-ufi" placeholder="N° UFI"></div>
+          <div class="form-group"><label>IPP N°</label><input id="f-ipp" placeholder="N° IPP"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Comisaría</label><input id="f-comisaria" placeholder="Comisaría interviniente"></div>
+          <div class="form-group"><label>Estado del expediente</label><select id="f-estado"><option>En trámite</option><option>Mediación</option><option>Juicio</option><option>Concluido</option></select></div>
+          <div class="form-group"><label>N° expediente judicial</label><input id="f-nroexp" placeholder="12345/2024"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Asociado/a a cargo</label><select id="f-asignado"><option value="">— Sin asignar —</option></select></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Notas internas</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Observaciones y notas del expediente</label><textarea id="f-obs" placeholder="Notas internas, particularidades del caso, recordatorios..." style="min-height:90px"></textarea></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeExpModal()">Cancelar</button><button class="btn btn-gold" onclick="guardarExp()" id="btn-guardar-exp">Guardar carpeta</button></div>
+  </div>
+</div>
+<!-- MODAL EDITAR CARPETA -->
+<div class="overlay" id="ov-editar" onclick="if(event.target.id==='ov-editar')closeEditarModal()">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Editar carpeta</div><button class="close-btn" onclick="closeEditarModal()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-id">
+      <div class="form-section"><div class="form-section-title">Víctima 1</div>
+        <div class="form-grid cols-2">
+          <div class="form-group" style="grid-column:span 2"><label>Nombre y apellido</label><input id="edit-nombre"></div>
+          <div class="form-group"><label>DNI</label><input id="edit-dni"></div>
+          <div class="form-group"><label>Edad</label><input id="edit-edad"></div>
+          <div class="form-group"><label>Fecha de nacimiento</label><input type="date" id="edit-fecha-nac"></div>
+          <div class="form-group"><label>Estado civil</label><select id="edit-estado-civil"><option value="">—</option><option>Soltero/a</option><option>Casado/a</option><option>Divorciado/a</option><option>Viudo/a</option><option>Unión convivencial</option></select></div>
+          <div class="form-group"><label>Nacionalidad</label><input id="edit-nacionalidad"></div>
+          <div class="form-group"><label>Teléfono</label><input id="edit-tel"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Domicilio</label><input id="edit-domicilio"></div>
+          <div class="form-group"><label>Cónyuge</label><input id="edit-conyuge"></div>
+          <div class="form-group"><label>DNI cónyuge</label><input id="edit-conyuge-dni"></div>
+          <div class="form-group"><label>Padre</label><input id="edit-padre"></div>
+          <div class="form-group"><label>DNI padre</label><input id="edit-padre-dni"></div>
+          <div class="form-group"><label>Madre</label><input id="edit-madre"></div>
+          <div class="form-group"><label>DNI madre</label><input id="edit-madre-dni"></div>
+          <div class="form-group"><label>Email</label><input type="email" id="edit-email"></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Víctima 2 (si corresponde)</div>
+        <div class="form-grid cols-2">
+          <div class="form-group" style="grid-column:span 2"><label>Nombre y apellido</label><input id="edit-v2-nombre"></div>
+          <div class="form-group"><label>DNI</label><input id="edit-v2-dni"></div>
+          <div class="form-group"><label>Edad</label><input id="edit-v2-edad"></div>
+          <div class="form-group"><label>Fecha de nacimiento</label><input type="date" id="edit-v2-fecha-nac"></div>
+          <div class="form-group"><label>Estado civil</label><select id="edit-v2-estado-civil"><option value="">—</option><option>Soltero/a</option><option>Casado/a</option><option>Divorciado/a</option><option>Viudo/a</option><option>Unión convivencial</option></select></div>
+          <div class="form-group"><label>Nacionalidad</label><input id="edit-v2-nacionalidad"></div>
+          <div class="form-group"><label>Teléfono</label><input id="edit-v2-tel"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Domicilio</label><input id="edit-v2-domicilio"></div>
+          <div class="form-group"><label>Cónyuge</label><input id="edit-v2-conyuge"></div>
+          <div class="form-group"><label>DNI cónyuge</label><input id="edit-v2-conyuge-dni"></div>
+          <div class="form-group"><label>Padre</label><input id="edit-v2-padre"></div>
+          <div class="form-group"><label>Madre</label><input id="edit-v2-madre"></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Demandado</div>
+        <div class="form-grid cols-2">
+          <div class="form-group" style="grid-column:span 2"><label>Nombre y apellido</label><input id="edit-demandado"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Domicilio</label><input id="edit-demandado-dom"></div>
+          <div class="form-group"><label>Teléfono</label><input id="edit-demandado-tel"></div>
+          <div class="form-group"><label>DNI</label><input id="edit-demandado-dni"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Titular de póliza</label><input id="edit-titular-poliza"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Domicilio titular póliza</label><input id="edit-titular-dom"></div>
+          <div class="form-group"><label>Teléfono titular</label><input id="edit-titular-tel"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Titular del vehículo</label><input id="edit-titular-vehiculo"></div>
+          <div class="form-group"><label>Vehículo</label><input id="edit-vehiculo"></div>
+          <div class="form-group"><label>Dominio / Patente</label><input id="edit-dominio"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Cía. de seguros</label><input id="edit-seguro"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Domicilio aseguradora</label><input id="edit-seguro-dom"></div>
+          <div class="form-group"><label>Teléfono aseguradora</label><input id="edit-seguro-tel"></div>
+          <div class="form-group"><label>N° de póliza</label><input id="edit-poliza"></div>
+          <div class="form-group"><label>STRO</label><input id="edit-stro"></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Testigos del hecho</div>
+        <div class="form-grid cols-2">
+          <div class="form-group"><label>Testigo 1</label><input id="edit-testigo-h1"></div>
+          <div class="form-group"><label>Testigo 2</label><input id="edit-testigo-h2"></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Testigos del beneficio</div>
+        <div class="form-grid cols-3">
+          <div class="form-group"><label>Testigo 1</label><input id="edit-testigo-b1"></div>
+          <div class="form-group"><label>Testigo 2</label><input id="edit-testigo-b2"></div>
+          <div class="form-group"><label>Testigo 3</label><input id="edit-testigo-b3"></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Contacto en Cía.</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Nombre y datos del contacto</label><input id="edit-contacto-cia"></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Mecánica del hecho</div>
+        <div class="form-grid">
+          <div class="form-grid cols-3">
+            <div class="form-group"><label>Fecha del accidente</label><input type="date" id="edit-fecha"></div>
+            <div class="form-group"><label>Hora</label><input type="time" id="edit-hora"></div>
+            <div class="form-group"><label>Lugar</label><input id="edit-lugar"></div>
+          </div>
+          <div class="form-group"><label>Mecánica del hecho</label><textarea id="edit-mecanica"></textarea></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Revisación médica y lesiones</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Revisación médica</label><input id="edit-revision-medica"></div>
+          <div class="form-group"><label>Lesiones</label><textarea id="edit-lesiones" style="min-height:70px"></textarea></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Datos judiciales</div>
+        <div class="form-grid cols-2">
+          <div class="form-group"><label>UFI</label><input id="edit-ufi"></div>
+          <div class="form-group"><label>IPP N°</label><input id="edit-ipp"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Comisaría</label><input id="edit-comisaria"></div>
+          <div class="form-group"><label>Estado del expediente</label><select id="edit-estado"><option>En trámite</option><option>Mediación</option><option>Juicio</option><option>Concluido</option></select></div>
+          <div class="form-group"><label>N° expediente judicial</label><input id="edit-nroexp"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Asociado/a a cargo</label><select id="edit-asignado"><option value="">— Sin asignar —</option></select></div>
+        </div>
+      </div>
+
+      <div class="form-section"><div class="form-section-title">Notas internas</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Observaciones y notas del expediente</label><textarea id="edit-obs" style="min-height:90px"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeEditarModal()">Cancelar</button><button class="btn btn-gold" onclick="guardarEdicion()" id="btn-guardar-edicion">Guardar cambios</button></div>
+  </div>
+</div>
+
+<!-- MODAL EVENTO -->
+<div class="overlay" id="ov-evento" onclick="if(event.target.id==='ov-evento')closeEventoModal()">
+  <div class="modal modal-sm">
+    <div class="modal-header"><div class="modal-title">Nuevo evento</div><button class="close-btn" onclick="closeEventoModal()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="form-grid" style="gap:12px">
+        <div class="form-group"><label>Título *</label><input id="ev-titulo" placeholder="Audiencia de conciliación..."></div>
+        <div class="form-group"><label>Tipo</label><select id="ev-tipo"><option value="audiencia">Audiencia</option><option value="vencimiento">Vencimiento</option><option value="mediacion">Mediación</option><option value="pericia">Pericia</option><option value="otro">Otro</option></select></div>
+        <div class="form-grid cols-2">
+          <div class="form-group"><label>Fecha *</label><input type="date" id="ev-fecha"></div>
+          <div class="form-group"><label>Hora</label><input type="time" id="ev-hora"></div>
+        </div>
+        <div class="form-group"><label>Expediente vinculado</label><select id="ev-expid"><option value="">— Evento general —</option></select></div>
+        <div class="form-group"><label>Descripción</label><textarea id="ev-desc" style="min-height:60px"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeEventoModal()">Cancelar</button><button class="btn btn-gold" onclick="guardarEvento()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- MODAL INDEMNIZACIÓN -->
+<div class="overlay" id="ov-indem" onclick="if(event.target.id==='ov-indem')closeIndemModal()">
+  <div class="modal modal-sm">
+    <div class="modal-header"><div class="modal-title">Registrar indemnización</div><button class="close-btn" onclick="closeIndemModal()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <input type="hidden" id="indem-exp-id">
+      <div style="background:var(--green-light);border:1px solid #b7e4c7;border-radius:10px;padding:12px;margin-bottom:16px;font-size:13px;color:var(--green);line-height:1.6"><strong>Honorarios automáticos:</strong> 30% cliente + 20% aseguradora = <strong>50% total</strong></div>
+      <div class="form-group" style="margin-bottom:16px">
+        <label>Monto total de la indemnización ($)</label>
+        <input type="text" id="indem-monto" placeholder="Ej: 15000000" style="font-size:16px;padding:12px 14px" oninput="previewIndem(this.value)">
+      </div>
+      <div id="indem-preview" style="display:none;background:var(--g50);border:1px solid var(--g100);border-radius:10px;padding:14px">
+        <div style="font-size:11px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Distribución automática</div>
+        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--g100)"><span style="font-size:13px;color:var(--g600)">Honorario del cliente (30%)</span><span style="font-weight:700;color:var(--navy)" id="prev-cliente">$0</span></div>
+        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--g100)"><span style="font-size:13px;color:var(--g600)">Honorario aseguradora (20%)</span><span style="font-weight:700;color:var(--navy)" id="prev-seg">$0</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0 0"><span style="font-size:14px;font-weight:700;color:var(--green)">Total honorarios</span><span style="font-size:16px;font-weight:700;color:var(--green)" id="prev-total">$0</span></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeIndemModal()">Cancelar</button><button class="btn btn-gold" onclick="guardarIndem()" id="btn-guardar-indem">Guardar</button></div>
+  </div>
+</div>
+
+<!-- MODAL CREAR USUARIO -->
+<div class="overlay" id="ov-usuario" onclick="if(event.target.id==='ov-usuario')closeCrearUserModal()">
+  <div class="modal modal-sm">
+    <div class="modal-header"><div class="modal-title">Agregar miembro</div><button class="close-btn" onclick="closeCrearUserModal()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="login-error" id="create-error"></div>
+      <div class="form-grid" style="gap:13px">
+        <div class="form-group"><label>Nombre completo *</label><input id="nu-nombre" placeholder="Juan Pérez"></div>
+        <div class="form-group"><label>Email *</label><input type="email" id="nu-email" placeholder="juan@lena.com.ar"></div>
+        <div class="form-group"><label>Contraseña *</label><input type="password" id="nu-pass" placeholder="Mínimo 6 caracteres"></div>
+        <div class="form-group"><label>Rol</label><select id="nu-rol"><option value="asociado">Asociado</option><option value="jefe">Jefe</option></select></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeCrearUserModal()">Cancelar</button><button class="btn btn-gold" onclick="crearUsuario()" id="btn-crear-user">Crear cuenta</button></div>
+  </div>
+</div>
+
+<!-- MODAL DESCARGA -->
+<div class="overlay" id="ov-descarga" onclick="if(event.target.id==='ov-descarga')closeDescarga()">
+  <div class="modal modal-sm">
+    <div class="modal-header"><div class="modal-title">Descargar carpeta para Claude</div><button class="close-btn" onclick="closeDescarga()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <p style="font-size:14px;color:var(--g600);margin-bottom:14px;line-height:1.6">Se abre una nueva pestaña con la carpeta completa lista para imprimir o guardar como PDF. Incluye todos los datos y fotos.</p>
+      <div style="background:#e8f4fd;border:1px solid #b3d9f5;border-radius:10px;padding:12px;font-size:13px;color:#1a5e9a;line-height:1.6">💡 <strong>Para guardar como PDF:</strong> usá <strong>Imprimir → Guardar como PDF</strong> en tu navegador.</div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeDescarga()">Cancelar</button><button class="btn btn-gold" onclick="confirmarDescarga()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Generar PDF</button></div>
+  </div>
+</div>
+
+<!-- MODAL PERFIL ASOCIADO (solo jefe) -->
+<div class="overlay" id="ov-perfil-asoc" onclick="if(event.target.id==='ov-perfil-asoc')closePerfillAsoc()">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title" id="perfil-asoc-title">Perfil del asociado</div>
+      <button class="close-btn" onclick="closePerfillAsoc()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" id="perfil-asoc-body">
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closePerfillAsoc()">Cerrar</button></div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loading"><div class="loading-box"><div class="spinner"></div>Cargando...</div></div>
+<!-- TOAST -->
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
+<!-- VISOR DE FOTOS -->
+<div class="lightbox" id="lightbox" onclick="if(event.target.id==='lightbox')cerrarFoto()">
+  <button class="lightbox-close" onclick="cerrarFoto()" aria-label="Cerrar"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+<script>
+const SUPA_URL = 'https://iboydjjeaeeayxjvaykr.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlib3lkamplYWVlYXl4anZheWtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0NDY3NjAsImV4cCI6MjA5NDAyMjc2MH0.e8Yy8E4oXvJWgY-AXWhlOtoLBZeZY8w1liLHM4JPY84';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+function h(s){if(s==null)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+let currentUser = null, currentPerfil = null;
+let expedientes = [], perfiles = [], eventos = [];
+let filtroEstado = '', filtroAsocId = '', currentView = 'dashboard';
+let calStates = {}, _descargaExp = null, _eventoExpId = null, _indemExpId = null;
+
+// ── AUTH ──
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value;
+  const errEl = document.getElementById('login-error');
+  const btn   = document.getElementById('btn-login');
+  errEl.style.display = 'none';
+  btn.innerHTML = '<div class="spinner spinner-w"></div> Ingresando...';
+  btn.disabled = true;
+  const {data, error} = await sb.auth.signInWithPassword({email, password:pass});
+  if(error) {
+    errEl.textContent = 'Email o contraseña incorrectos.';
+    errEl.style.display = 'block';
+    btn.innerHTML = 'Ingresar al sistema';
+    btn.disabled = false;
+    return;
+  }
+  await initApp(data.user);
+}
+document.getElementById('login-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+async function doLogout() {
+  await sb.auth.signOut();
+  currentUser = null; currentPerfil = null; expedientes = []; perfiles = []; eventos = [];
+  document.getElementById('app-shell').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-email').value = '';
+  document.getElementById('login-pass').value = '';
+}
+
+async function initApp(user) {
+  currentUser = user;
+  showLoading(true);
+  let {data: perfil} = await sb.from('perfiles').select('*').eq('id', user.id).single();
+  if(!perfil) {
+    const {data: np} = await sb.from('perfiles').insert({id:user.id, nombre:user.user_metadata?.nombre||user.email.split('@')[0], email:user.email, rol:user.user_metadata?.rol||'empleado'}).select().single();
+    perfil = np;
+  }
+  currentPerfil = perfil;
+  const esJefe = perfil?.rol === 'jefe';
+  const esSecretaria = perfil?.rol === 'secretaria';
+  document.querySelectorAll('.jefe-only').forEach(el => el.style.display = esJefe ? '' : 'none');
+  const initials = (perfil?.nombre||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const av = document.getElementById('sidebar-avatar');
+  av.textContent = initials;
+  av.className = 'user-avatar ' + (esJefe ? 'av-jefe' : (esSecretaria ? 'av-sec' : 'av-aso'));
+  document.getElementById('sidebar-name').textContent = perfil?.nombre || user.email;
+  const rb = document.getElementById('sidebar-role');
+  rb.textContent = esJefe ? 'Jefe' : (esSecretaria ? 'Secretaria' : 'Asociado');
+  rb.className = 'role-badge ' + (esJefe ? 'rb-jefe' : (esSecretaria ? 'rb-sec' : 'rb-aso'));
+  await loadPerfiles();
+  await Promise.all([loadExpedientes(), loadEventos()]);
+  showLoading(false);
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-shell').style.display = '';
+  document.getElementById('btn-login').innerHTML = 'Ingresar al sistema';
+  document.getElementById('btn-login').disabled = false;
+  renderDashboard();
+}
+
+sb.auth.getSession().then(({data:{session}}) => { if(session?.user) initApp(session.user); });
+
+// ── DATA ──
+async function loadExpedientes() {
+  const esJefe = currentPerfil?.rol === 'jefe';
+  const esSecretaria = currentPerfil?.rol === 'secretaria';
+  const esAsociado = currentPerfil?.rol === 'asociado' || currentPerfil?.rol === 'empleado';
+  let q = sb.from('expedientes').select('*, gastos(*), eventos(*), archivos(id,nombre,tipo,tamanio,fecha,expediente_id)').order('creado_at',{ascending:false});
+  // Asociados solo ven las carpetas que el jefe les asignó explícitamente
+  if(esAsociado) q = q.eq('asignado_a', currentUser.id);
+  const {data, error} = await q;
+  if(error || !data){ console.error('Error al cargar expedientes:', error); return; }
+  data.forEach(e=>{ e.asignado = perfiles.find(p=>p.id===e.asignado_a) || null; });
+  expedientes = data;
+}
+async function loadPerfiles() {
+  const {data} = await sb.from('perfiles').select('*').eq('activo',true).order('nombre');
+  perfiles = data || [];
+}
+async function loadEventos() {
+  const {data} = await sb.from('eventos').select('*').is('expediente_id',null).order('fecha');
+  eventos = data || [];
+}
+
+// ── VISTAS ──
+function showView(v) {
+  if((v==='rentabilidad'||v==='equipo') && currentPerfil?.rol!=='jefe') return;
+  currentView = v;
+  ['dashboard','expedientes','gastos','calendario','rentabilidad','equipo'].forEach(id => {
+    const el = document.getElementById('view-'+id);
+    if(el) el.style.display = id===v ? '' : 'none';
+  });
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  ['dashboard','expedientes','gastos','calendario','rentabilidad','equipo'].forEach((id,i) => {
+    if(id===v) document.querySelectorAll('.nav-btn')[i]?.classList.add('active');
+  });
+  if(v==='dashboard') renderDashboard();
+  if(v==='expedientes') { showListView(); renderExp(); }
+  if(v==='gastos') renderGastos();
+  if(v==='calendario') renderCalGlobal();
+  if(v==='rentabilidad') renderRentabilidad();
+  if(v==='equipo') renderEquipo();
+  if(window.innerWidth <= 768) closeSidebar();
+}
+
+// ── DASHBOARD ──
+function renderDashboard() {
+  document.getElementById('st-total').textContent = expedientes.length;
+  document.getElementById('st-curso').textContent = expedientes.filter(e=>e.estado!=='Concluido').length;
+  document.getElementById('st-conc').textContent = expedientes.filter(e=>e.estado==='Concluido').length;
+  const tG = expedientes.reduce((s,e)=>s+(e.gastos||[]).reduce((g,x)=>g+parseFloat(x.monto||0),0),0);
+  document.getElementById('st-gastos').textContent = '$'+tG.toLocaleString('es-AR');
+
+  const tbody = document.getElementById('dash-tbody');
+  const ultimas = expedientes.slice(0,6);
+  tbody.innerHTML = ultimas.length ? ultimas.map(e=>`
+    <tr onclick="goToDetail('${e.id}')">
+      <td><div class="exp-num">${h(e.nroexp)||'#'+e.id.slice(-6)}</div></td>
+      <td><div class="client-name">${h(e.nombre)}</div></td>
+      <td>${h(e.demandado)||'—'}</td>
+      <td>${estadoBadge(e.estado)}</td>
+    </tr>`).join('') :
+    `<tr><td colspan="4"><div class="empty-state"><div class="empty-title">Sin expedientes aún</div></div></td></tr>`;
+
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const en30 = new Date(hoy); en30.setDate(en30.getDate()+30);
+  const todos = todosEvs();
+  const prox = todos.filter(ev=>{const d=new Date(ev.fecha+'T00:00:00');return d>=hoy&&d<=en30;}).sort((a,b)=>a.fecha.localeCompare(b.fecha)).slice(0,5);
+  const listaEl = document.getElementById('proximos-list');
+  listaEl.innerHTML = prox.length ? prox.map(ev=>{
+    const exp = ev.expediente_id ? expedientes.find(x=>x.id===ev.expediente_id) : null;
+    const dias = Math.round((new Date(ev.fecha+'T00:00:00')-hoy)/86400000);
+    const col = dias<=3?'#c0392b':dias<=7?'var(--gold)':'var(--navy)';
+    return `<div class="ev-item"><div class="ev-dot" style="background:${col}"></div><div class="ev-info">
+      <div class="ev-title-t">${h(ev.titulo)}</div>
+      <div class="ev-meta-t">${fmtFecha(ev.fecha)} · <span style="color:${col};font-weight:600">${dias===0?'Hoy':dias===1?'Mañana':'en '+dias+' días'}</span></div>
+      ${exp?`<div class="ev-exp-tag">${h(exp.nroexp)||'#'+exp.id.slice(-6)} — ${h(exp.nombre)}</div>`:''}
+    </div></div>`;
+  }).join('') : '<div style="color:var(--g400);font-size:13px;text-align:center;padding:14px">Sin eventos próximos</div>';
+}
+
+// ── EXPEDIENTES ──
+function renderExp() {
+  const q = (document.getElementById('search-q')?.value||'').toLowerCase();
+  const qs = (document.getElementById('search-seg')?.value||'').toLowerCase();
+  let list = expedientes.filter(e=>{
+    const match = !q||[e.nombre,e.demandado,e.dni,e.demandado_dni,e.seguro,e.nroexp,e.dominio,e.vehiculo].some(f=>(f||'').toLowerCase().includes(q));
+    const matchSeg = !qs||(e.seguro||'').toLowerCase().includes(qs);
+    const matchEstado = !filtroEstado||e.estado===filtroEstado;
+    const matchAsoc = !filtroAsocId||e.asignado_a===filtroAsocId;
+    return match && matchSeg && matchEstado && matchAsoc;
+  });
+  document.getElementById('exp-count').textContent = list.length+' expediente'+(list.length!==1?'s':'');
+  const tbody = document.getElementById('exp-tbody');
+  tbody.innerHTML = list.length ? list.map(e=>`
+    <tr onclick="goToDetail('${e.id}')">
+      <td><div class="exp-num">${h(e.nroexp)||'#'+e.id.slice(-6)}</div></td>
+      <td><div class="client-name">${h(e.nombre)}</div>${e.conyuge?`<div class="client-sub">${h(e.conyuge)}</div>`:''}</td>
+      <td>${h(e.demandado)||'—'}</td><td>${h(e.seguro)||'—'}</td><td>${h(e.fecha)||'—'}</td>
+      <td>${estadoBadge(e.estado)}</td>
+      <td>${h(e.asignado?.nombre)||'<span style="color:var(--g400)">—</span>'}</td>
+    </tr>`).join('') :
+    `<tr><td colspan="7"><div class="empty-state"><div class="empty-title">Sin resultados</div></div></td></tr>`;
+}
+
+function goToDetail(id) {
+  showView('expedientes');
+  const e = expedientes.find(x=>x.id===id);
+  if(e) showDetailView(e);
+}
+
+function showListView() {
+  document.getElementById('exp-list').classList.remove('hidden');
+  const dv = document.getElementById('exp-detail');
+  dv.classList.remove('open'); dv.innerHTML = '';
+  renderExp();
+}
+
+function showDetailView(e) {
+  document.getElementById('exp-list').classList.add('hidden');
+  const dv = document.getElementById('exp-detail');
+  dv.classList.add('open');
+  const gastos = e.gastos||[];
+  const tG = gastos.reduce((s,g)=>s+parseFloat(g.monto||0),0);
+  const archivos = e.archivos||[];
+  const esJefe = currentPerfil?.rol==='jefe';
+  const ind = parseFloat(e.indemnizacion||0);
+
+  dv.innerHTML = `
+    <button class="detail-back" onclick="showListView()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Volver</button>
+    <div class="detail-header">
+      <div>
+        <div class="detail-exp-num">Expediente ${h(e.nroexp)||'#'+e.id.slice(-6)}</div>
+        <div class="detail-name">${h(e.nombre)||'Sin nombre'}</div>
+        <div class="detail-meta">
+          <div class="detail-meta-item">DNI: <span>${h(e.dni)||'—'}</span></div>
+          ${e.domicilio?`<div class="detail-meta-item">Dom: <span>${h(e.domicilio)}</span></div>`:''}
+          ${e.fecha?`<div class="detail-meta-item">Hecho: <span>${h(e.fecha)}</span></div>`:''}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+        ${estadoBadge(e.estado)}
+        ${e.estado==='Concluido' ? `<div style="text-align:right">
+          ${ind>0 ? `
+            <div style="color:var(--gold);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em">Indemnización</div>
+            <div style="color:white;font-size:20px;font-weight:700;font-family:'DM Serif Display',serif">$${ind.toLocaleString('es-AR')}</div>
+            <div style="color:rgba(255,255,255,.5);font-size:11px;margin:2px 0 6px">Hon. cliente: $${Math.round(ind*.3).toLocaleString('es-AR')} · Seg: $${Math.round(ind*.2).toLocaleString('es-AR')}</div>
+            <div style="color:var(--gold-light);font-size:13px;font-weight:700">Total: $${Math.round(ind*.5).toLocaleString('es-AR')}</div>
+            <button class="indem-btn indem-edit" style="margin-top:8px" onclick="abrirIndemModal('${e.id}',${ind})">✏️ Modificar</button>
+          ` : `<button class="indem-btn" onclick="abrirIndemModal('${e.id}',0)">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Cargar indemnización
+          </button>`}
+        </div>` : ''}
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <button class="btn btn-gold btn-sm" onclick="openEditarModal('${e.id}')">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Editar
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="abrirDescarga('${e.id}')">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            PDF
+          </button>
+          ${esJefe?`<button class="btn btn-danger btn-sm" onclick="eliminarExp('${e.id}')">Eliminar</button>`:''}
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-card">
+        <div class="detail-card-title">Damnificado</div>
+        ${df('Nombre',e.nombre)}${df('DNI',e.dni)}${df('Edad',e.edad)}${df('Nacionalidad',e.nacionalidad)}${df('Estado civil',e.estado_civil)}${df('Domicilio',e.domicilio)}${df('Teléfono',e.tel)}${df('Email',e.email)}${df('Cónyuge',e.conyuge)}${df('DNI cónyuge',e.conyuge_dni)}${df('Padre',e.padre)}${df('DNI padre',e.padre_dni)}${df('Madre',e.madre)}${df('DNI madre',e.madre_dni)}
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-title">Demandado</div>
+        ${df('Nombre',e.demandado)}${df('DNI',e.demandado_dni)}${df('Domicilio',e.demandado_dom)}${df('Teléfono',e.demandado_tel)}${df('Titular póliza',e.titular_poliza)}${df('Dom. titular póliza',e.titular_dom)}${df('Tel. titular',e.titular_tel)}${df('Titular del vehículo',e.titular_vehiculo)}${df('Vehículo',e.vehiculo)}${df('Dominio/Patente',e.dominio)}${df('Seguro',e.seguro)}${df('Dom. aseguradora',e.seguro_domicilio)}${df('Tel. aseguradora',e.seguro_tel)}${df('N° póliza',e.poliza)}${df('STRO',e.stro)}${df('Contacto Cía.',e.contacto_cia)}${df('Abogado a cargo',e.asignado?.nombre)}
+      </div>
+    </div>
+
+    ${e.victima2_nombre?`<div class="full-card">
+      <div class="detail-card-title">Segunda víctima</div>
+      ${df('Nombre',e.victima2_nombre)}${df('DNI',e.victima2_dni)}${df('Edad',e.victima2_edad)}${df('Nacionalidad',e.victima2_nacionalidad)}${df('Estado civil',e.victima2_estado_civil)}${df('Domicilio',e.victima2_domicilio)}${df('Teléfono',e.victima2_tel)}${df('Cónyuge',e.victima2_conyuge)}${df('DNI cónyuge',e.victima2_conyuge_dni)}${df('Padre',e.victima2_padre)}${df('Madre',e.victima2_madre)}
+    </div>`:''}
+
+    <div class="full-card">
+      <div class="detail-card-title">Mecánica del hecho</div>
+      ${e.lugar?`<div class="detail-field"><div class="field-label">Lugar</div><div class="field-value">${h(e.lugar)}${e.hora?' — '+h(e.hora)+' hs.':''}</div></div>`:''}
+      ${e.mecanica?`<div style="margin-top:10px"><div class="mecanica-text">${h(e.mecanica)}</div></div>`:''}
+      ${df('Revisación médica',e.revision_medica)}
+      ${e.lesiones?`<div class="detail-field"><div class="field-label">Lesiones</div><div class="field-value">${h(e.lesiones)}</div></div>`:''}
+    </div>
+
+    ${(e.testigo_hecho_1||e.testigo_hecho_2||e.testigo_beneficio_1)?`<div class="full-card">
+      <div class="detail-card-title">Testigos</div>
+      ${df('Testigo del hecho 1',e.testigo_hecho_1)}${df('Testigo del hecho 2',e.testigo_hecho_2)}
+      ${df('Testigo del beneficio 1',e.testigo_beneficio_1)}${df('Testigo del beneficio 2',e.testigo_beneficio_2)}${df('Testigo del beneficio 3',e.testigo_beneficio_3)}
+    </div>`:''}
+
+    <div class="full-card">
+      <div class="detail-card-title">Datos judiciales</div>
+      ${df('Estado',e.estado)}${df('N° expediente',e.nroexp)}${df('UFI',e.ufi)}${df('IPP',e.ipp)}${df('Comisaría',e.comisaria)}${df('Observaciones',e.obs)}
+    </div>
+
+    <div class="full-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <div class="detail-card-title" style="margin-bottom:0">Gastos</div>
+        <span class="badge badge-navy">Total: $${tG.toLocaleString('es-AR')}</span>
+      </div>
+      <div id="gastos-det-${e.id}">
+        ${gastos.length ? gastos.map(g=>`
+          <div class="gasto-row">
+            <div class="gasto-fecha">${h(g.fecha)||'—'}</div>
+            <div class="gasto-desc">${h(g.descripcion||g.desc||'')}</div>
+            <div class="gasto-monto">$${parseFloat(g.monto).toLocaleString('es-AR')}</div>
+            <button class="delete-btn" onclick="eliminarGasto('${g.id}','${e.id}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+          </div>`).join('') : '<div style="color:var(--g400);font-size:14px;padding:8px 0">Sin gastos aún.</div>'}
+      </div>
+      <div class="add-gasto-form">
+        <div class="form-group"><label>Descripción</label><input id="g-desc-${e.id}" placeholder="Sellado, pericia..."></div>
+        <div class="form-group"><label>Monto ($)</label><input type="number" id="g-monto-${e.id}" placeholder="0" min="0"></div>
+        <div class="form-group"><label>Fecha</label><input type="date" id="g-fecha-${e.id}"></div>
+        <div class="form-group"><label style="opacity:0">.</label><button class="btn btn-primary btn-sm" onclick="agregarGasto('${e.id}')">+ Agregar</button></div>
+      </div>
+    </div>
+
+    <div class="full-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div class="detail-card-title" style="margin-bottom:0">Archivos adjuntos</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="badge badge-navy">${archivos.length} archivo${archivos.length!==1?'s':''}</span>
+          <label class="btn btn-gold btn-sm" style="cursor:pointer">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Subir
+            <input type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt" style="display:none" onchange="subirArchivo('${e.id}',this)">
+          </label>
+        </div>
+      </div>
+      <div class="dropzone" id="dz-${e.id}" ondragover="dzOver(event,'${e.id}')" ondragleave="dzLeave(event,'${e.id}')" ondrop="dzDrop(event,'${e.id}')" onclick="document.getElementById('fi-${e.id}').click()">
+        <input type="file" id="fi-${e.id}" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt" style="display:none" onchange="subirArchivo('${e.id}',this)">
+        <svg width="26" height="26" fill="none" stroke="var(--g400)" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 7px;display:block"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <div style="font-size:13px;color:var(--g600);font-weight:500">Arrastrá archivos acá o hacé clic</div>
+        <div style="font-size:11px;color:var(--g400);margin-top:3px">Fotos, PDFs, Word, Excel</div>
+      </div>
+      <div style="display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap">
+        ${['todos','imagen','pdf','doc','otro'].map((t,i)=>`<button class="arch-filtro${i===0?' active':''}" data-exp="${e.id}" data-tipo="${t}" onclick="filtrarArchivos('${e.id}','${t}',this)">${['Todos','📷 Fotos','📄 PDFs','📝 Docs','📁 Otros'][i]}</button>`).join('')}
+      </div>
+      <div id="arch-grid-${e.id}">${renderArchGrid(archivos,e.id)}</div>
+    </div>
+
+    <div class="full-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="detail-card-title" style="margin-bottom:0">Calendario de esta carpeta</div>
+        <button class="btn btn-gold btn-sm" onclick="openEventoModal('${e.id}')">+ Evento</button>
+      </div>
+      <div id="cal-exp-${e.id}"></div>
+      <div id="cal-exp-lista-${e.id}" style="margin-top:12px"></div>
+    </div>
+
+    <div class="full-card" style="background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-family:'DM Serif Display',serif;color:white;font-size:17px;margin-bottom:3px">Redactar escritos con IA</div>
+          <div style="color:rgba(255,255,255,.6);font-size:13px">Generá el PDF completo y enviáselo a Claude para que redacte demandas o contestaciones.</div>
+        </div>
+        <button class="btn btn-gold" onclick="abrirDescarga('${e.id}')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar carpeta
+        </button>
+      </div>
+    </div>`;
+
+  setTimeout(() => renderCalExp(e), 0);
+  setTimeout(() => cargarFotosExp(e), 0);
+}
+
+// Carga el contenido real de las fotos solo de esta carpeta, al abrirla.
+// Las viejas (base64) se muestran tal cual; las nuevas (en el depósito) usan un enlace firmado privado.
+async function cargarFotosExp(e) {
+  const {data, error} = await sb.from('archivos').select('*').eq('expediente_id', e.id).order('fecha',{ascending:false});
+  if(error || !data) return;
+  const enDeposito = data.filter(a=>a.storage_key);
+  if(enDeposito.length){
+    try{
+      const {data:firmadas} = await sb.storage.from('carpetas').createSignedUrls(enDeposito.map(a=>a.storage_key), 7200);
+      if(firmadas){ enDeposito.forEach((a,i)=>{ if(firmadas[i]&&firmadas[i].signedUrl) a.storage_path = firmadas[i].signedUrl; }); }
+    }catch(err){ console.error('Error firmando URLs de fotos:', err); }
+  }
+  e.archivos = data;
+  const cont = document.getElementById('arch-grid-'+e.id);
+  if(cont){
+    const activo = document.querySelector('.arch-filtro[data-exp="'+e.id+'"].active');
+    cont.innerHTML = renderArchGrid(e.archivos, e.id, activo?.dataset.tipo || 'todos');
+  }
+}
+
+function df(label, val) {
+  if(!val) return '';
+  return `<div class="detail-field"><div class="field-label">${label}</div><div class="field-value">${h(val)}</div></div>`;
+}
+
+// ── CRUD EXP ──
+function openExpModal() {
+  const sel = document.getElementById('f-asignado');
+  sel.innerHTML = '<option value="">— Sin asignar —</option>';
+  const jefes = perfiles.filter(p=>p.rol==='jefe');
+  const emps = perfiles.filter(p=>p.rol==='empleado');
+  if(jefes.length){const og=document.createElement('optgroup');og.label='Jefes';jefes.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.nombre;og.appendChild(o);});sel.appendChild(og);}
+  if(emps.length){const og=document.createElement('optgroup');og.label='Asociados';emps.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.nombre;og.appendChild(o);});sel.appendChild(og);}
+  document.getElementById('f-fecha').valueAsDate = new Date();
+  document.getElementById('ov-exp').classList.add('open');
+}
+
+function closeExpModal() {
+  document.getElementById('ov-exp').classList.remove('open');
+  const ids=['f-nombre','f-dni','f-edad','f-fecha-nac','f-nacionalidad','f-estado-civil','f-domicilio','f-tel','f-email',
+    'f-conyuge','f-conyuge-dni','f-padre','f-padre-dni','f-madre','f-madre-dni',
+    'f-v2-nombre','f-v2-dni','f-v2-edad','f-v2-fecha-nac','f-v2-nacionalidad','f-v2-domicilio','f-v2-tel','f-v2-conyuge','f-v2-conyuge-dni','f-v2-padre','f-v2-madre',
+    'f-demandado','f-demandado-dni','f-demandado-dom','f-demandado-tel','f-titular-poliza','f-titular-dom','f-titular-tel','f-titular-vehiculo',
+    'f-vehiculo','f-dominio','f-seguro','f-seguro-dom','f-seguro-tel','f-poliza','f-stro','f-contacto-cia',
+    'f-testigo-h1','f-testigo-h2','f-testigo-b1','f-testigo-b2','f-testigo-b3',
+    'f-fecha','f-hora','f-lugar','f-mecanica','f-revision-medica','f-lesiones',
+    'f-ufi','f-ipp','f-comisaria','f-nroexp','f-obs'];
+  ids.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const selects=['f-estado-civil','f-v2-estado-civil'];
+  selects.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('f-estado').value='En trámite';
+}
+
+const g = id => (document.getElementById(id)?.value||'').trim();
+
+async function guardarExp() {
+  const nombre = g('f-nombre');
+  if(!nombre){showToast('Ingresá al menos el nombre de la víctima',true);return;}
+  const btn = document.getElementById('btn-guardar-exp');
+  btn.innerHTML='<div class="spinner spinner-w"></div>';btn.disabled=true;
+  const payload = {
+    nombre, dni:g('f-dni'), edad:g('f-edad'), fecha_nacimiento:g('f-fecha-nac')||null,
+    nacionalidad:g('f-nacionalidad'), estado_civil:g('f-estado-civil'),
+    domicilio:g('f-domicilio'), tel:g('f-tel'), email:g('f-email'),
+    conyuge:g('f-conyuge'), conyuge_dni:g('f-conyuge-dni'),
+    padre:g('f-padre'), padre_dni:g('f-padre-dni'),
+    madre:g('f-madre'), madre_dni:g('f-madre-dni'),
+    victima2_nombre:g('f-v2-nombre'), victima2_dni:g('f-v2-dni'), victima2_edad:g('f-v2-edad'),
+    victima2_fecha_nac:g('f-v2-fecha-nac')||null, victima2_nacionalidad:g('f-v2-nacionalidad'),
+    victima2_estado_civil:g('f-v2-estado-civil'), victima2_domicilio:g('f-v2-domicilio'),
+    victima2_tel:g('f-v2-tel'), victima2_conyuge:g('f-v2-conyuge'), victima2_conyuge_dni:g('f-v2-conyuge-dni'),
+    victima2_padre:g('f-v2-padre'), victima2_madre:g('f-v2-madre'),
+    demandado:g('f-demandado'), demandado_dni:g('f-demandado-dni'),
+    demandado_dom:g('f-demandado-dom'), demandado_tel:g('f-demandado-tel'),
+    titular_poliza:g('f-titular-poliza'), titular_dom:g('f-titular-dom'), titular_tel:g('f-titular-tel'),
+    titular_vehiculo:g('f-titular-vehiculo'),
+    vehiculo:g('f-vehiculo'), dominio:g('f-dominio'),
+    seguro:g('f-seguro'), seguro_domicilio:g('f-seguro-dom'), seguro_tel:g('f-seguro-tel'),
+    poliza:g('f-poliza'), stro:g('f-stro'), contacto_cia:g('f-contacto-cia'),
+    testigo_hecho_1:g('f-testigo-h1'), testigo_hecho_2:g('f-testigo-h2'),
+    testigo_beneficio_1:g('f-testigo-b1'), testigo_beneficio_2:g('f-testigo-b2'), testigo_beneficio_3:g('f-testigo-b3'),
+    fecha:g('f-fecha')||null, hora:g('f-hora')||null, lugar:g('f-lugar'),
+    mecanica:g('f-mecanica'), revision_medica:g('f-revision-medica'), lesiones:g('f-lesiones'),
+    ufi:g('f-ufi'), ipp:g('f-ipp'), comisaria:g('f-comisaria'),
+    estado:g('f-estado'), nroexp:g('f-nroexp'),
+    asignado_a:g('f-asignado')||null, obs:g('f-obs'),
+    creado_por:currentUser.id
+  };
+  const {error} = await sb.from('expedientes').insert(payload);
+  btn.innerHTML='Guardar carpeta';btn.disabled=false;
+  if(error){showToast('Error: '+error.message,true);return;}
+  await loadExpedientes();
+  closeExpModal();
+  showToast('Carpeta guardada ✓');
+  if(currentView==='dashboard') renderDashboard();
+  if(currentView==='expedientes') renderExp();
+}
+
+async function eliminarExp(id) {
+  if(!confirm('¿Eliminar este expediente? No se puede deshacer.')) return;
+  await sb.from('expedientes').delete().eq('id',id);
+  await loadExpedientes();
+  showListView();
+  showToast('Expediente eliminado');
+}
+
+// ── EDITAR ──
+function openEditarModal(expId) {
+  const e = expedientes.find(x=>x.id===expId); if(!e) return;
+  const sel = document.getElementById('edit-asignado');
+  sel.innerHTML = '<option value="">— Sin asignar —</option>';
+  perfiles.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.nombre+(p.rol==='jefe'?' (Jefe)':'');if(p.id===e.asignado_a)o.selected=true;sel.appendChild(o);});
+  const fields = {
+    'edit-id':e.id,'edit-nombre':e.nombre,'edit-dni':e.dni,'edit-edad':e.edad,
+    'edit-fecha-nac':e.fecha_nacimiento,'edit-nacionalidad':e.nacionalidad,'edit-estado-civil':e.estado_civil,
+    'edit-domicilio':e.domicilio,'edit-tel':e.tel,'edit-email':e.email,
+    'edit-conyuge':e.conyuge,'edit-conyuge-dni':e.conyuge_dni,'edit-padre':e.padre,'edit-padre-dni':e.padre_dni,'edit-madre':e.madre,'edit-madre-dni':e.madre_dni,
+    'edit-v2-nombre':e.victima2_nombre,'edit-v2-dni':e.victima2_dni,'edit-v2-edad':e.victima2_edad,
+    'edit-v2-fecha-nac':e.victima2_fecha_nac,'edit-v2-nacionalidad':e.victima2_nacionalidad,'edit-v2-estado-civil':e.victima2_estado_civil,
+    'edit-v2-domicilio':e.victima2_domicilio,'edit-v2-tel':e.victima2_tel,'edit-v2-conyuge':e.victima2_conyuge,'edit-v2-conyuge-dni':e.victima2_conyuge_dni,
+    'edit-v2-padre':e.victima2_padre,'edit-v2-madre':e.victima2_madre,
+    'edit-demandado':e.demandado,'edit-demandado-dni':e.demandado_dni,'edit-demandado-dom':e.demandado_dom,'edit-demandado-tel':e.demandado_tel,
+    'edit-titular-poliza':e.titular_poliza,'edit-titular-dom':e.titular_dom,'edit-titular-tel':e.titular_tel,'edit-titular-vehiculo':e.titular_vehiculo,
+    'edit-vehiculo':e.vehiculo,'edit-dominio':e.dominio,
+    'edit-seguro':e.seguro,'edit-seguro-dom':e.seguro_domicilio,'edit-seguro-tel':e.seguro_tel,'edit-poliza':e.poliza,'edit-stro':e.stro,'edit-contacto-cia':e.contacto_cia,
+    'edit-testigo-h1':e.testigo_hecho_1,'edit-testigo-h2':e.testigo_hecho_2,
+    'edit-testigo-b1':e.testigo_beneficio_1,'edit-testigo-b2':e.testigo_beneficio_2,'edit-testigo-b3':e.testigo_beneficio_3,
+    'edit-fecha':e.fecha,'edit-hora':e.hora,'edit-lugar':e.lugar,
+    'edit-mecanica':e.mecanica,'edit-revision-medica':e.revision_medica,'edit-lesiones':e.lesiones,'edit-estado':e.estado,
+    'edit-nroexp':e.nroexp,'edit-ufi':e.ufi,'edit-ipp':e.ipp,'edit-comisaria':e.comisaria,'edit-obs':e.obs
+  };
+  Object.entries(fields).forEach(([id,val])=>{const el=document.getElementById(id);if(el&&val!=null)el.value=val;});
+  document.getElementById('ov-editar').classList.add('open');
+}
+function closeEditarModal() { document.getElementById('ov-editar').classList.remove('open'); }
+
+async function guardarEdicion() {
+  const id = document.getElementById('edit-id').value;
+  const nombre = g('edit-nombre');
+  if(!nombre){showToast('Completá el nombre',true);return;}
+  const btn = document.getElementById('btn-guardar-edicion');
+  btn.innerHTML='<div class="spinner spinner-w"></div>';btn.disabled=true;
+  const payload = {
+    nombre, dni:g('edit-dni'), edad:g('edit-edad'), fecha_nacimiento:g('edit-fecha-nac')||null,
+    nacionalidad:g('edit-nacionalidad'), estado_civil:g('edit-estado-civil'),
+    domicilio:g('edit-domicilio'), tel:g('edit-tel'), email:g('edit-email'),
+    conyuge:g('edit-conyuge'), conyuge_dni:g('edit-conyuge-dni'),
+    padre:g('edit-padre'), padre_dni:g('edit-padre-dni'),
+    madre:g('edit-madre'), madre_dni:g('edit-madre-dni'),
+    victima2_nombre:g('edit-v2-nombre'), victima2_dni:g('edit-v2-dni'), victima2_edad:g('edit-v2-edad'),
+    victima2_fecha_nac:g('edit-v2-fecha-nac')||null, victima2_nacionalidad:g('edit-v2-nacionalidad'),
+    victima2_estado_civil:g('edit-v2-estado-civil'), victima2_domicilio:g('edit-v2-domicilio'),
+    victima2_tel:g('edit-v2-tel'), victima2_conyuge:g('edit-v2-conyuge'), victima2_conyuge_dni:g('edit-v2-conyuge-dni'),
+    victima2_padre:g('edit-v2-padre'), victima2_madre:g('edit-v2-madre'),
+    demandado:g('edit-demandado'), demandado_dni:g('edit-demandado-dni'),
+    demandado_dom:g('edit-demandado-dom'), demandado_tel:g('edit-demandado-tel'),
+    titular_poliza:g('edit-titular-poliza'), titular_dom:g('edit-titular-dom'), titular_tel:g('edit-titular-tel'),
+    titular_vehiculo:g('edit-titular-vehiculo'),
+    vehiculo:g('edit-vehiculo'), dominio:g('edit-dominio'),
+    seguro:g('edit-seguro'), seguro_domicilio:g('edit-seguro-dom'), seguro_tel:g('edit-seguro-tel'),
+    poliza:g('edit-poliza'), stro:g('edit-stro'), contacto_cia:g('edit-contacto-cia'),
+    testigo_hecho_1:g('edit-testigo-h1'), testigo_hecho_2:g('edit-testigo-h2'),
+    testigo_beneficio_1:g('edit-testigo-b1'), testigo_beneficio_2:g('edit-testigo-b2'), testigo_beneficio_3:g('edit-testigo-b3'),
+    fecha:g('edit-fecha')||null, hora:g('edit-hora')||null, lugar:g('edit-lugar'),
+    mecanica:g('edit-mecanica'), revision_medica:g('edit-revision-medica'), lesiones:g('edit-lesiones'),
+    estado:g('edit-estado'), nroexp:g('edit-nroexp'), ufi:g('edit-ufi'), ipp:g('edit-ipp'), comisaria:g('edit-comisaria'), obs:g('edit-obs'),
+    asignado_a:g('edit-asignado')||null, actualizado_at:new Date().toISOString()
+  };
+  const {error} = await sb.from('expedientes').update(payload).eq('id',id);
+  btn.innerHTML='Guardar cambios';btn.disabled=false;
+  if(error){showToast('Error: '+error.message,true);return;}
+  await loadExpedientes();
+  closeEditarModal();
+  showToast('Carpeta actualizada ✓');
+  const exp = expedientes.find(x=>x.id===id);
+  if(exp) showDetailView(exp);
+}
+
+// ── GASTOS ──
+async function agregarGasto(expId) {
+  const desc = document.getElementById('g-desc-'+expId).value.trim();
+  const monto = document.getElementById('g-monto-'+expId).value;
+  const fecha = document.getElementById('g-fecha-'+expId).value;
+  if(!desc||!monto){showToast('Completá descripción y monto',true);return;}
+  await sb.from('gastos').insert({expediente_id:expId, descripcion:desc, monto:parseFloat(monto), fecha:fecha||null});
+  await loadExpedientes();
+  const e = expedientes.find(x=>x.id===expId);
+  if(e) showDetailView(e);
+  showToast('Gasto agregado ✓');
+}
+async function eliminarGasto(gastoId, expId) {
+  await sb.from('gastos').delete().eq('id',gastoId);
+  await loadExpedientes();
+  const e = expedientes.find(x=>x.id===expId);
+  if(e) showDetailView(e);
+}
+function renderGastos() {
+  const tbody = document.getElementById('gastos-tbody');
+  const badge = document.getElementById('gastos-total');
+  let total=0; let rows=[];
+  expedientes.forEach(e=>(e.gastos||[]).forEach(g=>{total+=parseFloat(g.monto||0);rows.push({e,g});}));
+  badge.textContent = 'Total: $'+total.toLocaleString('es-AR');
+  tbody.innerHTML = rows.length ? rows.map(r=>`
+    <tr onclick="goToDetail('${r.e.id}')">
+      <td><div class="exp-num">${h(r.e.nroexp)||'#'+r.e.id.slice(-6)}</div></td>
+      <td>${h(r.e.nombre)}</td><td>${h(r.g.descripcion||r.g.desc||'')}</td><td>${h(r.g.fecha)||'—'}</td>
+      <td><strong>$${parseFloat(r.g.monto).toLocaleString('es-AR')}</strong></td>
+    </tr>`).join('') :
+    `<tr><td colspan="5"><div class="empty-state"><div class="empty-title">Sin gastos</div></div></td></tr>`;
+}
+
+// ── ARCHIVOS ──
+async function subirArchivo(expId, input) { await procesarArchivos(expId, input.files); }
+function dzOver(ev,id){ev.preventDefault();document.getElementById('dz-'+id).classList.add('dz-active')}
+function dzLeave(ev,id){document.getElementById('dz-'+id).classList.remove('dz-active')}
+async function dzDrop(ev,id){ev.preventDefault();document.getElementById('dz-'+id).classList.remove('dz-active');await procesarArchivos(id,ev.dataTransfer.files);}
+
+async function procesarArchivos(expId, files) {
+  if(!files.length) return;
+  showLoading(true);
+  const arr = Array.from(files);
+  const subidos = [];   // claves ya subidas al depósito (para limpiar si algo falla)
+  const inserts = [];
+  for(const f of arr){
+    const safe = (f.name||'archivo').replace(/[^a-zA-Z0-9._-]/g,'_');
+    const key = expId + '/' + Date.now() + '_' + Math.random().toString(36).slice(2,8) + '_' + safe;
+    const {error: upErr} = await sb.storage.from('carpetas').upload(key, f, {contentType:f.type||'application/octet-stream', upsert:false});
+    if(upErr){
+      if(subidos.length) await sb.storage.from('carpetas').remove(subidos); // limpiar lo ya subido
+      showLoading(false);
+      showToast('No se pudo subir "'+f.name+'": '+upErr.message+'. No se guardó nada.', true);
+      return;
+    }
+    subidos.push(key);
+    inserts.push({expediente_id:expId, nombre:f.name, tipo:f.type, tamanio:fmtSize(f.size), fecha:new Date().toISOString().slice(0,10), storage_key:key});
+  }
+  const {error} = await sb.from('archivos').insert(inserts);
+  if(error){
+    if(subidos.length) await sb.storage.from('carpetas').remove(subidos); // sin registro, no dejamos huérfanos
+    showLoading(false);
+    showToast('Error al guardar: '+error.message+'. No se guardó nada.', true);
+    return;
+  }
+  await loadExpedientes();
+  const e = expedientes.find(x=>x.id===expId);
+  if(e) showDetailView(e);
+  showLoading(false);
+  showToast(arr.length+' archivo(s) agregado(s) ✓');
+}
+
+async function eliminarArchivo(archId, expId) {
+  const e0 = expedientes.find(x=>x.id===expId);
+  let key = e0?.archivos?.find(a=>a.id===archId)?.storage_key || null;
+  if(!key){
+    const {data} = await sb.from('archivos').select('storage_key').eq('id',archId).single();
+    key = data?.storage_key || null;
+  }
+  if(key){ await sb.storage.from('carpetas').remove([key]); }
+  await sb.from('archivos').delete().eq('id',archId);
+  await loadExpedientes();
+  const e = expedientes.find(x=>x.id===expId);
+  if(e) showDetailView(e);
+}
+
+function renderArchGrid(archivos, expId, filtro='todos') {
+  if(!archivos.length) return '<div style="color:var(--g400);font-size:13px;text-align:center;padding:14px">Sin archivos. Arrastrá o seleccioná para adjuntar.</div>';
+  const f = archivos.filter(a=>{
+    if(filtro==='todos') return true;
+    if(filtro==='imagen') return a.tipo&&a.tipo.startsWith('image');
+    if(filtro==='pdf') return a.tipo&&a.tipo.includes('pdf');
+    if(filtro==='doc') return a.nombre&&a.nombre.match(/\.(doc|docx|xls|xlsx|txt)$/i);
+    return!((a.tipo&&a.tipo.startsWith('image'))||(a.tipo&&a.tipo.includes('pdf'))||(a.nombre&&a.nombre.match(/\.(doc|docx|xls|xlsx|txt)$/i)));
+  });
+  if(!f.length) return '<div style="color:var(--g400);font-size:13px;text-align:center;padding:14px">No hay archivos de este tipo.</div>';
+  return '<div class="archivos-grid">'+f.map(a=>{
+    const realIdx = archivos.indexOf(a);
+    const [ico,col] = fileIconBig(a.tipo,a.nombre);
+    const preview = a.tipo&&a.tipo.startsWith('image')&&a.storage_path
+      ? `<div class="arch-preview"><img src="${a.storage_path}" alt="${h(a.nombre)}" data-nombre="${h(a.nombre)}" onclick="abrirFoto(this.src,this.dataset.nombre)"></div>`
+      : `<div class="arch-preview"><div style="display:flex;flex-direction:column;align-items:center;gap:4px">${ico}<span style="font-size:10px;color:${col};font-weight:600">${h(fmtExt(a.nombre))}</span></div></div>`;
+    return `<div class="arch-item">${preview}
+      <div class="arch-info"><div class="arch-name" title="${h(a.nombre)}">${h(a.nombre)}</div><div class="arch-meta">${h(a.tamanio||'')} · ${h(a.fecha||'')}</div></div>
+      <button class="arch-del" onclick="eliminarArchivo('${a.id}','${expId}')"><svg width="9" height="9" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>`;
+  }).join('')+'</div>';
+}
+
+function filtrarArchivos(expId, tipo, btn) {
+  document.querySelectorAll(`.arch-filtro[data-exp="${expId}"]`).forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const e = expedientes.find(x=>x.id===expId);
+  if(e) document.getElementById('arch-grid-'+expId).innerHTML = renderArchGrid(e.archivos||[],expId,tipo);
+}
+
+function abrirFoto(src, nombre) {
+  const img = document.getElementById('lightbox-img');
+  img.src = src;
+  img.alt = nombre || '';
+  document.getElementById('lightbox-caption').textContent = nombre || '';
+  document.getElementById('lightbox').classList.add('open');
+}
+function cerrarFoto() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightbox-img').src = '';
+}
+document.addEventListener('keydown', ev=>{ if(ev.key==='Escape') cerrarFoto(); });
+
+// ── CALENDARIO ──
+function todosEvs() {
+  const evExp=[];
+  expedientes.forEach(e=>(e.eventos||[]).forEach(ev=>evExp.push({...ev,expediente_id:e.id})));
+  return [...eventos,...evExp];
+}
+
+function renderCal(wrapId, listaId, mes, anio, filtroExpId) {
+  const wrap = document.getElementById(wrapId); if(!wrap) return;
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const calKey = filtroExpId||'global';
+  const todosE = filtroExpId
+    ? (expedientes.find(x=>x.id===filtroExpId)?.eventos||[]).map(ev=>({...ev,expediente_id:filtroExpId}))
+    : todosEvs();
+  const byDay={};
+  todosE.forEach(ev=>{if(!ev.fecha)return;const[y,m,d]=ev.fecha.split('-').map(Number);if(y===anio&&m===mes+1){if(!byDay[d])byDay[d]=[];byDay[d].push(ev);}});
+  const primerDia=new Date(anio,mes,1);
+  const ultimoDia=new Date(anio,mes+1,0);
+  const offset=(primerDia.getDay()+6)%7;
+  let cells='';
+  for(let i=0;i<offset;i++) cells+='<div class="cal-cell other"><div class="cal-num"></div></div>';
+  for(let d=1;d<=ultimoDia.getDate();d++){
+    const isHoy=new Date(anio,mes,d).toDateString()===hoy.toDateString();
+    const evs=byDay[d]||[];
+    const fd=`${anio}-${String(mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    cells+=`<div class="cal-cell${isHoy?' today':''}" onclick="abrirDia('${fd}','${filtroExpId||''}')">
+      <div class="cal-num">${d}</div>
+      ${evs.slice(0,2).map(ev=>`<div class="cal-ev ${ev.expediente_id?'cal-ev-e':'cal-ev-g'}" title="${h(ev.titulo)}">${h(ev.titulo)}</div>`).join('')}
+      ${evs.length>2?`<div style="font-size:10px;color:var(--g400);padding-left:4px">+${evs.length-2}</div>`:''}
+    </div>`;
+  }
+  const total=offset+ultimoDia.getDate();
+  for(let i=0;i<(total%7===0?0:7-total%7);i++) cells+='<div class="cal-cell other"><div class="cal-num"></div></div>';
+  wrap.innerHTML=`<div class="cal-wrap">
+    <div class="cal-head">
+      <button class="cal-nav-btn" onclick="navCal(-1,'${calKey}','${filtroExpId||''}')">&#8249;</button>
+      <div class="cal-month">${meses[mes]} ${anio}</div>
+      <button class="cal-nav-btn" onclick="navCal(1,'${calKey}','${filtroExpId||''}')">&#8250;</button>
+    </div>
+    <div class="cal-days-head">${['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(d=>`<div class="cal-day-name">${d}</div>`).join('')}</div>
+    <div class="cal-cells">${cells}</div>
+  </div>`;
+  const listaEl=document.getElementById(listaId);if(!listaEl)return;
+  const evsMes=todosE.filter(ev=>{if(!ev.fecha)return false;const[y,m]=ev.fecha.split('-').map(Number);return y===anio&&m===mes+1;}).sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  const cols={audiencia:'#0f1f3d',vencimiento:'#c0392b',mediacion:'#c9a84c',pericia:'#1a6b4a',otro:'#9a9690'};
+  listaEl.innerHTML=evsMes.length?evsMes.map(ev=>{
+    const exp=ev.expediente_id?expedientes.find(x=>x.id===ev.expediente_id):null;
+    return`<div class="ev-item">
+      <div class="ev-dot" style="background:${cols[ev.tipo]||'#9a9690'}"></div>
+      <div class="ev-info">
+        <div class="ev-title-t">${h(ev.titulo)}</div>
+        <div class="ev-meta-t">${fmtFecha(ev.fecha)}${ev.hora?' · '+h(ev.hora)+' hs.':''}</div>
+        ${exp?`<div class="ev-exp-tag">${h(exp.nroexp)||'#'+exp.id.slice(-6)} — ${h(exp.nombre)}</div>`:''}
+        ${ev.descripcion?`<div style="font-size:12px;color:var(--g600);margin-top:2px">${h(ev.descripcion)}</div>`:''}
+        <div style="margin-top:7px"><button class="btn btn-danger btn-sm" style="font-size:12px;padding:5px 10px" onclick="eliminarEvento('${ev.id}','${ev.expediente_id||''}')">Eliminar</button></div>
+      </div>
+    </div>`;
+  }).join(''):'<div style="color:var(--g400);font-size:13px;padding:10px 0">Sin eventos este mes.</div>';
+}
+
+function navCal(dir,calKey,expId) {
+  if(!calStates[calKey]) calStates[calKey]={mes:new Date().getMonth(),anio:new Date().getFullYear()};
+  calStates[calKey].mes+=dir;
+  if(calStates[calKey].mes>11){calStates[calKey].mes=0;calStates[calKey].anio++;}
+  if(calStates[calKey].mes<0){calStates[calKey].mes=11;calStates[calKey].anio--;}
+  if(calKey==='global') renderCal('cal-global-wrap','cal-global-lista',calStates[calKey].mes,calStates[calKey].anio,null);
+  else renderCal('cal-exp-'+expId,'cal-exp-lista-'+expId,calStates[calKey].mes,calStates[calKey].anio,expId);
+}
+function renderCalGlobal(){if(!calStates.global)calStates.global={mes:new Date().getMonth(),anio:new Date().getFullYear()};renderCal('cal-global-wrap','cal-global-lista',calStates.global.mes,calStates.global.anio,null);}
+function renderCalExp(e){const k=e.id;if(!calStates[k])calStates[k]={mes:new Date().getMonth(),anio:new Date().getFullYear()};renderCal('cal-exp-'+e.id,'cal-exp-lista-'+e.id,calStates[k].mes,calStates[k].anio,e.id);}
+function abrirDia(fecha,expId){openEventoModal(expId||null,fecha);}
+
+// ── EVENTOS ──
+function openEventoModal(expId, fechaPre) {
+  _eventoExpId = expId||null;
+  const sel=document.getElementById('ev-expid');
+  sel.innerHTML='<option value="">— Evento general —</option>';
+  expedientes.forEach(e=>{const o=document.createElement('option');o.value=e.id;o.textContent=`${e.nroexp||'#'+e.id.slice(-6)} — ${e.nombre}`;if(e.id===_eventoExpId)o.selected=true;sel.appendChild(o);});
+  document.getElementById('ev-fecha').value=fechaPre||new Date().toISOString().slice(0,10);
+  document.getElementById('ov-evento').classList.add('open');
+}
+function closeEventoModal(){
+  document.getElementById('ov-evento').classList.remove('open');
+  ['ev-titulo','ev-fecha','ev-hora','ev-desc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('ev-tipo').value='audiencia';
+  _eventoExpId=null;
+}
+async function guardarEvento(){
+  const titulo=document.getElementById('ev-titulo').value.trim();
+  const fecha=document.getElementById('ev-fecha').value;
+  if(!titulo||!fecha){showToast('Completá título y fecha',true);return;}
+  const expSelId=document.getElementById('ev-expid').value;
+  const ev={titulo,tipo:document.getElementById('ev-tipo').value,fecha,hora:document.getElementById('ev-hora').value||null,descripcion:document.getElementById('ev-desc').value.trim(),wpp:false,expediente_id:expSelId||null};
+  const {error}=await sb.from('eventos').insert(ev);
+  if(error){showToast('Error: '+error.message,true);return;}
+  await loadEventos();await loadExpedientes();
+  closeEventoModal();showToast('Evento guardado ✓');
+  if(currentView==='dashboard') renderDashboard();
+  if(currentView==='calendario') renderCalGlobal();
+  const dv=document.getElementById('exp-detail');
+  if(dv&&dv.classList.contains('open')&&expSelId){const e=expedientes.find(x=>x.id===expSelId);if(e)renderCalExp(e);}
+}
+async function eliminarEvento(evId,expId){
+  await sb.from('eventos').delete().eq('id',evId);
+  await loadEventos();await loadExpedientes();
+  if(currentView==='dashboard') renderDashboard();
+  if(currentView==='calendario') renderCalGlobal();
+  if(expId){const e=expedientes.find(x=>x.id===expId);if(e)renderCalExp(e);}
+  showToast('Evento eliminado');
+}
+
+// ── INDEMNIZACIÓN ──
+function abrirIndemModal(expId, montoActual) {
+  _indemExpId = expId;
+  document.getElementById('indem-exp-id').value = expId;
+  const inp = document.getElementById('indem-monto');
+  inp.value = montoActual > 0 ? montoActual : '';
+  const prev = document.getElementById('indem-preview');
+  if(montoActual > 0) { previewIndem(montoActual); prev.style.display='block'; }
+  else prev.style.display='none';
+  document.getElementById('ov-indem').classList.add('open');
+}
+function closeIndemModal(){document.getElementById('ov-indem').classList.remove('open');_indemExpId=null;}
+function previewIndem(val){
+  const n=parseFloat((val+'').replace(/\./g,'').replace(/,/g,'').replace(/\$/g,''))||0;
+  const prev=document.getElementById('indem-preview');
+  if(!n){prev.style.display='none';return;}
+  prev.style.display='block';
+  document.getElementById('prev-cliente').textContent='$'+Math.round(n*.3).toLocaleString('es-AR');
+  document.getElementById('prev-seg').textContent='$'+Math.round(n*.2).toLocaleString('es-AR');
+  document.getElementById('prev-total').textContent='$'+Math.round(n*.5).toLocaleString('es-AR');
+}
+async function guardarIndem(){
+  const raw=document.getElementById('indem-monto').value.replace(/\./g,'').replace(/,/g,'').replace(/\$/g,'').trim();
+  const monto=parseFloat(raw);
+  if(!monto||monto<=0){showToast('Ingresá un monto válido',true);return;}
+  const btn=document.getElementById('btn-guardar-indem');
+  btn.innerHTML='<div class="spinner spinner-w"></div>';btn.disabled=true;
+  const {error}=await sb.from('expedientes').update({indemnizacion:monto}).eq('id',_indemExpId);
+  btn.innerHTML='Guardar';btn.disabled=false;
+  if(error){showToast('Error: '+error.message,true);return;}
+  await loadExpedientes();
+  closeIndemModal();
+  showToast('Indemnización registrada ✓');
+  const e=expedientes.find(x=>x.id===_indemExpId);
+  if(e)showDetailView(e);
+  if(currentView==='dashboard') renderDashboard();
+}
+
+// ── RENTABILIDAD ──
+function renderRentabilidad(){
+  if(currentPerfil?.rol!=='jefe') return;
+
+  // Inicializar selectores
+  const selAnio = document.getElementById('rent-anio');
+  const selMes = document.getElementById('rent-mes');
+  const hoy = new Date();
+  const anioActual = hoy.getFullYear();
+  const mesActual = hoy.getMonth();
+
+  if(!selAnio.options.length){
+    for(let y=anioActual;y>=anioActual-4;y--){
+      const o=document.createElement('option');o.value=y;o.textContent=y;
+      if(y===anioActual) o.selected=true;
+      selAnio.appendChild(o);
+    }
+  }
+  // Seleccionar mes actual por defecto la primera vez
+  if(!selMes._init){ selMes.value=mesActual; selMes._init=true; }
+
+  const anio = parseInt(selAnio.value)||anioActual;
+  const mes = parseInt(selMes.value); // 0-11
+  const mesNombre = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][mes];
+  const prefMes = `${anio}-${String(mes+1).padStart(2,'0')}`;
+
+  const fmt = n => '$'+Math.round(n).toLocaleString('es-AR');
+
+  // ── Filtrar por mes seleccionado ──
+  // Causas concluidas con indemnización en el mes seleccionado (fecha del hecho o fecha_nacimiento? → usamos fecha del accidente)
+  const concluidosMes = expedientes.filter(e =>
+    e.estado==='Concluido' && e.indemnizacion>0 && e.fecha && e.fecha.startsWith(prefMes)
+  );
+  // Gastos del mes
+  const gastosMesArr = [];
+  expedientes.forEach(e => (e.gastos||[]).forEach(g => {
+    if(g.fecha && g.fecha.startsWith(prefMes)) gastosMesArr.push({...g, expNombre:e.nombre, expId:e.id, expNro:e.nroexp});
+  }));
+
+  const totalIndemMes = concluidosMes.reduce((s,e)=>s+parseFloat(e.indemnizacion||0),0);
+  const totalHonMes = totalIndemMes * 0.5;
+  const totalGastosMes = gastosMesArr.reduce((s,g)=>s+parseFloat(g.monto||0),0);
+  const netoMes = totalHonMes - totalGastosMes;
+
+  // ── Rueda SVG ──
+  const r=80,cx=100,cy=100,circ=2*Math.PI*r;
+  const tot = totalHonMes+totalGastosMes || 1;
+  const pHon=totalHonMes/tot, pGas=totalGastosMes/tot;
+  const dHon=pHon*circ, dGas=pGas*circ;
+  const ruedaSvg = `<svg viewBox="0 0 200 200" width="200" height="200">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#eeece6" stroke-width="32"/>
+    ${totalHonMes>0?`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#1a6b4a" stroke-width="32" stroke-dasharray="${dHon} ${circ}" stroke-dashoffset="${circ*.25}" stroke-linecap="round"/>`:''}
+    ${totalGastosMes>0?`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#c0392b" stroke-width="32" stroke-dasharray="${dGas} ${circ}" stroke-dashoffset="${circ*.25-dHon}" stroke-linecap="round"/>`:''}
+    <text x="100" y="88" text-anchor="middle" font-family="DM Serif Display,serif" font-size="12" fill="#0f1f3d">${mesNombre}</text>
+    <text x="100" y="107" text-anchor="middle" font-family="DM Serif Display,serif" font-size="16" fill="${netoMes>=0?'#1a6b4a':'#c0392b'}" font-weight="700">${netoMes>=0?'+':'−'}$${Math.round(Math.abs(netoMes)/1000).toLocaleString('es-AR')}k</text>
+    <text x="100" y="124" text-anchor="middle" font-size="10" fill="#9a9690">neto del mes</text>
+  </svg>`;
+
+  // ── Todos los meses del año para el gráfico de barras ──
+  const honPorMes = Array(12).fill(0);
+  const gasPorMes = Array(12).fill(0);
+  expedientes.forEach(e => {
+    if(e.estado==='Concluido' && e.indemnizacion>0 && e.fecha && e.fecha.startsWith(anio+'')) {
+      const m = parseInt(e.fecha.split('-')[1])-1;
+      if(m>=0&&m<12) honPorMes[m] += parseFloat(e.indemnizacion||0)*.5;
+    }
+    (e.gastos||[]).forEach(g => {
+      if(g.fecha && g.fecha.startsWith(anio+'')) {
+        const m = parseInt(g.fecha.split('-')[1])-1;
+        if(m>=0&&m<12) gasPorMes[m] += parseFloat(g.monto||0);
+      }
+    });
+  });
+  const maxBar = Math.max(...honPorMes,...gasPorMes,1);
+  const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+  // ── Por abogado (mes seleccionado) ──
+  const porAbog = {};
+  concluidosMes.forEach(e => {
+    const n = e.asignado?.nombre||'Sin asignar';
+    if(!porAbog[n]) porAbog[n]={causas:0,hon:0};
+    porAbog[n].causas++; porAbog[n].hon+=parseFloat(e.indemnizacion||0)*.5;
+  });
+  const abogList = Object.entries(porAbog).sort((a,b)=>b[1].hon-a[1].hon);
+  const maxAbog = Math.max(...abogList.map(a=>a[1].hon),1);
+
+  // ── Por aseguradora (mes seleccionado) ──
+  const porSeg = {};
+  concluidosMes.forEach(e => {
+    if(!e.seguro) return;
+    if(!porSeg[e.seguro]) porSeg[e.seguro]={causas:0};
+    porSeg[e.seguro].causas++;
+  });
+  const segList = Object.entries(porSeg).sort((a,b)=>b[1].causas-a[1].causas).slice(0,5);
+  const maxSeg = Math.max(...segList.map(s=>s[1].causas),1);
+
+  document.getElementById('rent-content').innerHTML = `
+    <div style="margin-bottom:6px;font-size:13px;color:var(--g400)">Mostrando datos de <strong style="color:var(--navy)">${mesNombre} ${anio}</strong></div>
+
+    <!-- KPIs del mes -->
+    <div class="rent-kpi-grid">
+      <div class="rent-kpi gr"><div class="rent-kpi-label">Honorarios del mes</div><div class="rent-kpi-value" style="font-size:20px;color:var(--green)">${fmt(totalHonMes)}</div><div class="rent-kpi-sub">50% de ${fmt(totalIndemMes)}</div></div>
+      <div class="rent-kpi rd"><div class="rent-kpi-label">Gastos del mes</div><div class="rent-kpi-value" style="font-size:20px;color:var(--red)">${fmt(totalGastosMes)}</div><div class="rent-kpi-sub">${gastosMesArr.length} gasto${gastosMesArr.length!==1?'s':''}</div></div>
+      <div class="rent-kpi ${netoMes>=0?'gr':'rd'}"><div class="rent-kpi-label">Resultado neto</div><div class="rent-kpi-value" style="font-size:20px;color:${netoMes>=0?'var(--green)':'var(--red)'}">${fmt(netoMes)}</div><div class="rent-kpi-sub">honorarios − gastos</div></div>
+      <div class="rent-kpi gd"><div class="rent-kpi-label">Causas concluidas</div><div class="rent-kpi-value">${concluidosMes.length}</div><div class="rent-kpi-sub">en ${mesNombre} ${anio}</div></div>
+    </div>
+
+    <!-- Rueda + detalle -->
+    <div class="full-card" style="margin-bottom:16px">
+      <div class="detail-card-title">${mesNombre} ${anio} — Resumen financiero</div>
+      <div style="display:flex;align-items:center;gap:40px;flex-wrap:wrap;justify-content:center;padding:8px 0">
+        ${ruedaSvg}
+        <div style="display:flex;flex-direction:column;gap:14px;min-width:200px">
+          <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span style="width:14px;height:14px;background:var(--green);border-radius:4px"></span><span style="font-size:13px;color:var(--g600);font-weight:600">Honorarios del mes</span></div><div style="font-family:'DM Serif Display',serif;font-size:22px;color:var(--green);padding-left:22px">${fmt(totalHonMes)}</div><div style="font-size:11px;color:var(--g400);padding-left:22px">30% cliente + 20% aseguradora</div></div>
+          <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span style="width:14px;height:14px;background:var(--red);border-radius:4px"></span><span style="font-size:13px;color:var(--g600);font-weight:600">Gastos del mes</span></div><div style="font-family:'DM Serif Display',serif;font-size:22px;color:var(--red);padding-left:22px">${fmt(totalGastosMes)}</div></div>
+          <div style="border-top:2px solid var(--g100);padding-top:12px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span style="width:14px;height:14px;background:${netoMes>=0?'var(--green)':'var(--red)'};border-radius:4px"></span><span style="font-size:13px;color:var(--g600);font-weight:600">Resultado neto</span></div><div style="font-family:'DM Serif Display',serif;font-size:26px;color:${netoMes>=0?'var(--green)':'var(--red)'};padding-left:22px">${fmt(netoMes)}</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <!-- Barras por mes del año -->
+      <div class="full-card" style="margin-bottom:0">
+        <div class="detail-card-title">Todos los meses de ${anio}</div>
+        <div style="display:flex;gap:14px;margin-bottom:10px;font-size:12px">
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:11px;height:11px;background:var(--green);border-radius:3px"></span>Honorarios</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:11px;height:11px;background:var(--red);border-radius:3px"></span>Gastos</span>
+        </div>
+        <div class="rent-bars">
+          ${meses.map((m,i)=>`<div class="rent-bar-row" style="${i===mes?'background:var(--g50);border-radius:6px;padding:3px 4px;margin:-3px -4px':''}">
+            <div class="rent-bar-label" style="${i===mes?'font-weight:700;color:var(--navy)':''}">${m}</div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+              <div class="rent-bar-track"><div class="rent-bar-fill" style="width:${honPorMes[i]/maxBar*100}%;background:var(--green)"></div></div>
+              <div class="rent-bar-track"><div class="rent-bar-fill" style="width:${gasPorMes[i]/maxBar*100}%;background:var(--red);opacity:.7"></div></div>
+            </div>
+            <div style="min-width:110px;text-align:right;font-size:11px">
+              <div style="color:var(--green);font-weight:600">${honPorMes[i]>0?fmt(honPorMes[i]):'-'}</div>
+              <div style="color:var(--red)">${gasPorMes[i]>0?fmt(gasPorMes[i]):'-'}</div>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <!-- Por abogado del mes -->
+        <div class="full-card" style="margin-bottom:0">
+          <div class="detail-card-title">Por abogado — ${mesNombre}</div>
+          ${abogList.length?`<div class="rent-bars">${abogList.map(([n,d])=>`<div class="rent-bar-row"><div class="rent-bar-label" title="${h(n)}">${h(n)}</div><div class="rent-bar-track"><div class="rent-bar-fill" style="width:${d.hon/maxAbog*100}%;background:var(--navy)"></div></div><div class="rent-bar-val"><div>${fmt(d.hon)}</div><div style="font-size:10px;color:var(--g400);font-weight:400">${d.causas} causa${d.causas!==1?'s':''}</div></div></div>`).join('')}</div>`:'<div style="color:var(--g400);font-size:13px">Sin causas concluidas este mes</div>'}
+        </div>
+        <!-- Gastos del mes detalle -->
+        <div class="full-card" style="margin-bottom:0">
+          <div class="detail-card-title">Gastos del mes — ${mesNombre}</div>
+          ${gastosMesArr.length?`<div style="max-height:200px;overflow-y:auto">${gastosMesArr.map(g=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--g100)"><div style="flex:1"><div style="font-size:13px;font-weight:500">${h(g.descripcion||'')}</div><div style="font-size:11px;color:var(--g400)">${h(g.expNombre||'')}</div></div><div style="font-weight:600;color:var(--red);font-size:13px">$${parseFloat(g.monto).toLocaleString('es-AR')}</div></div>`).join('')}</div>`:'<div style="color:var(--g400);font-size:13px">Sin gastos este mes</div>'}
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla causas del mes -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">Causas concluidas en ${mesNombre} ${anio}</div><span class="badge badge-green">${concluidosMes.length}</span></div>
+      <table><thead><tr><th>Expediente</th><th>Cliente</th><th>Abogado</th><th>Indemnización</th><th>Hon. 30%</th><th>Hon. 20%</th><th>Total hon.</th><th>Gastos</th><th>Neto</th></tr></thead>
+      <tbody>
+        ${concluidosMes.length?concluidosMes.map(e=>{
+          const ind=parseFloat(e.indemnizacion||0);
+          const gas=(e.gastos||[]).reduce((s,g)=>s+parseFloat(g.monto||0),0);
+          const honTot=ind*.5; const ne=honTot-gas;
+          return `<tr onclick="goToDetail('${e.id}')">
+            <td><div class="exp-num">${h(e.nroexp)||'#'+e.id.slice(-6)}</div></td>
+            <td>${h(e.nombre)}</td><td>${h(e.asignado?.nombre)||'—'}</td>
+            <td style="font-weight:700">${fmt(ind)}</td>
+            <td style="color:var(--green)">${fmt(ind*.3)}</td>
+            <td style="color:var(--green)">${fmt(ind*.2)}</td>
+            <td style="font-weight:700;color:var(--green)">${fmt(honTot)}</td>
+            <td style="color:var(--red)">${fmt(gas)}</td>
+            <td style="font-weight:700;color:${ne>=0?'var(--green)':'var(--red)'}">${fmt(ne)}</td>
+          </tr>`;
+        }).join(''):`<tr><td colspan="9"><div class="empty-state"><div class="empty-title">Sin causas concluidas en ${mesNombre} ${anio}</div></div></td></tr>`}
+      </tbody>
+      ${concluidosMes.length?`<tfoot style="background:var(--g50)"><tr>
+        <td colspan="3" style="padding:11px 16px;font-weight:700;color:var(--navy)">TOTALES</td>
+        <td style="padding:11px 16px;font-weight:700">${fmt(totalIndemMes)}</td>
+        <td style="padding:11px 16px;font-weight:700;color:var(--green)">${fmt(totalIndemMes*.3)}</td>
+        <td style="padding:11px 16px;font-weight:700;color:var(--green)">${fmt(totalIndemMes*.2)}</td>
+        <td style="padding:11px 16px;font-weight:700;color:var(--green)">${fmt(totalHonMes)}</td>
+        <td style="padding:11px 16px;font-weight:700;color:var(--red)">${fmt(totalGastosMes)}</td>
+        <td style="padding:11px 16px;font-weight:700;color:${netoMes>=0?'var(--green)':'var(--red)'}">${fmt(netoMes)}</td>
+      </tr></tfoot>`:''}
+      </table>
+    </div>`;
+}
+// ── EQUIPO ──
+function renderEquipo(){
+  const el=document.getElementById('equipo-list');
+  if(!perfiles.length){el.innerHTML='<div class="empty-state"><div class="empty-title">Sin miembros aún</div></div>';return;}
+  const esJefe = currentPerfil?.rol === 'jefe';
+  el.innerHTML=perfiles.map(p=>{
+    const esAsocP = p.rol==='asociado'||p.rol==='empleado';
+    const expAsoc = expedientes.filter(e=>e.asignado_a===p.id);
+    const activos = expAsoc.filter(e=>e.estado!=='Concluido').length;
+    const concluidos = expedientes.filter(e=>e.asignado_a===p.id&&e.estado==='Concluido').length;
+    return `
+    <div class="member-card">
+      <div class="user-avatar ${p.rol==='jefe'?'av-jefe':p.rol==='secretaria'?'av-sec':'av-aso'}">${(p.nombre||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+      <div class="member-info">
+        <div class="member-name">${h(p.nombre)}</div>
+        <div class="member-email">${h(p.email)}</div>
+        ${esAsocP&&esJefe?`<div style="margin-top:4px;display:flex;gap:10px;font-size:12px"><span style="color:var(--gold);font-weight:600">${activos} activa${activos!==1?'s':''}</span><span style="color:var(--g400)">·</span><span style="color:var(--green);font-weight:600">${concluidos} concluida${concluidos!==1?'s':''}</span></div>`:''}
+      </div>
+      <span class="badge ${p.rol==='jefe'?'badge-gold':p.rol==='secretaria'?'badge-purple':'badge-navy'}">${p.rol==='jefe'?'Jefe':p.rol==='secretaria'?'Secretaria':'Asociado'}</span>
+      ${esJefe&&esAsocP?`<button class="btn btn-outline btn-sm" onclick="verPerfilAsoc('${p.id}')"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Ver perfil</button>`:''}
+      ${p.id!==currentUser.id?`
+        <select onchange="cambiarRol('${p.id}',this.value)" style="font-size:13px;padding:6px 10px;border-radius:8px;border:1.5px solid var(--g200);font-family:'DM Sans',sans-serif;cursor:pointer;background:white">
+          <option value="asociado" ${p.rol==='asociado'||p.rol==='empleado'?'selected':''}>Asociado</option>
+          <option value="secretaria" ${p.rol==='secretaria'?'selected':''}>Secretaria</option>
+          <option value="jefe" ${p.rol==='jefe'?'selected':''}>Jefe</option>
+        </select>
+        <button class="btn btn-danger btn-sm" onclick="eliminarMiembro('${p.id}','${p.nombre}')">Eliminar</button>
+      `:'<span style="font-size:12px;color:var(--g400)">(vos)</span>'}
+    </div>`;
+  }).join('');
+}
+async function cambiarRol(id,rol){await sb.from('perfiles').update({rol}).eq('id',id);await loadPerfiles();renderEquipo();showToast('Rol actualizado ✓');}
+async function eliminarMiembro(id,nombre){
+  if(!confirm('¿Eliminar a '+nombre+' del equipo?')) return;
+  await sb.from('perfiles').update({activo:false}).eq('id',id);
+  await loadPerfiles();renderEquipo();showToast(nombre+' eliminado');
+}
+function openCrearUserModal(){document.getElementById('ov-usuario').classList.add('open');}
+function closeCrearUserModal(){document.getElementById('ov-usuario').classList.remove('open');['nu-nombre','nu-email','nu-pass'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('nu-rol').value='asociado';document.getElementById('create-error').style.display='none';}
+async function crearUsuario(){
+  const nombre=g('nu-nombre'),email=g('nu-email'),pass=document.getElementById('nu-pass').value,rol=g('nu-rol');
+  const errEl=document.getElementById('create-error');errEl.style.display='none';
+  if(!nombre||!email||!pass){errEl.textContent='Completá todos los campos.';errEl.style.display='block';return;}
+  if(pass.length<6){errEl.textContent='La contraseña debe tener al menos 6 caracteres.';errEl.style.display='block';return;}
+  const btn=document.getElementById('btn-crear-user');btn.innerHTML='<div class="spinner spinner-w"></div>';btn.disabled=true;
+  const {data,error}=await sb.auth.signUp({email,password:pass,options:{data:{nombre,rol}}});
+  btn.innerHTML='Crear cuenta';btn.disabled=false;
+  if(error){errEl.textContent='Error: '+error.message;errEl.style.display='block';return;}
+  if(data?.user) await sb.from('perfiles').upsert({id:data.user.id,nombre,email,rol,activo:true});
+  await loadPerfiles();closeCrearUserModal();showToast('Cuenta creada ✓');renderEquipo();
+}
+
+// ── DESCARGA PDF ──
+function abrirDescarga(expId){_descargaExp=expId;document.getElementById('ov-descarga').classList.add('open');}
+function closeDescarga(){document.getElementById('ov-descarga').classList.remove('open');_descargaExp=null;}
+function confirmarDescarga(){
+  const e=expedientes.find(x=>x.id===_descargaExp);if(!e)return;
+  const campo=(label,val)=>val?`<tr><td style="font-weight:600;color:#1a3260;padding:5px 10px;width:200px;border-bottom:1px solid #eeece6;font-size:13px">${label}</td><td style="padding:5px 10px;border-bottom:1px solid #eeece6;font-size:13px">${h(val)}</td></tr>`:'';
+  const sec=(t)=>`<tr><td colspan="2" style="background:#0f1f3d;color:#c9a84c;font-weight:700;padding:7px 10px;font-size:11px;letter-spacing:.08em;text-transform:uppercase">${t}</td></tr>`;
+  const gastos=e.gastos||[];
+  const tG=gastos.reduce((s,g)=>s+parseFloat(g.monto||0),0);
+  const ind=parseFloat(e.indemnizacion||0);
+  const archivos=e.archivos||[];
+  const imgArchivos=archivos.filter(a=>a.tipo&&a.tipo.startsWith('image')&&a.storage_path);
+  const otrosArchivos=archivos.filter(a=>!(a.tipo&&a.tipo.startsWith('image')&&a.storage_path));
+  const fechaExp=new Date().toLocaleDateString('es-AR');
+
+  const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><style>
+    body{font-family:Arial,sans-serif;font-size:13px;color:#2e2c28;margin:0;padding:0}
+    .header{background:#0f1f3d;color:white;padding:22px 30px;display:flex;justify-content:space-between;align-items:center}
+    .logo{font-size:20px;font-weight:700;color:#c9a84c}
+    .logo-sub{font-size:10px;color:rgba(255,255,255,.5);margin-top:2px;text-transform:uppercase;letter-spacing:.08em}
+    .exp-badge{background:#c9a84c;color:#0f1f3d;padding:5px 12px;border-radius:5px;font-weight:700;font-size:13px}
+    .body{padding:22px 30px}
+    table{width:100%;border-collapse:collapse;margin-bottom:16px}
+    h2{font-size:11px;color:#c9a84c;text-transform:uppercase;letter-spacing:.1em;margin:16px 0 6px}
+    .mecanica{background:#f8f7f4;border:1px solid #eeece6;border-radius:6px;padding:11px;line-height:1.7;white-space:pre-wrap;font-size:13px;margin:8px 0 14px}
+    .footer{border-top:2px solid #eeece6;padding:10px 30px;font-size:11px;color:#9a9690;display:flex;justify-content:space-between}
+    @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+  </style></head><body>
+  <div class="header">
+    <div><div class="logo">Lena & Asociados</div><div class="logo-sub">Accidentes de Tránsito · Carpeta de Expediente</div></div>
+    <div class="exp-badge">${h(e.nroexp)||'Exp. #'+e.id.slice(-6)}</div>
+  </div>
+  <div class="body">
+  <table>
+    <tr><td colspan="2" style="padding:10px 10px 3px;font-size:19px;font-weight:700;color:#0f1f3d">${h(e.nombre)||'—'}</td></tr>
+    <tr><td colspan="2" style="padding:0 10px 10px;color:#9a9690;font-size:12px">Abogado/a: <strong>${h(e.asignado?.nombre)||'—'}</strong> &nbsp;·&nbsp; Estado: <strong>${h(e.estado)||'—'}</strong> &nbsp;·&nbsp; Exportado: ${fechaExp}</td></tr>
+    ${sec('Datos de la víctima')}
+    ${campo('DNI',e.dni)}${campo('Edad',e.edad)}${campo('Fecha de nac.',e.fecha_nacimiento)}${campo('Nacionalidad',e.nacionalidad)}${campo('Estado civil',e.estado_civil)}${campo('Domicilio',e.domicilio)}${campo('Teléfono',e.tel)}${campo('Email',e.email)}${campo('Cónyuge',e.conyuge)}${campo('DNI cónyuge',e.conyuge_dni)}${campo('Padre',e.padre)}${campo('DNI padre',e.padre_dni)}${campo('Madre',e.madre)}${campo('DNI madre',e.madre_dni)}
+    ${e.victima2_nombre?sec('Segunda víctima')+campo('Nombre',e.victima2_nombre)+campo('DNI',e.victima2_dni)+campo('Edad',e.victima2_edad)+campo('Nacionalidad',e.victima2_nacionalidad)+campo('Estado civil',e.victima2_estado_civil)+campo('Domicilio',e.victima2_domicilio)+campo('Teléfono',e.victima2_tel)+campo('Cónyuge',e.victima2_conyuge)+campo('DNI cónyuge',e.victima2_conyuge_dni)+campo('Padre',e.victima2_padre)+campo('Madre',e.victima2_madre):''}
+    ${sec('Demandado')}
+    ${campo('Nombre',e.demandado)}${campo('DNI',e.demandado_dni)}${campo('Domicilio',e.demandado_dom)}${campo('Teléfono',e.demandado_tel)}${campo('Titular póliza',e.titular_poliza)}${campo('Dom. titular póliza',e.titular_dom)}${campo('Tel. titular',e.titular_tel)}${campo('Titular del vehículo',e.titular_vehiculo)}${campo('Vehículo',e.vehiculo)}${campo('Dominio/Patente',e.dominio)}
+    ${sec('Compañía de seguros')}
+    ${campo('Aseguradora',e.seguro)}${campo('N° póliza',e.poliza)}${campo('STRO',e.stro)}${campo('Dom. aseguradora',e.seguro_domicilio)}${campo('Tel. aseguradora',e.seguro_tel)}${campo('Contacto en Cía.',e.contacto_cia)}
+    ${sec('Mecánica del hecho')}
+    ${campo('Fecha',e.fecha)}${campo('Hora',e.hora)}${campo('Lugar',e.lugar)}
+  </table>
+  ${e.mecanica?`<div class="mecanica">${h(e.mecanica)}</div>`:''}
+  <table>
+    ${campo('Revisación médica',e.revision_medica)}${campo('Lesiones',e.lesiones)}
+    ${(e.testigo_hecho_1||e.testigo_hecho_2)?sec('Testigos del hecho')+campo('Testigo 1',e.testigo_hecho_1)+campo('Testigo 2',e.testigo_hecho_2):''}
+    ${(e.testigo_beneficio_1)?sec('Testigos del beneficio')+campo('Testigo 1',e.testigo_beneficio_1)+campo('Testigo 2',e.testigo_beneficio_2)+campo('Testigo 3',e.testigo_beneficio_3):''}
+    ${sec('Datos judiciales')}
+    ${campo('N° expediente',e.nroexp)}${campo('UFI',e.ufi)}${campo('IPP',e.ipp)}${campo('Comisaría',e.comisaria)}${campo('Observaciones',e.obs)}
+    ${ind>0?sec('Indemnización y honorarios')+campo('Monto indemnización','$'+ind.toLocaleString('es-AR'))+campo('Honorario cliente 30%','$'+Math.round(ind*.3).toLocaleString('es-AR'))+campo('Honorario aseguradora 20%','$'+Math.round(ind*.2).toLocaleString('es-AR'))+campo('Total honorarios','$'+Math.round(ind*.5).toLocaleString('es-AR')):''}
+  </table>
+  <h2>Gastos del expediente</h2>
+  <table><thead><tr style="background:#f8f7f4"><th style="text-align:left;padding:6px 10px;font-size:11px;color:#9a9690">Fecha</th><th style="text-align:left;padding:6px 10px;font-size:11px;color:#9a9690">Descripción</th><th style="text-align:right;padding:6px 10px;font-size:11px;color:#9a9690">Monto</th></tr></thead>
+  <tbody>${gastos.length?gastos.map(g=>`<tr><td style="padding:4px 10px;border-bottom:1px solid #eeece6">${g.fecha||'—'}</td><td style="padding:4px 10px;border-bottom:1px solid #eeece6">${g.descripcion||''}</td><td style="padding:4px 10px;border-bottom:1px solid #eeece6;text-align:right;font-weight:600">$${parseFloat(g.monto).toLocaleString('es-AR')}</td></tr>`).join(''):'<tr><td colspan="3" style="padding:8px 10px;color:#9a9690">Sin gastos</td></tr>'}</tbody>
+  ${gastos.length?`<tfoot><tr><td colspan="2" style="padding:6px 10px;font-weight:700;text-align:right;border-top:2px solid #0f1f3d">Total gastos</td><td style="padding:6px 10px;font-weight:700;text-align:right;border-top:2px solid #0f1f3d">$${tG.toLocaleString('es-AR')}</td></tr></tfoot>`:''}
+  </table>
+  ${imgArchivos.length?`<h2>Fotos adjuntas</h2>${imgArchivos.map(a=>`<div style="margin-bottom:14px"><div style="font-size:11px;color:#9a9690;margin-bottom:4px">📷 ${a.nombre}</div><img src="${a.storage_path}" style="max-width:100%;border-radius:6px;border:1px solid #eeece6" alt="${a.nombre}"></div>`).join('')}`:''}
+  ${otrosArchivos.length?`<h2>Otros archivos</h2>${otrosArchivos.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 10px;border:1px solid #eeece6;border-radius:6px;margin-bottom:6px"><span>${a.tipo?.includes('pdf')?'📄':'📁'}</span><div style="flex:1"><div style="font-weight:600">${a.nombre}</div><div style="font-size:11px;color:#9a9690">${a.tamanio||''}</div></div>${a.storage_path?`<a href="${a.storage_path}" download="${a.nombre}" style="background:#0f1f3d;color:white;padding:4px 10px;border-radius:5px;text-decoration:none;font-size:11px">Descargar</a>`:''}</div>`).join('')}`:''}
+  </div>
+  <div class="footer"><span>Lena & Asociados — Sistema de Expedientes</span><span>Documento confidencial</span></div>
+  </body></html>`;
+
+  const blob=new Blob([html],{type:'text/html'});
+  const url=URL.createObjectURL(blob);
+  const w=window.open(url,'_blank');
+  if(w) setTimeout(()=>w.print(),800);
+  closeDescarga();
+  showToast('PDF listo ✓');
+}
+
+// ── HELPERS ──
+function estadoBadge(e){const map={'En trámite':'badge-gold','Mediación':'badge-navy','Juicio':'badge-red','Concluido':'badge-green'};return`<span class="badge ${map[e]||'badge-gray'}">${h(e)||'—'}</span>`;}
+function fmtFecha(f){if(!f)return'—';const[y,m,d]=f.split('-');const ms=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];return`${parseInt(d)} de ${ms[parseInt(m)-1]} de ${y}`;}
+function fmtSize(b){if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';return(b/1048576).toFixed(1)+' MB';}
+function fmtExt(n){const m=n.match(/\.([a-zA-Z0-9]+)$/);return m?m[1].toUpperCase():'FILE';}
+function fileIconBig(tipo,nombre){
+  if(tipo&&tipo.startsWith('image'))return[`<svg width="30" height="30" fill="none" stroke="#c9a84c" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`,'#c9a84c'];
+  if(tipo&&tipo.includes('pdf'))return[`<svg width="30" height="30" fill="none" stroke="#c0392b" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,'#c0392b'];
+  if(nombre&&nombre.match(/\.(doc|docx)$/i))return[`<svg width="30" height="30" fill="none" stroke="#1a5e9a" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,'#1a5e9a'];
+  return[`<svg width="30" height="30" fill="none" stroke="#9a9690" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,'#9a9690'];
+}
+
+// ── BUSCAR POR ASOCIADO (solo jefe) ──
+function toggleBuscarPorAsoc() {
+  const panel = document.getElementById('panel-buscar-asoc');
+  const esVisible = panel.style.display !== 'none';
+  if(esVisible) { panel.style.display='none'; limpiarFiltroAsoc(); return; }
+  // Poblar chips con todo el estudio (jefes, secretarias y asociados)
+  const asocs = perfiles.slice();
+  const chips = document.getElementById('asoc-chips');
+  chips.innerHTML = asocs.length ? asocs.map(p=>{
+    const activos = expedientes.filter(e=>e.asignado_a===p.id&&e.estado!=='Concluido').length;
+    const total = expedientes.filter(e=>e.asignado_a===p.id).length;
+    return `<button onclick="seleccionarAsoc('${p.id}')" id="chip-${p.id}" style="padding:7px 14px;border-radius:20px;border:1.5px solid var(--g200);background:white;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--g800);display:inline-flex;align-items:center;gap:8px;transition:all .15s">
+      <span style="width:26px;height:26px;border-radius:50%;background:var(--navy-light);color:white;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">${p.nombre.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</span>
+      ${h(p.nombre)}
+      <span style="background:var(--g100);color:var(--g600);border-radius:10px;padding:1px 7px;font-size:11px">${activos} activa${activos!==1?'s':''} / ${total} total</span>
+    </button>`;
+  }).join('') : '<div style="color:var(--g400);font-size:13px">No hay asociados registrados</div>';
+  panel.style.display = '';
+}
+function seleccionarAsoc(id) {
+  filtroAsocId = filtroAsocId===id ? '' : id;
+  document.querySelectorAll('[id^="chip-"]').forEach(el=>{
+    const chipId = el.id.replace('chip-','');
+    el.style.background = chipId===filtroAsocId ? 'var(--navy)' : 'white';
+    el.style.color = chipId===filtroAsocId ? 'white' : 'var(--g800)';
+    el.style.borderColor = chipId===filtroAsocId ? 'var(--navy)' : 'var(--g200)';
+  });
+  renderExp();
+}
+function limpiarFiltroAsoc() {
+  filtroAsocId = '';
+  document.querySelectorAll('[id^="chip-"]').forEach(el=>{el.style.background='white';el.style.color='var(--g800)';el.style.borderColor='var(--g200)';});
+  renderExp();
+}
+
+// ── PERFIL ASOCIADO ──
+function verPerfilAsoc(id) {
+  const p = perfiles.find(x=>x.id===id);
+  if(!p) return;
+  // Cargar todos los expedientes de este asociado (del array global del jefe)
+  const todos = expedientes.filter(e=>e.asignado_a===id);
+  const activos = todos.filter(e=>e.estado!=='Concluido');
+  const concluidos = todos.filter(e=>e.estado==='Concluido');
+  document.getElementById('perfil-asoc-title').textContent = 'Perfil — '+p.nombre;
+  document.getElementById('perfil-asoc-body').innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--g100)">
+      <div class="user-avatar av-aso" style="width:52px;height:52px;font-size:18px">${p.nombre.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+      <div>
+        <div style="font-size:16px;font-weight:700;color:var(--navy)">${h(p.nombre)}</div>
+        <div style="font-size:13px;color:var(--g400);margin-top:2px">${h(p.email)}</div>
+        <span class="badge badge-navy" style="margin-top:4px">Asociado</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px">
+      <div style="background:var(--g50);border-radius:10px;padding:14px;text-align:center;border:1px solid var(--g100)">
+        <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--navy)">${todos.length}</div>
+        <div style="font-size:11px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.05em;margin-top:3px">Total</div>
+      </div>
+      <div style="background:rgba(201,168,76,.07);border-radius:10px;padding:14px;text-align:center;border:1px solid rgba(201,168,76,.2)">
+        <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--gold)">${activos.length}</div>
+        <div style="font-size:11px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.05em;margin-top:3px">En curso</div>
+      </div>
+      <div style="background:var(--green-light);border-radius:10px;padding:14px;text-align:center;border:1px solid #b7e4c7">
+        <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--green)">${concluidos.length}</div>
+        <div style="font-size:11px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.05em;margin-top:3px">Concluidas</div>
+      </div>
+    </div>
+    ${activos.length?`
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:600;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--gold-pale)">Carpetas activas</div>
+      ${activos.map(e=>`<div onclick="closePerfillAsoc();goToDetail('${e.id}')" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-bottom:1px solid var(--g100);cursor:pointer;border-radius:6px;transition:background .1s" onmouseover="this.style.background='var(--g50)'" onmouseout="this.style.background=''">
+        <div class="exp-num" style="font-size:13px;min-width:80px">${h(e.nroexp)||'#'+e.id.slice(-6)}</div>
+        <div style="flex:1;font-size:13px;font-weight:500">${h(e.nombre)}</div>
+        ${estadoBadge(e.estado)}
+      </div>`).join('')}
+    </div>`:''}
+    ${concluidos.length?`
+    <div>
+      <div style="font-size:11px;font-weight:600;color:var(--green);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #b7e4c7">Carpetas concluidas (${concluidos.length})</div>
+      <div style="max-height:160px;overflow-y:auto">
+        ${concluidos.map(e=>`<div onclick="closePerfillAsoc();goToDetail('${e.id}')" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-bottom:1px solid var(--g100);cursor:pointer;border-radius:6px;transition:background .1s" onmouseover="this.style.background='var(--g50)'" onmouseout="this.style.background=''">
+          <div class="exp-num" style="font-size:13px;min-width:80px">${h(e.nroexp)||'#'+e.id.slice(-6)}</div>
+          <div style="flex:1;font-size:13px;font-weight:500">${h(e.nombre)}</div>
+          <span class="badge badge-green">Concluido</span>
+        </div>`).join('')}
+      </div>
+    </div>`:''}
+    ${!todos.length?`<div class="empty-state"><div class="empty-title">Sin carpetas asignadas</div></div>`:''}
+  `;
+  document.getElementById('ov-perfil-asoc').classList.add('open');
+}
+function closePerfillAsoc(){document.getElementById('ov-perfil-asoc').classList.remove('open');}
+
+let toastTimer;
+function showToast(msg,error=false){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;t.style.background=error?'var(--red)':'var(--navy)';t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3500);}
+function showLoading(show){document.getElementById('loading').classList.toggle('show',show);}
+
+function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('backdrop').classList.toggle('open');}
+function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('backdrop').classList.remove('open');}
+</script>
+</body>
+</html>
