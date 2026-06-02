@@ -509,6 +509,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
           <div class="form-group" style="grid-column:span 2"><label>Domicilio titular póliza</label><input id="f-titular-dom" placeholder="Domicilio del titular"></div>
           <div class="form-group"><label>Teléfono titular</label><input id="f-titular-tel"></div>
           <div class="form-group" style="grid-column:span 2"><label>Titular del vehículo</label><input id="f-titular-vehiculo" placeholder="Nombre del titular registral del vehículo"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Domicilio del titular del vehículo</label><input id="f-titular-vehiculo-dom" placeholder="Calle, número, localidad"></div>
           <div class="form-group"><label>Vehículo</label><input id="f-vehiculo" placeholder="Marca y modelo"></div>
           <div class="form-group"><label>Dominio / Patente</label><input id="f-dominio" placeholder="ABC 123"></div>
           <div class="form-group" style="grid-column:span 2"><label>Cía. de seguros</label><input id="f-seguro" placeholder="Nombre de la aseguradora"></div>
@@ -632,6 +633,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
           <div class="form-group" style="grid-column:span 2"><label>Domicilio titular póliza</label><input id="edit-titular-dom"></div>
           <div class="form-group"><label>Teléfono titular</label><input id="edit-titular-tel"></div>
           <div class="form-group" style="grid-column:span 2"><label>Titular del vehículo</label><input id="edit-titular-vehiculo"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Domicilio del titular del vehículo</label><input id="edit-titular-vehiculo-dom"></div>
           <div class="form-group"><label>Vehículo</label><input id="edit-vehiculo"></div>
           <div class="form-group"><label>Dominio / Patente</label><input id="edit-dominio"></div>
           <div class="form-group" style="grid-column:span 2"><label>Cía. de seguros</label><input id="edit-seguro"></div>
@@ -1044,7 +1046,7 @@ function showDetailView(e) {
       </div>
       <div class="detail-card">
         <div class="detail-card-title">Demandado</div>
-        ${df('Nombre',e.demandado)}${df('DNI',e.demandado_dni)}${df('Domicilio',e.demandado_dom)}${df('Teléfono',e.demandado_tel)}${df('Titular póliza',e.titular_poliza)}${df('Dom. titular póliza',e.titular_dom)}${df('Tel. titular',e.titular_tel)}${df('Titular del vehículo',e.titular_vehiculo)}${df('Vehículo',e.vehiculo)}${df('Dominio/Patente',e.dominio)}${df('Seguro',e.seguro)}${df('Dom. aseguradora',e.seguro_domicilio)}${df('Tel. aseguradora',e.seguro_tel)}${df('N° póliza',e.poliza)}${df('STRO',e.stro)}${df('Contacto Cía.',e.contacto_cia)}${df('Abogado a cargo',e.asignado?.nombre)}
+        ${df('Nombre',e.demandado)}${df('DNI',e.demandado_dni)}${df('Domicilio',e.demandado_dom)}${df('Teléfono',e.demandado_tel)}${df('Titular póliza',e.titular_poliza)}${df('Dom. titular póliza',e.titular_dom)}${df('Tel. titular',e.titular_tel)}${df('Titular del vehículo',e.titular_vehiculo)}${df('Dom. titular vehículo',e.titular_vehiculo_dom)}${df('Vehículo',e.vehiculo)}${df('Dominio/Patente',e.dominio)}${df('Seguro',e.seguro)}${df('Dom. aseguradora',e.seguro_domicilio)}${df('Tel. aseguradora',e.seguro_tel)}${df('N° póliza',e.poliza)}${df('STRO',e.stro)}${df('Contacto Cía.',e.contacto_cia)}${df('Abogado a cargo',e.asignado?.nombre)}
       </div>
     </div>
 
@@ -1186,7 +1188,7 @@ function closeExpModal() {
   const ids=['f-nombre','f-dni','f-edad','f-fecha-nac','f-nacionalidad','f-estado-civil','f-domicilio','f-tel','f-email',
     'f-conyuge','f-conyuge-dni','f-padre','f-padre-dni','f-madre','f-madre-dni',
     'f-v2-nombre','f-v2-dni','f-v2-edad','f-v2-fecha-nac','f-v2-nacionalidad','f-v2-domicilio','f-v2-tel','f-v2-conyuge','f-v2-conyuge-dni','f-v2-padre','f-v2-madre',
-    'f-demandado','f-demandado-dni','f-demandado-dom','f-demandado-tel','f-titular-poliza','f-titular-dom','f-titular-tel','f-titular-vehiculo',
+    'f-demandado','f-demandado-dni','f-demandado-dom','f-demandado-tel','f-titular-poliza','f-titular-dom','f-titular-tel','f-titular-vehiculo','f-titular-vehiculo-dom',
     'f-vehiculo','f-dominio','f-seguro','f-seguro-dom','f-seguro-tel','f-poliza','f-stro','f-contacto-cia',
     'f-testigo-h1','f-testigo-h2','f-testigo-b1','f-testigo-b2','f-testigo-b3',
     'f-fecha','f-hora','f-lugar','f-mecanica','f-revision-medica','f-lesiones',
@@ -1219,7 +1221,7 @@ async function guardarExp() {
     demandado:g('f-demandado'), demandado_dni:g('f-demandado-dni'),
     demandado_dom:g('f-demandado-dom'), demandado_tel:g('f-demandado-tel'),
     titular_poliza:g('f-titular-poliza'), titular_dom:g('f-titular-dom'), titular_tel:g('f-titular-tel'),
-    titular_vehiculo:g('f-titular-vehiculo'),
+    titular_vehiculo:g('f-titular-vehiculo'), titular_vehiculo_dom:g('f-titular-vehiculo-dom'),
     vehiculo:g('f-vehiculo'), dominio:g('f-dominio'),
     seguro:g('f-seguro'), seguro_domicilio:g('f-seguro-dom'), seguro_tel:g('f-seguro-tel'),
     poliza:g('f-poliza'), stro:g('f-stro'), contacto_cia:g('f-contacto-cia'),
@@ -1266,7 +1268,7 @@ function openEditarModal(expId) {
     'edit-v2-domicilio':e.victima2_domicilio,'edit-v2-tel':e.victima2_tel,'edit-v2-conyuge':e.victima2_conyuge,'edit-v2-conyuge-dni':e.victima2_conyuge_dni,
     'edit-v2-padre':e.victima2_padre,'edit-v2-madre':e.victima2_madre,
     'edit-demandado':e.demandado,'edit-demandado-dni':e.demandado_dni,'edit-demandado-dom':e.demandado_dom,'edit-demandado-tel':e.demandado_tel,
-    'edit-titular-poliza':e.titular_poliza,'edit-titular-dom':e.titular_dom,'edit-titular-tel':e.titular_tel,'edit-titular-vehiculo':e.titular_vehiculo,
+    'edit-titular-poliza':e.titular_poliza,'edit-titular-dom':e.titular_dom,'edit-titular-tel':e.titular_tel,'edit-titular-vehiculo':e.titular_vehiculo,'edit-titular-vehiculo-dom':e.titular_vehiculo_dom,
     'edit-vehiculo':e.vehiculo,'edit-dominio':e.dominio,
     'edit-seguro':e.seguro,'edit-seguro-dom':e.seguro_domicilio,'edit-seguro-tel':e.seguro_tel,'edit-poliza':e.poliza,'edit-stro':e.stro,'edit-contacto-cia':e.contacto_cia,
     'edit-testigo-h1':e.testigo_hecho_1,'edit-testigo-h2':e.testigo_hecho_2,
@@ -1301,7 +1303,7 @@ async function guardarEdicion() {
     demandado:g('edit-demandado'), demandado_dni:g('edit-demandado-dni'),
     demandado_dom:g('edit-demandado-dom'), demandado_tel:g('edit-demandado-tel'),
     titular_poliza:g('edit-titular-poliza'), titular_dom:g('edit-titular-dom'), titular_tel:g('edit-titular-tel'),
-    titular_vehiculo:g('edit-titular-vehiculo'),
+    titular_vehiculo:g('edit-titular-vehiculo'), titular_vehiculo_dom:g('edit-titular-vehiculo-dom'),
     vehiculo:g('edit-vehiculo'), dominio:g('edit-dominio'),
     seguro:g('edit-seguro'), seguro_domicilio:g('edit-seguro-dom'), seguro_tel:g('edit-seguro-tel'),
     poliza:g('edit-poliza'), stro:g('edit-stro'), contacto_cia:g('edit-contacto-cia'),
@@ -1883,7 +1885,7 @@ function confirmarDescarga(){
     ${campo('DNI',e.dni)}${campo('Edad',e.edad)}${campo('Fecha de nac.',e.fecha_nacimiento)}${campo('Nacionalidad',e.nacionalidad)}${campo('Estado civil',e.estado_civil)}${campo('Domicilio',e.domicilio)}${campo('Teléfono',e.tel)}${campo('Email',e.email)}${campo('Cónyuge',e.conyuge)}${campo('DNI cónyuge',e.conyuge_dni)}${campo('Padre',e.padre)}${campo('DNI padre',e.padre_dni)}${campo('Madre',e.madre)}${campo('DNI madre',e.madre_dni)}
     ${e.victima2_nombre?sec('Segunda víctima')+campo('Nombre',e.victima2_nombre)+campo('DNI',e.victima2_dni)+campo('Edad',e.victima2_edad)+campo('Nacionalidad',e.victima2_nacionalidad)+campo('Estado civil',e.victima2_estado_civil)+campo('Domicilio',e.victima2_domicilio)+campo('Teléfono',e.victima2_tel)+campo('Cónyuge',e.victima2_conyuge)+campo('DNI cónyuge',e.victima2_conyuge_dni)+campo('Padre',e.victima2_padre)+campo('Madre',e.victima2_madre):''}
     ${sec('Demandado')}
-    ${campo('Nombre',e.demandado)}${campo('DNI',e.demandado_dni)}${campo('Domicilio',e.demandado_dom)}${campo('Teléfono',e.demandado_tel)}${campo('Titular póliza',e.titular_poliza)}${campo('Dom. titular póliza',e.titular_dom)}${campo('Tel. titular',e.titular_tel)}${campo('Titular del vehículo',e.titular_vehiculo)}${campo('Vehículo',e.vehiculo)}${campo('Dominio/Patente',e.dominio)}
+    ${campo('Nombre',e.demandado)}${campo('DNI',e.demandado_dni)}${campo('Domicilio',e.demandado_dom)}${campo('Teléfono',e.demandado_tel)}${campo('Titular póliza',e.titular_poliza)}${campo('Dom. titular póliza',e.titular_dom)}${campo('Tel. titular',e.titular_tel)}${campo('Titular del vehículo',e.titular_vehiculo)}${campo('Dom. titular vehículo',e.titular_vehiculo_dom)}${campo('Vehículo',e.vehiculo)}${campo('Dominio/Patente',e.dominio)}
     ${sec('Compañía de seguros')}
     ${campo('Aseguradora',e.seguro)}${campo('N° póliza',e.poliza)}${campo('STRO',e.stro)}${campo('Dom. aseguradora',e.seguro_domicilio)}${campo('Tel. aseguradora',e.seguro_tel)}${campo('Contacto en Cía.',e.contacto_cia)}
     ${sec('Mecánica del hecho')}
