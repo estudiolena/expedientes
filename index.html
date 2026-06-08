@@ -756,7 +756,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
         <div class="form-group"><label>Nombre completo *</label><input id="nu-nombre" placeholder="Juan Pérez"></div>
         <div class="form-group"><label>Email *</label><input type="email" id="nu-email" placeholder="juan@lena.com.ar"></div>
         <div class="form-group"><label>Contraseña *</label><input type="password" id="nu-pass" placeholder="Mínimo 6 caracteres"></div>
-        <div class="form-group"><label>Rol</label><select id="nu-rol"><option value="asociado">Asociado</option><option value="jefe">Jefe</option></select></div>
+        <div class="form-group"><label>Rol</label><select id="nu-rol"><option value="asociado">Asociado</option><option value="jefe">Director Jurídico</option></select></div>
       </div>
     </div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeCrearUserModal()">Cancelar</button><button class="btn btn-gold" onclick="crearUsuario()" id="btn-crear-user">Crear cuenta</button></div>
@@ -859,7 +859,7 @@ async function initApp(user) {
   av.className = 'user-avatar ' + (esJefe ? 'av-jefe' : (esSecretaria ? 'av-sec' : 'av-aso'));
   document.getElementById('sidebar-name').textContent = perfil?.nombre || user.email;
   const rb = document.getElementById('sidebar-role');
-  rb.textContent = esJefe ? 'Jefe' : (esSecretaria ? 'Secretaria' : 'Asociado');
+  rb.textContent = esJefe ? 'Director Jurídico' : (esSecretaria ? 'Secretaria' : 'Asociado');
   rb.className = 'role-badge ' + (esJefe ? 'rb-jefe' : (esSecretaria ? 'rb-sec' : 'rb-aso'));
   await loadPerfiles();
   await Promise.all([loadExpedientes(), loadEventos()]);
@@ -1332,10 +1332,8 @@ function abrirExpedienteDeUrl(){
 function openExpModal() {
   const sel = document.getElementById('f-asignado');
   sel.innerHTML = '<option value="">— Sin asignar —</option>';
-  const jefes = perfiles.filter(p=>p.rol==='jefe');
-  const emps = perfiles.filter(p=>p.rol==='empleado');
-  if(jefes.length){const og=document.createElement('optgroup');og.label='Jefes';jefes.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.nombre;og.appendChild(o);});sel.appendChild(og);}
-  if(emps.length){const og=document.createElement('optgroup');og.label='Asociados';emps.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.nombre;og.appendChild(o);});sel.appendChild(og);}
+  const personas = [...perfiles.filter(p=>p.rol==='jefe'), ...perfiles.filter(p=>p.rol==='empleado')];
+  personas.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.nombre;sel.appendChild(o);});
   document.getElementById('f-fecha').valueAsDate = new Date();
   document.getElementById('ov-exp').classList.add('open');
 }
@@ -1414,7 +1412,7 @@ function openEditarModal(expId) {
   const e = expedientes.find(x=>x.id===expId); if(!e) return;
   const sel = document.getElementById('edit-asignado');
   sel.innerHTML = '<option value="">— Sin asignar —</option>';
-  perfiles.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.nombre+(p.rol==='jefe'?' (Jefe)':'');if(p.id===e.asignado_a)o.selected=true;sel.appendChild(o);});
+  perfiles.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.nombre;if(p.id===e.asignado_a)o.selected=true;sel.appendChild(o);});
   const fields = {
     'edit-id':e.id,'edit-nombre':e.nombre,'edit-dni':e.dni,'edit-edad':e.edad,
     'edit-fecha-nac':e.fecha_nacimiento,'edit-nacionalidad':e.nacionalidad,'edit-estado-civil':e.estado_civil,
@@ -1968,13 +1966,13 @@ function renderEquipo(){
         <div class="member-email">${h(p.email)}</div>
         ${esAsocP&&esJefe?`<div style="margin-top:4px;display:flex;gap:10px;font-size:12px"><span style="color:var(--gold);font-weight:600">${activos} activa${activos!==1?'s':''}</span><span style="color:var(--g400)">·</span><span style="color:var(--green);font-weight:600">${concluidos} concluida${concluidos!==1?'s':''}</span></div>`:''}
       </div>
-      <span class="badge ${p.rol==='jefe'?'badge-gold':p.rol==='secretaria'?'badge-purple':'badge-navy'}">${p.rol==='jefe'?'Jefe':p.rol==='secretaria'?'Secretaria':'Asociado'}</span>
+      <span class="badge ${p.rol==='jefe'?'badge-gold':p.rol==='secretaria'?'badge-purple':'badge-navy'}">${p.rol==='jefe'?'Director Jurídico':p.rol==='secretaria'?'Secretaria':'Asociado'}</span>
       ${esJefe&&esAsocP?`<button class="btn btn-outline btn-sm" onclick="verPerfilAsoc('${p.id}')"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Ver perfil</button>`:''}
       ${p.id!==currentUser.id?`
         <select onchange="cambiarRol('${p.id}',this.value)" style="font-size:13px;padding:6px 10px;border-radius:8px;border:1.5px solid var(--g200);font-family:'DM Sans',sans-serif;cursor:pointer;background:white">
           <option value="asociado" ${p.rol==='asociado'||p.rol==='empleado'?'selected':''}>Asociado</option>
           <option value="secretaria" ${p.rol==='secretaria'?'selected':''}>Secretaria</option>
-          <option value="jefe" ${p.rol==='jefe'?'selected':''}>Jefe</option>
+          <option value="jefe" ${p.rol==='jefe'?'selected':''}>Director Jurídico</option>
         </select>
         <button class="btn btn-danger btn-sm" onclick="eliminarMiembro('${p.id}','${p.nombre}')">Eliminar</button>
       `:'<span style="font-size:12px;color:var(--g400)">(vos)</span>'}
