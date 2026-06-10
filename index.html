@@ -804,6 +804,66 @@ const SUPA_URL = 'https://iboydjjeaeeayxjvaykr.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlib3lkamplYWVlYXl4anZheWtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0NDY3NjAsImV4cCI6MjA5NDAyMjc2MH0.e8Yy8E4oXvJWgY-AXWhlOtoLBZeZY8w1liLHM4JPY84';
 const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
+// --- Croquis 3D: token de sesión para el visor embebido (mismo origen, sin re-login) ---
+let CROQUIS_TOKEN='';
+const CROQUIS_URL='croquis-3d-lena.html';   // subir este archivo junto a index.html
+sb.auth.getSession().then(({data:{session}})=>{ if(session) CROQUIS_TOKEN=session.access_token; });
+sb.auth.onAuthStateChange((_ev,session)=>{ CROQUIS_TOKEN = session ? session.access_token : ''; });
+function croquisCardHTML(e){
+  const tok=encodeURIComponent(CROQUIS_TOKEN||'');
+  const mecP = e.mecanica ? '&mecanica='+encodeURIComponent(e.mecanica) : '';
+  const addrP = e.lugar ? '&addr='+encodeURIComponent(e.lugar) : '';
+  const ver=`${CROQUIS_URL}?exp=${e.id}&ver=1#token=${tok}`;
+  const edit=`${CROQUIS_URL}?exp=${e.id}${mecP}${addrP}#token=${tok}`;
+  const tiene = e.croquis && e.croquis.vehicles && e.croquis.vehicles.length;
+  const subirBtn = `<label class="btn btn-outline btn-sm" style="cursor:pointer">⬆️ Subir croquis<input type="file" accept=".json,.lena3d,application/json" style="display:none" onchange="subirCroquis('${e.id}',this)"></label>`;
+  if(tiene){
+    return `<div class="full-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+        <div class="detail-card-title" style="margin-bottom:0">🚗 Croquis 3D del accidente</div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <a class="btn btn-outline btn-sm" href="${edit}" target="_blank" rel="noopener">✏️ Editar</a>
+          ${subirBtn}
+        </div>
+      </div>
+      <iframe src="${ver}" allow="autoplay; fullscreen" loading="lazy" style="width:100%;height:520px;border:0;border-radius:12px;background:#04050c;box-shadow:0 6px 20px rgba(0,0,0,.15)"></iframe>
+      <div style="font-size:12px;color:var(--g600);margin-top:6px">Reconstrucción del siniestro. Tocá ▶ dentro del visor para reproducir. Para cambiarlo, editá y volvé a subir el archivo.</div>
+    </div>`;
+  }
+  return `<div class="full-card">
+    <div class="detail-card-title">🚗 Croquis 3D del accidente</div>
+    <p style="color:var(--g600);font-size:14px;margin:6px 0 14px;line-height:1.6">
+      <b>1.</b> Tocá <b>Hacer el croquis 3D</b>: abre el simulador con un caso ya armado a partir de la mecánica.<br>
+      <b>2.</b> Ajustalo hasta dejarlo exacto y tocá <b>💾 Guardar caso</b> (te baja un archivo <code>.lena3d.json</code>).<br>
+      <b>3.</b> Volvé acá y tocá <b>⬆️ Subir croquis</b> para dejar la simulación guardada en el expediente.
+    </p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="btn btn-gold btn-sm" href="${edit}" target="_blank" rel="noopener">🎬 Hacer el croquis 3D</a>
+      ${subirBtn}
+    </div>
+  </div>`;
+}
+
+async function subirCroquis(expId, input){
+  const file = input && input.files && input.files[0];
+  if(!file){ return; }
+  try{
+    const txt = await file.text();
+    const json = JSON.parse(txt);
+    if(!json || !Array.isArray(json.vehicles) || !json.vehicles.length){
+      showToast('Ese archivo no tiene un croquis válido.'); input.value=''; return;
+    }
+    const {error} = await sb.from('expedientes').update({croquis: json}).eq('id', expId);
+    if(error){ showToast('No se pudo guardar: '+error.message); input.value=''; return; }
+    const e = expedientes.find(x=>x.id===expId);
+    if(e){ e.croquis = json; showDetailView(e); }
+    showToast('Croquis cargado al expediente ✓');
+  }catch(err){
+    showToast('No pude leer el archivo. Tiene que ser el .lena3d.json que baja el simulador.');
+  }
+  if(input) input.value='';
+}
+
 function h(s){if(s==null)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
 let currentUser = null, currentPerfil = null;
@@ -1079,6 +1139,7 @@ function showDetailView(e) {
       ${e.lesiones?`<div class="detail-field"><div class="field-label">Lesiones</div><div class="field-value">${h(e.lesiones)}</div></div>`:''}
     </div>
 
+
     ${(e.testigo_hecho_1||e.testigo_hecho_2||e.testigo_beneficio_1)?`<div class="full-card">
       <div class="detail-card-title">Testigos</div>
       ${df('Testigo del hecho 1',e.testigo_hecho_1)}${df('Testigo del hecho 2',e.testigo_hecho_2)}
@@ -1171,7 +1232,9 @@ function showDetailView(e) {
         <div class="detail-card-title" style="margin-bottom:10px">Datos del cliente que faltan cargar</div>
         <div id="faltantes-${e.id}">${renderFaltantes(e)}</div>
       </div>
-    </div>`;
+    </div>
+
+    ${croquisCardHTML(e)}`;
 
   setTimeout(() => renderCalExp(e), 0);
   setTimeout(() => cargarFotosExp(e), 0);
