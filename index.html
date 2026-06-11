@@ -176,10 +176,31 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .arch-item:hover .arch-del{opacity:1}
 .arch-preview{width:100%;height:88px;display:flex;align-items:center;justify-content:center;background:var(--g50);overflow:hidden}
 .arch-preview img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
+.arch-acts{display:flex;gap:5px;padding:0 8px 8px}
+.arch-act{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:3px;font-size:11px;font-weight:600;padding:5px 4px;border-radius:6px;border:1.5px solid var(--g100);background:var(--g50);color:var(--g600);cursor:pointer;text-decoration:none;text-align:center;transition:background .12s}
+.arch-act:hover{background:var(--g100)}
+.arch-act[disabled]{opacity:.4;cursor:default}
 .lightbox{display:none;position:fixed;inset:0;background:rgba(8,15,30,.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column;padding:24px;box-sizing:border-box}
 .lightbox.open{display:flex}
 .lightbox img{max-width:95vw;max-height:82vh;object-fit:contain;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 .lightbox-caption{color:rgba(255,255,255,.85);font-size:13px;margin-top:14px;text-align:center;max-width:90vw;word-break:break-word}
+.docview{display:none;position:fixed;inset:0;background:rgba(8,15,30,.96);z-index:1001;flex-direction:column}
+.docview.open{display:flex}
+.docview-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;background:#0a142a;border-bottom:1px solid rgba(201,168,76,.25)}
+.docview-title{color:#f0ece2;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.docview-actions{display:flex;gap:8px;flex-shrink:0}
+.docview-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);color:#f0ece2;border:1px solid rgba(255,255,255,.15);padding:7px 13px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background .12s}
+.docview-btn:hover{background:rgba(201,168,76,.25)}
+.docview-body{flex:1;overflow:auto;display:flex;align-items:stretch;justify-content:center}
+.docview-body iframe{width:100%;height:100%;border:0;background:#fff}
+.docview-body .docview-img{margin:auto;max-width:96%;max-height:96%;object-fit:contain;border-radius:6px}
+.docview-doc{background:#fff;color:#1a1a1a;max-width:820px;width:100%;margin:0 auto;padding:48px 56px;box-sizing:border-box;font-family:'Times New Roman',Georgia,serif;font-size:15px;line-height:1.7;min-height:100%}
+.docview-doc h1{font-size:22px;margin:0 0 14px}.docview-doc h2{font-size:18px;margin:18px 0 10px}.docview-doc p{margin:0 0 10px}
+.docview-doc table{border-collapse:collapse;width:100%;margin:12px 0}.docview-doc td,.docview-doc th{border:1px solid #ccc;padding:6px 9px}
+.docview-doc img{max-width:100%}
+.docview-msg{margin:auto;color:#cfccc4;text-align:center;font-size:14px;padding:30px;max-width:420px}
+.docview-spin{margin:auto;color:#cfccc4;display:flex;flex-direction:column;align-items:center;gap:14px;font-size:13px}
+.docview-spin .sp{width:34px;height:34px;border:3px solid rgba(201,168,76,.25);border-top-color:#c9a84c;border-radius:50%;animation:spin .8s linear infinite}
 .lightbox-close{position:absolute;top:18px;right:18px;width:42px;height:42px;border-radius:50%;border:none;background:rgba(255,255,255,.12);color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
 .lightbox-close:hover{background:rgba(255,255,255,.25)}
 .arch-info{padding:7px 9px;border-top:1px solid var(--g100)}
@@ -769,7 +790,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
     <div class="modal-header"><div class="modal-title">Descargar carpeta para Claude</div><button class="close-btn" onclick="closeDescarga()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div class="modal-body">
       <p style="font-size:14px;color:var(--g600);margin-bottom:14px;line-height:1.6">Se abre una nueva pestaña con la carpeta completa lista para imprimir o guardar como PDF. Incluye todos los datos y fotos.</p>
-      <div style="background:#e8f4fd;border:1px solid #b3d9f5;border-radius:10px;padding:12px;font-size:13px;color:#1a5e9a;line-height:1.6">💡 <strong>Para guardar como PDF:</strong> usá <strong>Imprimir → Guardar como PDF</strong> en tu navegador.</div>
+      <div style="background:#e8f4fd;border:1px solid #b3d9f5;border-radius:10px;padding:12px;font-size:13px;color:#1a5e9a;line-height:1.6"><strong>Para guardar como PDF:</strong> usá <strong>Imprimir → Guardar como PDF</strong> en tu navegador.</div>
     </div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeDescarga()">Cancelar</button><button class="btn btn-gold" onclick="confirmarDescarga()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Generar PDF</button></div>
   </div>
@@ -797,6 +818,25 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
   <button class="lightbox-close" onclick="cerrarFoto()" aria-label="Cerrar"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   <img id="lightbox-img" src="" alt="">
   <div class="lightbox-caption" id="lightbox-caption"></div>
+  <button id="lightbox-download" onclick="descargarFotoActual()" style="margin-top:14px;background:#c9a84c;color:#04050c;border:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">Descargar</button>
+</div>
+
+<!-- VISOR DE DOCUMENTOS (vista previa embebida, sin descargar) -->
+<div class="docview" id="docview">
+  <div class="docview-bar">
+    <div class="docview-title" id="docview-title"></div>
+    <div class="docview-actions">
+      <button class="docview-btn" id="docview-dl" onclick="descargarDocActual()">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Descargar
+      </button>
+      <button class="docview-btn" onclick="cerrarDoc()">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        Cerrar
+      </button>
+    </div>
+  </div>
+  <div class="docview-body" id="docview-body"></div>
 </div>
 
 <script>
@@ -816,29 +856,35 @@ function croquisCardHTML(e){
   const ver=`${CROQUIS_URL}?exp=${e.id}&ver=1#token=${tok}`;
   const edit=`${CROQUIS_URL}?exp=${e.id}${mecP}${addrP}#token=${tok}`;
   const tiene = e.croquis && e.croquis.vehicles && e.croquis.vehicles.length;
-  const subirBtn = `<label class="btn btn-outline btn-sm" style="cursor:pointer">⬆️ Subir croquis<input type="file" accept=".json,.lena3d,application/json" style="display:none" onchange="subirCroquis('${e.id}',this)"></label>`;
+  // ilustración: auto de planta sobre cruce (line-art dorado, dibujada a mano)
+  const autoIlustra=`<svg width="22" height="22" viewBox="0 0 48 48" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M11 18 q0-4 4-4 h18 q4 0 4 4 v12 q0 4-4 4 h-18 q-4 0-4-4 z"/><path d="M16 14 l2-4 h12 l2 4"/><line x1="11" y1="22" x2="37" y2="22"/><line x1="11" y1="30" x2="37" y2="30"/><circle cx="17" cy="35" r="2.5"/><circle cx="31" cy="35" r="2.5"/><circle cx="17" cy="13" r="2.5"/><circle cx="31" cy="13" r="2.5"/></svg>`;
+  const icoEditar=`<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="vertical-align:-2px"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>`;
+  const icoSubir=`<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="vertical-align:-2px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`;
+  const icoCubo=`<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="vertical-align:-2px"><path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.3 7 12 12 20.7 7"/><line x1="12" y1="22" x2="12" y2="12"/></svg>`;
+  const subirBtn = `<label class="btn btn-outline btn-sm" style="cursor:pointer">${icoSubir} Subir croquis<input type="file" accept=".json,.lena3d,application/json" style="display:none" onchange="subirCroquis('${e.id}',this)"></label>`;
+  const titulo=`<div class="detail-card-title" style="margin-bottom:0;display:flex;align-items:center;gap:8px">${autoIlustra} Croquis 3D del accidente</div>`;
   if(tiene){
     return `<div class="full-card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-        <div class="detail-card-title" style="margin-bottom:0">🚗 Croquis 3D del accidente</div>
+        ${titulo}
         <div style="display:flex;gap:7px;flex-wrap:wrap">
-          <a class="btn btn-outline btn-sm" href="${edit}" target="_blank" rel="noopener">✏️ Editar</a>
+          <a class="btn btn-outline btn-sm" href="${edit}" target="_blank" rel="noopener">${icoEditar} Editar</a>
           ${subirBtn}
         </div>
       </div>
       <iframe src="${ver}" allow="autoplay; fullscreen" loading="lazy" style="width:100%;height:520px;border:0;border-radius:12px;background:#04050c;box-shadow:0 6px 20px rgba(0,0,0,.15)"></iframe>
-      <div style="font-size:12px;color:var(--g600);margin-top:6px">Reconstrucción del siniestro. Tocá ▶ dentro del visor para reproducir. Para cambiarlo, editá y volvé a subir el archivo.</div>
+      <div style="font-size:12px;color:var(--g600);margin-top:6px">Reconstrucción del siniestro. Tocá reproducir dentro del visor. Para cambiarlo, editá y volvé a subir el archivo.</div>
     </div>`;
   }
   return `<div class="full-card">
-    <div class="detail-card-title">🚗 Croquis 3D del accidente</div>
+    <div style="margin-bottom:6px">${titulo}</div>
     <p style="color:var(--g600);font-size:14px;margin:6px 0 14px;line-height:1.6">
       <b>1.</b> Tocá <b>Hacer el croquis 3D</b>: abre el simulador con un caso ya armado a partir de la mecánica.<br>
-      <b>2.</b> Ajustalo hasta dejarlo exacto y tocá <b>💾 Guardar caso</b> (te baja un archivo <code>.lena3d.json</code>).<br>
-      <b>3.</b> Volvé acá y tocá <b>⬆️ Subir croquis</b> para dejar la simulación guardada en el expediente.
+      <b>2.</b> Ajustalo hasta dejarlo exacto y tocá <b>Guardar caso</b> (te baja un archivo <code>.lena3d.json</code>).<br>
+      <b>3.</b> Volvé acá y tocá <b>Subir croquis</b> para dejar la simulación guardada en el expediente.
     </p>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <a class="btn btn-gold btn-sm" href="${edit}" target="_blank" rel="noopener">🎬 Hacer el croquis 3D</a>
+      <a class="btn btn-gold btn-sm" href="${edit}" target="_blank" rel="noopener">${icoCubo} Hacer el croquis 3D</a>
       ${subirBtn}
     </div>
   </div>`;
@@ -857,7 +903,7 @@ async function subirCroquis(expId, input){
     if(error){ showToast('No se pudo guardar: '+error.message); input.value=''; return; }
     const e = expedientes.find(x=>x.id===expId);
     if(e){ e.croquis = json; showDetailView(e); }
-    showToast('Croquis cargado al expediente ✓');
+    showToast('Croquis cargado al expediente');
   }catch(err){
     showToast('No pude leer el archivo. Tiene que ser el .lena3d.json que baja el simulador.');
   }
@@ -1080,7 +1126,7 @@ function showDetailView(e) {
             <div style="color:white;font-size:20px;font-weight:700;font-family:'DM Serif Display',serif">$${ind.toLocaleString('es-AR')}</div>
             <div style="color:rgba(255,255,255,.5);font-size:11px;margin:2px 0 6px">Hon. cliente: $${Math.round(ind*.3).toLocaleString('es-AR')} · Seg: $${Math.round(ind*.2).toLocaleString('es-AR')}</div>
             <div style="color:var(--gold-light);font-size:13px;font-weight:700">Total: $${Math.round(ind*.5).toLocaleString('es-AR')}</div>
-            <button class="indem-btn indem-edit" style="margin-top:8px" onclick="abrirIndemModal('${e.id}',${ind})">✏️ Modificar</button>
+            <button class="indem-btn indem-edit" style="margin-top:8px" onclick="abrirIndemModal('${e.id}',${ind})">Modificar</button>
           ` : `<button class="indem-btn" onclick="abrirIndemModal('${e.id}',0)">
             <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Cargar indemnización
@@ -1102,13 +1148,13 @@ function showDetailView(e) {
 
     <div class="full-card" style="border-left:4px solid var(--gold)">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:10px">
-        <div class="detail-card-title" style="margin-bottom:0">⚖️ Estado del juicio</div>
+        <div class="detail-card-title" style="margin-bottom:0;display:flex;align-items:center;gap:7px"><svg width="17" height="17" fill="none" stroke="var(--navy)" stroke-width="1.7" viewBox="0 0 24 24"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 7h14"/><path d="M5 7l-3 6a3 3 0 0 0 6 0z"/><path d="M19 7l-3 6a3 3 0 0 0 6 0z"/><path d="M8 21h8"/></svg> Estado del juicio</div>
         <select id="etapa-sel-${e.id}" onchange="guardarEtapa('${e.id}')" style="background:var(--white);border:1.5px solid var(--g200);border-radius:var(--r);padding:8px 12px;font-family:inherit;font-size:13px;font-weight:600;color:var(--navy);outline:none;cursor:pointer">
           ${ETAPAS_JUICIO.map(op=>`<option value="${op}" ${e.etapa===op?'selected':''}>${op||'— Sin definir —'}</option>`).join('')}
         </select>
       </div>
       <div style="margin-bottom:12px">
-        <label style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--g600);font-weight:700;margin-bottom:5px">👤 ¿Quién nos pasó el caso? <span style="text-transform:none;font-weight:500;color:var(--g400)">(para la comisión al cobrar)</span></label>
+        <label style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--g600);font-weight:700;margin-bottom:5px">¿Quién nos pasó el caso? <span style="text-transform:none;font-weight:500;color:var(--g400)">(para la comisión al cobrar)</span></label>
         <input id="referido-${e.id}" value="${h(e.referido||'')}" onchange="guardarReferido('${e.id}')" placeholder="Ej.: Juan Pérez 10%, redes sociales, amigo de Pablo..." style="width:100%;background:var(--white);border:1.5px solid var(--g200);border-radius:var(--r);padding:10px 13px;font-family:inherit;font-size:14px;color:var(--g800);outline:none;box-sizing:border-box">
       </div>
       <textarea id="notas-txt-${e.id}" placeholder="Escribí acá: notas del caso, estrategia, próximos pasos, recordatorios..." style="width:100%;min-height:110px;background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--r);padding:12px 14px;font-family:inherit;font-size:14px;color:var(--g800);line-height:1.6;resize:vertical;outline:none;box-sizing:border-box">${h(e.notas||'')}</textarea>
@@ -1192,7 +1238,7 @@ function showDetailView(e) {
         <div style="font-size:11px;color:var(--g400);margin-top:3px">Fotos, PDFs, Word, Excel</div>
       </div>
       <div style="display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap">
-        ${['todos','imagen','pdf','doc','otro'].map((t,i)=>`<button class="arch-filtro${i===0?' active':''}" data-exp="${e.id}" data-tipo="${t}" onclick="filtrarArchivos('${e.id}','${t}',this)">${['Todos','📷 Fotos','📄 PDFs','📝 Docs','📁 Otros'][i]}</button>`).join('')}
+        ${['todos','imagen','pdf','doc','otro'].map((t,i)=>`<button class="arch-filtro${i===0?' active':''}" data-exp="${e.id}" data-tipo="${t}" onclick="filtrarArchivos('${e.id}','${t}',this)">${['Todos','Fotos','PDFs','Docs','Otros'][i]}</button>`).join('')}
       </div>
       <div id="arch-grid-${e.id}">${renderArchGrid(archivos,e.id)}</div>
     </div>
@@ -1221,9 +1267,9 @@ function showDetailView(e) {
 
     <div class="full-card" id="resumen-card-${e.id}">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-        <div class="detail-card-title" style="margin-bottom:0">📋 Resumen de la carpeta</div>
+        <div class="detail-card-title" style="margin-bottom:0;display:flex;align-items:center;gap:7px"><svg width="17" height="17" fill="none" stroke="var(--navy)" stroke-width="1.7" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg> Resumen de la carpeta</div>
         <div style="display:flex;gap:7px">
-          <button class="btn btn-outline btn-sm" onclick="generarResumen('${e.id}')">↻ Generar automático</button>
+          <button class="btn btn-outline btn-sm" onclick="generarResumen('${e.id}')">Generar automático</button>
           <button class="btn btn-gold btn-sm" onclick="guardarResumen('${e.id}')">Guardar</button>
         </div>
       </div>
@@ -1272,21 +1318,21 @@ async function guardarEtapa(id){
   const {error} = await sb.from('expedientes').update({etapa: sel.value}).eq('id', id);
   if(error){ showToast('Error al guardar la etapa', true); return; }
   const e = expedientes.find(x=>x.id===id); if(e) e.etapa = sel.value;
-  showToast('Etapa actualizada ✓');
+  showToast('Etapa actualizada');
 }
 async function guardarNotas(id){
   const ta = document.getElementById('notas-txt-'+id); if(!ta) return;
   const {error} = await sb.from('expedientes').update({notas: ta.value}).eq('id', id);
   if(error){ showToast('Error al guardar las notas', true); return; }
   const e = expedientes.find(x=>x.id===id); if(e) e.notas = ta.value;
-  showToast('Notas guardadas ✓');
+  showToast('Notas guardadas');
 }
 async function guardarReferido(id){
   const inp = document.getElementById('referido-'+id); if(!inp) return;
   const {error} = await sb.from('expedientes').update({referido: inp.value}).eq('id', id);
   if(error){ showToast('Error al guardar', true); return; }
   const e = expedientes.find(x=>x.id===id); if(e) e.referido = inp.value;
-  showToast('Guardado ✓');
+  showToast('Guardado');
 }
 async function toggleDoc(id, docId){
   const e = expedientes.find(x=>x.id===id); if(!e) return;
@@ -1318,7 +1364,7 @@ const DOCS_DEMANDA = [
 function _itemFalta(ok,label){
   return '<div style="display:flex;align-items:center;gap:9px;font-size:13px;color:'+(ok?'var(--g400)':'var(--g800)')+'">'
     + '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;flex-shrink:0;font-size:11px;font-weight:700;'
-    + (ok?'background:var(--green-light);color:var(--green)':'background:var(--red-light);color:var(--red)')+'">'+(ok?'✓':'!')+'</span>'
+    + (ok?'background:var(--green-light);color:var(--green)':'background:var(--red-light);color:var(--red)')+'">'+(ok?'<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':'!')+'</span>'
     + '<span style="'+(ok?'text-decoration:line-through':'font-weight:600')+'">'+label+'</span></div>';
 }
 function renderFaltantes(e){
@@ -1330,15 +1376,15 @@ function renderFaltantes(e){
   });
   const causaOk = _lleno(e.ufi)||_lleno(e.ipp)||_lleno(e.comisaria);
   html += '<div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);font-weight:700;margin:14px 0 6px">Causa penal <span style="text-transform:none;font-weight:500;color:var(--g400)">(opcional — suma como prueba)</span></div>';
-  html += '<div style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--g600)"><span style="width:18px;height:18px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;'+(causaOk?'background:var(--green-light);color:var(--green)':'background:var(--g100);color:var(--g400)')+';font-size:11px;font-weight:700">'+(causaOk?'✓':'○')+'</span><span>UFI, IPP o Comisaría</span></div>';
+  html += '<div style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--g600)"><span style="width:18px;height:18px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;'+(causaOk?'background:var(--green-light);color:var(--green)':'background:var(--g100);color:var(--g400)')+';font-size:11px;font-weight:700">'+(causaOk?'<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':'○')+'</span><span>UFI, IPP o Comisaría</span></div>';
   const faltan = totalReq - completos;
-  const cab = '<div style="font-size:13px;color:var(--g600);margin-bottom:4px">'+completos+' de '+totalReq+' requisitos cargados'+(faltan===0?' — lista para demandar ✅':' — faltan '+faltan)+'</div>';
+  const cab = '<div style="font-size:13px;color:var(--g600);margin-bottom:4px">'+completos+' de '+totalReq+' requisitos cargados'+(faltan===0?' — lista para demandar':' — faltan '+faltan)+'</div>';
   let docs = '<div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);font-weight:700;margin:16px 0 6px">Documentación a adjuntar <span style="text-transform:none;font-weight:500;color:var(--g400)">(tocá para marcar las que ya tenés)</span></div><div style="display:flex;flex-direction:column;gap:5px">';
   const marc = e.docs_adjuntos||{};
   DOCS_DEMANDA.forEach(d=>{
     const ok = !!marc[d.id];
     docs += '<div onclick="toggleDoc(\''+e.id+'\',\''+d.id+'\')" style="display:flex;align-items:center;gap:9px;font-size:13px;cursor:pointer;color:'+(ok?'var(--g400)':'var(--g800)')+'">'
-      + '<span style="width:18px;height:18px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:5px;border:1.5px solid '+(ok?'var(--green)':'var(--g200)')+';background:'+(ok?'var(--green-light)':'var(--white)')+';color:var(--green);font-size:11px;font-weight:700">'+(ok?'✓':'')+'</span>'
+      + '<span style="width:18px;height:18px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:5px;border:1.5px solid '+(ok?'var(--green)':'var(--g200)')+';background:'+(ok?'var(--green-light)':'var(--white)')+';color:var(--green);font-size:11px;font-weight:700">'+(ok?'<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':'')+'</span>'
       + '<span style="'+(ok?'text-decoration:line-through':'')+'">'+d.label+'</span></div>';
   });
   docs += '</div>';
@@ -1371,7 +1417,7 @@ function generarResumen(id){
   if(_lleno(e.estado)) partes.push('Estado del expediente: '+e.estado+'.');
   const ta = document.getElementById('resumen-txt-'+id);
   if(ta) ta.value = partes.join(' ');
-  showToast('Resumen generado — revisalo y guardá ✓');
+  showToast('Resumen generado — revisalo y guardá');
 }
 async function guardarResumen(id){
   const ta = document.getElementById('resumen-txt-'+id); if(!ta) return;
@@ -1379,7 +1425,7 @@ async function guardarResumen(id){
   const {error} = await sb.from('expedientes').update({resumen: texto}).eq('id', id);
   if(error){ showToast('Error al guardar el resumen: '+error.message, true); return; }
   const e = expedientes.find(x=>x.id===id); if(e) e.resumen = texto;
-  showToast('Resumen guardado ✓');
+  showToast('Resumen guardado');
 }
 function abrirExpedienteDeUrl(){
   try{
@@ -1457,7 +1503,7 @@ async function guardarExp() {
   if(error){showToast('Error: '+error.message,true);return;}
   await loadExpedientes();
   closeExpModal();
-  showToast('Carpeta guardada ✓');
+  showToast('Carpeta guardada');
   if(currentView==='dashboard') renderDashboard();
   if(currentView==='expedientes') renderExp();
 }
@@ -1537,7 +1583,7 @@ async function guardarEdicion() {
   if(error){showToast('Error: '+error.message,true);return;}
   await loadExpedientes();
   closeEditarModal();
-  showToast('Carpeta actualizada ✓');
+  showToast('Carpeta actualizada');
   const exp = expedientes.find(x=>x.id===id);
   if(exp) showDetailView(exp);
 }
@@ -1552,7 +1598,7 @@ async function agregarGasto(expId) {
   await loadExpedientes();
   const e = expedientes.find(x=>x.id===expId);
   if(e) showDetailView(e);
-  showToast('Gasto agregado ✓');
+  showToast('Gasto agregado');
 }
 async function eliminarGasto(gastoId, expId) {
   await sb.from('gastos').delete().eq('id',gastoId);
@@ -1611,7 +1657,7 @@ async function procesarArchivos(expId, files) {
   const e = expedientes.find(x=>x.id===expId);
   if(e) showDetailView(e);
   showLoading(false);
-  showToast(arr.length+' archivo(s) agregado(s) ✓');
+  showToast(arr.length+' archivo(s) agregado(s)');
 }
 
 async function eliminarArchivo(archId, expId) {
@@ -1638,14 +1684,18 @@ function renderArchGrid(archivos, expId, filtro='todos') {
     return!((a.tipo&&a.tipo.startsWith('image'))||(a.tipo&&a.tipo.includes('pdf'))||(a.nombre&&a.nombre.match(/\.(doc|docx|xls|xlsx|txt)$/i)));
   });
   if(!f.length) return '<div style="color:var(--g400);font-size:13px;text-align:center;padding:14px">No hay archivos de este tipo.</div>';
+  const ojoSVG='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const bajarSVG='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
   return '<div class="archivos-grid">'+f.map(a=>{
     const realIdx = archivos.indexOf(a);
     const [ico,col] = fileIconBig(a.tipo,a.nombre);
-    const preview = a.tipo&&a.tipo.startsWith('image')&&a.storage_path
-      ? `<div class="arch-preview"><img src="${a.storage_path}" alt="${h(a.nombre)}" data-nombre="${h(a.nombre)}" onclick="abrirFoto(this.src,this.dataset.nombre)"></div>`
-      : `<div class="arch-preview"><div style="display:flex;flex-direction:column;align-items:center;gap:4px">${ico}<span style="font-size:10px;color:${col};font-weight:600">${h(fmtExt(a.nombre))}</span></div></div>`;
+    const esImg = a.tipo&&a.tipo.startsWith('image');
+    const preview = esImg&&a.storage_path
+      ? `<div class="arch-preview"><img src="${a.storage_path}" alt="${h(a.nombre)}" data-nombre="${h(a.nombre)}" data-id="${a.id}" data-exp="${expId}" onclick="abrirFoto(this.src,this.dataset.nombre,this.dataset.exp,this.dataset.id)"></div>`
+      : `<div class="arch-preview" onclick="verArchivo('${expId}','${a.id}')" style="cursor:zoom-in"><div style="display:flex;flex-direction:column;align-items:center;gap:4px">${ico}<span style="font-size:10px;color:${col};font-weight:600">${h(fmtExt(a.nombre))}</span></div></div>`;
     return `<div class="arch-item">${preview}
       <div class="arch-info"><div class="arch-name" title="${h(a.nombre)}">${h(a.nombre)}</div><div class="arch-meta">${h(a.tamanio||'')} · ${h(a.fecha||'')}</div></div>
+      <div class="arch-acts"><button class="arch-act" onclick="verArchivo('${expId}','${a.id}')">${ojoSVG} Ver</button><button class="arch-act" onclick="descargarArchivo('${expId}','${a.id}')">${bajarSVG} Bajar</button></div>
       <button class="arch-del" onclick="eliminarArchivo('${a.id}','${expId}')"><svg width="9" height="9" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>`;
   }).join('')+'</div>';
@@ -1658,18 +1708,105 @@ function filtrarArchivos(expId, tipo, btn) {
   if(e) document.getElementById('arch-grid-'+expId).innerHTML = renderArchGrid(e.archivos||[],expId,tipo);
 }
 
-function abrirFoto(src, nombre) {
+let _fotoActual = null;
+function abrirFoto(src, nombre, expId, archId) {
   const img = document.getElementById('lightbox-img');
   img.src = src;
   img.alt = nombre || '';
   document.getElementById('lightbox-caption').textContent = nombre || '';
+  _fotoActual = (expId && archId) ? {expId, archId} : null;
+  const dl = document.getElementById('lightbox-download');
+  if(dl) dl.style.display = _fotoActual ? '' : 'none';
   document.getElementById('lightbox').classList.add('open');
+}
+function descargarFotoActual(){ if(_fotoActual) descargarArchivo(_fotoActual.expId, _fotoActual.archId); }
+function verImagen(expId, archId){
+  const e = expedientes.find(x=>x.id===expId);
+  const a = (e?.archivos||[]).find(x=>x.id===archId);
+  if(a && a.storage_path) abrirFoto(a.storage_path, a.nombre, expId, archId);
+}
+
+// ── VISOR DE DOCUMENTOS (vista previa embebida) ──
+function cargarLib(src){
+  return new Promise((res,rej)=>{
+    const s=document.createElement('script'); s.src=src;
+    s.onload=res; s.onerror=()=>rej(new Error('No se pudo cargar '+src));
+    document.head.appendChild(s);
+  });
+}
+let _docActual=null;
+async function verArchivo(expId, archId){
+  const e=expedientes.find(x=>x.id===expId);
+  let a=(e?.archivos||[]).find(x=>x.id===archId);
+  if(!a){ return; }
+  const nombre=(a.nombre||'').toLowerCase(), tipo=a.tipo||'';
+  // imágenes -> visor de fotos
+  if(tipo.startsWith('image')||nombre.match(/\.(jpe?g|png|gif|webp|bmp)$/)){
+    if(a.storage_path) abrirFoto(a.storage_path,a.nombre,expId,archId); else verImagen(expId,archId);
+    return;
+  }
+  // asegurar URL firmada
+  let url=a.storage_path, key=a.storage_key;
+  if(!key){ const {data}=await sb.from('archivos').select('storage_key').eq('id',archId).single(); key=data?.storage_key; if(a) a.storage_key=key; }
+  if(!url && key){ const {data}=await sb.storage.from('carpetas').createSignedUrl(key,7200); url=data?.signedUrl; if(a) a.storage_path=url; }
+  if(!url){ showToast('Este archivo no está disponible para ver.'); return; }
+  _docActual={expId,archId};
+  document.getElementById('docview-title').textContent=a.nombre||'Documento';
+  const body=document.getElementById('docview-body');
+  document.getElementById('docview').classList.add('open');
+  body.innerHTML='<div class="docview-spin"><div class="sp"></div>Abriendo…</div>';
+  try{
+    if(tipo.includes('pdf')||nombre.endsWith('.pdf')){
+      body.innerHTML='<iframe src="'+url+'#view=FitH"></iframe>'; return;
+    }
+    if(nombre.endsWith('.docx')){
+      if(typeof mammoth==='undefined') await cargarLib('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
+      const buf=await (await fetch(url)).arrayBuffer();
+      const r=await mammoth.convertToHtml({arrayBuffer:buf});
+      body.innerHTML='<div class="docview-doc">'+(r.value||'<p>(Documento vacío)</p>')+'</div>'; return;
+    }
+    if(nombre.match(/\.xlsx?$/)){
+      if(typeof XLSX==='undefined') await cargarLib('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js');
+      const buf=await (await fetch(url)).arrayBuffer();
+      const wb=XLSX.read(buf,{type:'array'});
+      const html=wb.SheetNames.map(n=>'<h2>'+n+'</h2>'+XLSX.utils.sheet_to_html(wb.Sheets[n])).join('');
+      body.innerHTML='<div class="docview-doc">'+html+'</div>'; return;
+    }
+    if(nombre.match(/\.(txt|csv|md|json|xml)$/)){
+      const txt=await (await fetch(url)).text();
+      body.innerHTML='<div class="docview-doc"><pre style="white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:13px">'+h(txt)+'</pre></div>'; return;
+    }
+    body.innerHTML='<div class="docview-msg">Este tipo de archivo no se puede previsualizar en el navegador. Tocá <b>Descargar</b> arriba para abrirlo.</div>';
+  }catch(err){
+    body.innerHTML='<div class="docview-msg">No se pudo generar la vista previa. Podés descargar el archivo con el botón de arriba.</div>';
+  }
+}
+function cerrarDoc(){ document.getElementById('docview').classList.remove('open'); document.getElementById('docview-body').innerHTML=''; _docActual=null; }
+function descargarDocActual(){ if(_docActual) descargarArchivo(_docActual.expId,_docActual.archId); }
+
+// Genera un enlace firmado de descarga (con el nombre original) y lo dispara
+async function descargarArchivo(expId, archId){
+  const e = expedientes.find(x=>x.id===expId);
+  let a = (e?.archivos||[]).find(x=>x.id===archId);
+  let key = a?.storage_key;
+  if(!key){
+    const {data} = await sb.from('archivos').select('storage_key,nombre').eq('id',archId).single();
+    key = data?.storage_key; if(a&&data) a.nombre = a.nombre||data.nombre; if(!a) a={nombre:data?.nombre};
+  }
+  if(!key){ showToast('Este archivo no está en el depósito, no se puede descargar.'); return; }
+  try{
+    const {data, error} = await sb.storage.from('carpetas').createSignedUrl(key, 120, {download: a?.nombre || true});
+    if(error || !data?.signedUrl){ showToast('No se pudo generar la descarga.'); return; }
+    const link = document.createElement('a');
+    link.href = data.signedUrl; link.download = a?.nombre || '';
+    document.body.appendChild(link); link.click(); link.remove();
+  }catch(err){ showToast('No se pudo descargar el archivo.'); }
 }
 function cerrarFoto() {
   document.getElementById('lightbox').classList.remove('open');
   document.getElementById('lightbox-img').src = '';
 }
-document.addEventListener('keydown', ev=>{ if(ev.key==='Escape') cerrarFoto(); });
+document.addEventListener('keydown', ev=>{ if(ev.key==='Escape'){ cerrarFoto(); cerrarDoc(); } });
 
 // ── CALENDARIO ──
 function todosEvs() {
@@ -1768,7 +1905,7 @@ async function guardarEvento(){
   const {error}=await sb.from('eventos').insert(ev);
   if(error){showToast('Error: '+error.message,true);return;}
   await loadEventos();await loadExpedientes();
-  closeEventoModal();showToast('Evento guardado ✓');
+  closeEventoModal();showToast('Evento guardado');
   if(currentView==='dashboard') renderDashboard();
   if(currentView==='calendario') renderCalGlobal();
   const dv=document.getElementById('exp-detail');
@@ -1815,7 +1952,7 @@ async function guardarIndem(){
   if(error){showToast('Error: '+error.message,true);return;}
   await loadExpedientes();
   closeIndemModal();
-  showToast('Indemnización registrada ✓');
+  showToast('Indemnización registrada');
   const e=expedientes.find(x=>x.id===_indemExpId);
   if(e)showDetailView(e);
   if(currentView==='dashboard') renderDashboard();
@@ -2042,7 +2179,7 @@ function renderEquipo(){
     </div>`;
   }).join('');
 }
-async function cambiarRol(id,rol){await sb.from('perfiles').update({rol}).eq('id',id);await loadPerfiles();renderEquipo();showToast('Rol actualizado ✓');}
+async function cambiarRol(id,rol){await sb.from('perfiles').update({rol}).eq('id',id);await loadPerfiles();renderEquipo();showToast('Rol actualizado');}
 async function eliminarMiembro(id,nombre){
   if(!confirm('¿Eliminar a '+nombre+' del equipo?')) return;
   await sb.from('perfiles').update({activo:false}).eq('id',id);
@@ -2060,7 +2197,7 @@ async function crearUsuario(){
   btn.innerHTML='Crear cuenta';btn.disabled=false;
   if(error){errEl.textContent='Error: '+error.message;errEl.style.display='block';return;}
   if(data?.user) await sb.from('perfiles').upsert({id:data.user.id,nombre,email,rol,activo:true});
-  await loadPerfiles();closeCrearUserModal();showToast('Cuenta creada ✓');renderEquipo();
+  await loadPerfiles();closeCrearUserModal();showToast('Cuenta creada');renderEquipo();
 }
 
 // ── DESCARGA PDF ──
@@ -2123,8 +2260,8 @@ function confirmarDescarga(){
   <tbody>${gastos.length?gastos.map(g=>`<tr><td style="padding:4px 10px;border-bottom:1px solid #eeece6">${g.fecha||'—'}</td><td style="padding:4px 10px;border-bottom:1px solid #eeece6">${g.descripcion||''}</td><td style="padding:4px 10px;border-bottom:1px solid #eeece6;text-align:right;font-weight:600">$${parseFloat(g.monto).toLocaleString('es-AR')}</td></tr>`).join(''):'<tr><td colspan="3" style="padding:8px 10px;color:#9a9690">Sin gastos</td></tr>'}</tbody>
   ${gastos.length?`<tfoot><tr><td colspan="2" style="padding:6px 10px;font-weight:700;text-align:right;border-top:2px solid #0f1f3d">Total gastos</td><td style="padding:6px 10px;font-weight:700;text-align:right;border-top:2px solid #0f1f3d">$${tG.toLocaleString('es-AR')}</td></tr></tfoot>`:''}
   </table>
-  ${imgArchivos.length?`<h2>Fotos adjuntas</h2>${imgArchivos.map(a=>`<div style="margin-bottom:14px"><div style="font-size:11px;color:#9a9690;margin-bottom:4px">📷 ${a.nombre}</div><img src="${a.storage_path}" style="max-width:100%;border-radius:6px;border:1px solid #eeece6" alt="${a.nombre}"></div>`).join('')}`:''}
-  ${otrosArchivos.length?`<h2>Otros archivos</h2>${otrosArchivos.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 10px;border:1px solid #eeece6;border-radius:6px;margin-bottom:6px"><span>${a.tipo?.includes('pdf')?'📄':'📁'}</span><div style="flex:1"><div style="font-weight:600">${a.nombre}</div><div style="font-size:11px;color:#9a9690">${a.tamanio||''}</div></div>${a.storage_path?`<a href="${a.storage_path}" download="${a.nombre}" style="background:#0f1f3d;color:white;padding:4px 10px;border-radius:5px;text-decoration:none;font-size:11px">Descargar</a>`:''}</div>`).join('')}`:''}
+  ${imgArchivos.length?`<h2>Fotos adjuntas</h2>${imgArchivos.map(a=>`<div style="margin-bottom:14px"><div style="font-size:11px;color:#9a9690;margin-bottom:4px">${a.nombre}</div><img src="${a.storage_path}" style="max-width:100%;border-radius:6px;border:1px solid #eeece6" alt="${a.nombre}"></div>`).join('')}`:''}
+  ${otrosArchivos.length?`<h2>Otros archivos</h2>${otrosArchivos.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 10px;border:1px solid #eeece6;border-radius:6px;margin-bottom:6px"><div style="flex:1"><div style="font-weight:600">${a.nombre}</div><div style="font-size:11px;color:#9a9690">${a.tamanio||''}</div></div>${a.storage_path?`<a href="${a.storage_path}" download="${a.nombre}" style="background:#0f1f3d;color:white;padding:4px 10px;border-radius:5px;text-decoration:none;font-size:11px">Descargar</a>`:''}</div>`).join('')}`:''}
   </div>
   <div class="footer"><span>Lena & Asociados — Sistema de Expedientes</span><span>Documento confidencial</span></div>
   </body></html>`;
@@ -2134,7 +2271,7 @@ function confirmarDescarga(){
   const w=window.open(url,'_blank');
   if(w) setTimeout(()=>w.print(),800);
   closeDescarga();
-  showToast('PDF listo ✓');
+  showToast('PDF listo');
 }
 
 // ── HELPERS ──
