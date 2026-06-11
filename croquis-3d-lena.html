@@ -1,0 +1,2456 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Croquis 3D — Estudio Lena & Asociados</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap');
+
+  :root{
+    --bg:#020308;
+    --navy:#0b0f28;
+    --navy2:#0f1535;
+    --panel:#080a18;
+    --panel2:#05060f;
+    --gold:#c9a84c;
+    --gold2:#ddb95e;
+    --gold-soft:#ddb95e;
+    --gold3:#f0d080;
+    --line:rgba(201,168,76,.16);
+    --line2:rgba(201,168,76,.24);
+    --txt:#f2efe8;
+    --txt-dim:#8990a8;
+    --danger:#b5483f;
+    --ok:#4c9a6a;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Jost',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:var(--sans)}
+  #app{display:flex;flex-direction:column;height:100vh;width:100vw}
+
+  /* ---------- Top bar ---------- */
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 18px;background:linear-gradient(180deg,var(--navy2),var(--panel2));
+    border-bottom:1px solid var(--line);z-index:10;
+  }
+  .brand{display:flex;align-items:center;gap:13px}
+  .brand-logo{height:40px;width:auto;object-fit:contain;filter:brightness(0) saturate(100%) invert(75%) sepia(60%) saturate(500%) hue-rotate(5deg) brightness(105%)}
+  .brand-txt{display:flex;flex-direction:column;gap:3px;border-left:1px solid var(--line);padding-left:14px}
+  .brand-name{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:.04em;color:var(--txt);line-height:1;display:flex;align-items:baseline;gap:6px}
+  .brand-name .g{color:var(--gold)}
+  .brand-name .est{font-size:8px;font-weight:300;letter-spacing:.26em;text-transform:uppercase;color:var(--txt-dim);align-self:flex-end;margin-bottom:1px}
+  .brand-sub{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2);opacity:.7}
+  .brand span{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--txt-dim)}
+  .brand .est{font-family:var(--serif);font-size:13px;color:var(--txt-dim);font-style:italic}
+
+  .topactions{display:flex;gap:8px;flex-wrap:wrap}
+
+  /* ---------- Layout ---------- */
+  main{flex:1;display:flex;min-height:0}
+  #stage{flex:1;position:relative;background:#04050c}
+  #scene{width:100%;height:100%;display:block;cursor:grab}
+  #scene:active{cursor:grabbing}
+  aside{
+    width:312px;flex-shrink:0;background:var(--panel);border-left:1px solid var(--line);
+    overflow-y:auto;padding:14px 14px 40px;
+  }
+  aside::-webkit-scrollbar{width:8px}
+  aside::-webkit-scrollbar-thumb{background:rgba(201,168,76,.25);border-radius:4px}
+
+  .group{margin-bottom:18px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);overflow:hidden}
+  .group>h2{
+    font-family:var(--serif);font-size:16px;font-weight:600;color:var(--gold-soft);
+    padding:9px 12px;border-bottom:1px solid var(--line);letter-spacing:.4px;
+    display:flex;align-items:center;gap:8px;background:rgba(201,168,76,.05)
+  }
+  .group>h2 .dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+  .gbody{padding:11px 12px;display:flex;flex-direction:column;gap:9px}
+
+  label.field{display:flex;flex-direction:column;gap:4px;font-size:11px;color:var(--txt-dim);letter-spacing:.4px;text-transform:uppercase}
+  input[type=text],input[type=number],select{
+    background:#070b15;border:1px solid var(--line);color:var(--txt);
+    padding:7px 9px;border-radius:7px;font-family:var(--sans);font-size:13px;width:100%;
+  }
+  input:focus,select:focus{outline:none;border-color:var(--gold)}
+  input[type=range]{width:100%;accent-color:var(--gold);background:transparent}
+
+  /* buttons */
+  button{
+    font-family:var(--sans);font-size:12px;letter-spacing:.5px;cursor:pointer;
+    border:1px solid var(--line);background:#0d1424;color:var(--txt);
+    padding:8px 12px;border-radius:8px;transition:.15s;display:inline-flex;align-items:center;gap:6px;justify-content:center;
+  }
+  button:hover{border-color:var(--gold);background:#141d33;color:var(--gold-soft)}
+  button.gold{background:linear-gradient(180deg,var(--gold),#b3923f);color:#1a1305;border-color:var(--gold);font-weight:600}
+  button.gold:hover{background:var(--gold-soft);color:#1a1305}
+  button.danger{border-color:rgba(181,72,63,.5);color:#e0938c}
+  button.danger:hover{background:rgba(181,72,63,.18);border-color:var(--danger)}
+  button.rec.active{background:var(--danger);border-color:var(--danger);color:#fff;animation:pulse 1.1s infinite}
+  @keyframes pulse{50%{opacity:.55}}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  .btn-row{display:flex;gap:7px;flex-wrap:wrap}
+  .btn-row button{flex:1;min-width:0}
+
+  .add-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  .add-grid button{padding:10px 6px;flex-direction:column;gap:5px;font-size:11px}
+  .add-grid button .ico{font-size:19px}
+
+  .hint{font-size:11px;color:var(--txt-dim);line-height:1.5}
+  .hint b{color:var(--gold-soft);font-weight:500}
+
+  .swatches{display:flex;gap:6px;flex-wrap:wrap}
+  .sw{width:26px;height:26px;border-radius:6px;cursor:pointer;border:2px solid transparent}
+  .sw.on{border-color:#fff}
+
+  .empty-sel{font-size:12px;color:var(--txt-dim);font-style:italic;line-height:1.5;text-align:center;padding:6px 0}
+
+  .kf-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--txt-dim)}
+  .kf-badge{background:rgba(201,168,76,.14);color:var(--gold-soft);padding:2px 8px;border-radius:20px;font-weight:600}
+
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+  /* timeline bar */
+  #timeline{
+    position:absolute;left:50%;transform:translateX(-50%);bottom:16px;
+    width:min(640px,80vw);background:rgba(8,12,22,.86);backdrop-filter:blur(8px);
+    border:1px solid var(--line);border-radius:14px;padding:11px 16px;display:flex;align-items:center;gap:12px;
+    box-shadow:0 10px 40px rgba(0,0,0,.5)
+  }
+  #timeline .play{width:42px;height:42px;border-radius:50%;font-size:16px;flex-shrink:0;background:linear-gradient(180deg,var(--gold),#b3923f);color:#1a1305;border-color:var(--gold)}
+  #scrub{flex:1}
+  #tlabel{font-variant-numeric:tabular-nums;font-size:12px;color:var(--gold-soft);min-width:70px;text-align:right}
+  .speed{display:flex;gap:3px;flex-shrink:0}
+  .speed .sp{padding:5px 7px;font-size:11px;min-width:0;border-radius:6px;background:#0d1424}
+  .speed .sp.on{background:var(--gold);color:#1a1305;border-color:var(--gold);font-weight:600}
+
+  /* helper toast */
+  #toast{
+    position:absolute;top:14px;left:50%;transform:translateX(-50%) translateY(-12px);
+    background:rgba(10,15,28,.95);border:1px solid var(--gold);color:var(--gold-soft);
+    padding:9px 18px;border-radius:30px;font-size:12px;letter-spacing:.4px;opacity:0;pointer-events:none;transition:.3s;z-index:20
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .viewbtns{position:absolute;top:14px;left:14px;display:flex;flex-direction:column;gap:7px;z-index:5}
+  .viewbtns button{width:120px;background:rgba(10,15,28,.78);backdrop-filter:blur(6px)}
+
+  .legend{position:absolute;bottom:16px;left:16px;font-size:10px;color:var(--txt-dim);line-height:1.7;background:rgba(8,12,22,.6);padding:8px 11px;border-radius:8px;border:1px solid var(--line)}
+  .legend b{color:var(--gold-soft);font-weight:500}
+
+  .toolbar-sec{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--txt-dim);margin:2px 0 -2px}
+
+  input[type=file]{display:none}
+  .filelabel{display:inline-flex}
+
+  /* step buttons + route status */
+  button.step{width:100%;justify-content:flex-start;font-size:13px;padding:11px 12px}
+  .route-status{display:flex;gap:8px;margin-bottom:2px}
+  .pill{flex:1;text-align:center;font-size:11px;padding:6px 4px;border-radius:20px;border:1px solid var(--line);color:var(--txt-dim);background:#070b15;letter-spacing:.3px}
+  .pill.done{color:#1a1305;background:var(--gold);border-color:var(--gold);font-weight:600}
+
+  /* on-screen instructions overlay */
+  #help{position:absolute;inset:0;z-index:30;display:none;align-items:center;justify-content:center;background:rgba(4,7,14,.72);backdrop-filter:blur(4px)}
+  #help.show{display:flex}
+  .help-card{width:min(560px,92%);max-height:86%;overflow-y:auto;background:linear-gradient(180deg,var(--navy2),var(--panel2));
+    border:1px solid var(--gold);border-radius:16px;padding:26px 30px;box-shadow:0 20px 70px rgba(0,0,0,.6)}
+  .help-card h3{font-family:var(--serif);font-size:26px;color:var(--gold-soft);margin-bottom:4px}
+  .help-card .sub{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--txt-dim);margin-bottom:18px}
+  .steps{display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
+  .step-item{display:flex;gap:14px;align-items:flex-start}
+  .step-num{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:var(--gold);color:#1a1305;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .step-txt{font-size:14px;line-height:1.55;color:var(--txt)}
+  .step-txt b{color:var(--gold-soft);font-weight:600}
+  .cam-tip{font-size:12px;color:var(--txt-dim);line-height:1.7;border-top:1px solid var(--line);padding-top:14px;margin-bottom:18px}
+  .cam-tip b{color:var(--gold-soft)}
+  #helpBtn{background:rgba(10,15,28,.78)}
+
+  /* chat assistant */
+  .chat-box{display:flex;flex-direction:column;gap:8px}
+  #chatLog{display:flex;flex-direction:column;gap:7px;max-height:170px;overflow-y:auto}
+  #chatLog:empty{display:none}
+  .msg{font-size:12px;line-height:1.5;padding:8px 11px;border-radius:10px}
+  .msg.ai{background:rgba(201,168,76,.08);border:1px solid var(--line);color:var(--txt)}
+  .msg.ai b{color:var(--gold-soft)}
+  .msg.err{background:rgba(181,72,63,.12);border:1px solid rgba(181,72,63,.4);color:#e0938c}
+  #chatInput{min-height:74px;resize:vertical;font-family:var(--sans)}
+  .spinner{width:15px;height:15px;border:2px solid rgba(201,168,76,.3);border-top-color:var(--gold);border-radius:50%;display:inline-block;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .ai-note{font-size:10.5px;color:var(--txt-dim);line-height:1.5;font-style:italic}
+
+  /* vincular expediente */
+  button.exp-link{width:100%;background:#0d1424;border:1px dashed var(--line);color:var(--gold-soft);padding:10px}
+  button.exp-link:hover{border-style:solid;border-color:var(--gold)}
+  #expModal{position:absolute;inset:0;z-index:35;display:none;align-items:center;justify-content:center;background:rgba(4,7,14,.78);backdrop-filter:blur(5px)}
+  #expModal.show{display:flex}
+  .exp-card{width:min(560px,94%);max-height:88%;display:flex;flex-direction:column;background:linear-gradient(180deg,var(--navy2),var(--panel2));border:1px solid var(--gold);border-radius:16px;box-shadow:0 20px 70px rgba(0,0,0,.6);overflow:hidden}
+  .exp-head{padding:18px 22px 14px;border-bottom:1px solid var(--line)}
+  .exp-head h3{font-family:var(--serif);font-size:23px;color:var(--gold-soft)}
+  .exp-head .sub{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt-dim);margin-top:3px}
+  .exp-body{padding:18px 22px;overflow-y:auto}
+  .exp-foot{padding:12px 22px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+  .ro-note{font-size:11px;color:var(--ok);background:rgba(76,154,106,.1);border:1px solid rgba(76,154,106,.35);border-radius:8px;padding:7px 11px;margin-bottom:14px}
+  .exp-list{display:flex;flex-direction:column;gap:7px}
+  .exp-item{text-align:left;width:100%;justify-content:flex-start;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 13px;background:#0b1120}
+  .exp-item:hover{background:#141d33;border-color:var(--gold)}
+  .exp-item .ttl{font-size:13px;color:var(--txt);font-weight:500}
+  .exp-item .ttl b{color:var(--gold-soft)}
+  .exp-item .mec{font-size:11px;color:var(--txt-dim);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .exp-item .nomec{font-size:11px;color:#c98a3d;font-style:italic}
+  #expSearch{margin-bottom:12px}
+  .exp-msg{font-size:12px;line-height:1.5;padding:9px 12px;border-radius:8px;margin-top:10px}
+  .exp-msg.err{background:rgba(181,72,63,.12);border:1px solid rgba(181,72,63,.4);color:#e0938c}
+  .exp-empty{font-size:12px;color:var(--txt-dim);font-style:italic;text-align:center;padding:18px 0}
+
+  #casoInfo{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(8,12,22,.92);border:1px solid var(--gold);border-radius:11px;padding:8px 18px;text-align:center;display:none;z-index:6;max-width:74%;box-shadow:0 6px 24px rgba(0,0,0,.45)}
+  #casoInfo.show{display:block}
+  #stageMark{position:absolute;right:16px;bottom:18px;display:flex;align-items:center;gap:8px;opacity:.4;pointer-events:none;z-index:4}
+  #stageMark img{height:26px;width:auto;filter:brightness(0) saturate(100%) invert(75%) sepia(60%) saturate(500%) hue-rotate(5deg) brightness(105%)}
+  #stageMark span{font-family:var(--serif);font-size:12px;color:var(--gold2);letter-spacing:.04em}
+  #casoInfo .l1{font-family:var(--serif);font-size:15px;color:var(--gold-soft);letter-spacing:.3px}
+  #casoInfo .l2{font-size:11px;color:var(--txt-dim);margin-top:2px}
+  /* caption de explicación + modo presentación */
+  #explainCaption{position:absolute;left:50%;bottom:84px;transform:translateX(-50%);max-width:80%;background:rgba(5,7,15,.86);border:1px solid var(--gold);border-radius:12px;padding:14px 22px;color:var(--txt);font-size:18px;line-height:1.45;text-align:center;display:none;z-index:7;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+  #exitPres{position:absolute;top:16px;right:16px;display:none;z-index:9}
+  body.presentando header,
+  body.presentando aside,
+  body.presentando .viewbtns,
+  body.presentando .legend,
+  body.presentando #stageMark{display:none !important}
+  body.presentando #exitPres{display:block}
+  body.presentando #stage{border-radius:0}
+  body.presentando #timeline{transform:translateX(-50%) scale(1.12)}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="brand">
+      <img class="brand-logo" src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=320,fit=crop,q=95/AzG3MXjOpKfBol0d/4-removebg-preview-YZ9xgPgQgXT5jZqP.png" alt="Estudio Lena &amp; Asociados">
+      <div class="brand-txt">
+        <div class="brand-name"><span class="g">Lena</span>&nbsp;&amp;&nbsp;Asociados <span class="est">Estudio Jurídico</span></div>
+        <div class="brand-sub">Croquis 3D · Reconstrucción de siniestros</div>
+      </div>
+    </div>
+    <div class="topactions">
+      <button id="helpBtn" onclick="showHelp()">❓ Instrucciones</button>
+      <label class="filelabel"><button class="" onclick="document.getElementById('loadScene').click()">📂 Abrir caso</button></label>
+      <input type="file" id="loadScene" accept=".json,.lena3d">
+      <button onclick="saveScene()">💾 Guardar caso</button>
+      <button onclick="shoot()">📷 Foto</button>
+      <button onclick="togglePresentacion()">🖥 Presentar</button>
+      <button class="rec" id="recBtn" onclick="toggleRec()">⏺ Grabar</button>
+      <button class="gold" id="autoRecBtn" onclick="recordClip()">🎬 Grabar choque</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="stage">
+      <canvas id="scene"></canvas>
+
+      <div class="viewbtns">
+        <button onclick="setView('top')">⬇ Vista cenital</button>
+        <button onclick="setView('persp')">◈ Vista 3/4</button>
+        <button onclick="frameAll()">⊡ Centrar</button>
+      </div>
+
+      <div class="legend">
+        <b>Mover:</b> arrastrá un vehículo &nbsp;·&nbsp; <b>Girar cámara:</b> arrastrá el vacío<br>
+        <b>Zoom:</b> rueda &nbsp;·&nbsp; <b>Desplazar:</b> click derecho + arrastrar
+      </div>
+
+      <div id="timeline">
+        <button class="play" id="playBtn" onclick="togglePlay()">▶</button>
+        <button class="play" id="resetBtn" onclick="volverAlInicio()" title="Volver al inicio" style="font-size:16px">↺</button>
+        <input type="range" id="scrub" min="0" max="1000" value="0">
+        <span id="tlabel">0.0s / 6.0s</span>
+        <div class="speed" id="speedCtl">
+          <button class="sp on" data-m="1" onclick="setSpeed(1,this)">1×</button>
+          <button class="sp" data-m="2" onclick="setSpeed(2,this)">2×</button>
+          <button class="sp" data-m="4" onclick="setSpeed(4,this)">4×</button>
+        </div>
+      </div>
+
+      <div id="toast"></div>
+      <div id="casoInfo"></div>
+      <div id="explainCaption"></div>
+      <button id="exitPres" onclick="togglePresentacion()">✕ Salir de presentación</button>
+      <div id="stageMark">
+        <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=320,fit=crop,q=95/AzG3MXjOpKfBol0d/4-removebg-preview-YZ9xgPgQgXT5jZqP.png" alt="">
+        <span>Estudio Lena &amp; Asociados</span>
+      </div>
+
+      <div id="help">
+        <div class="help-card">
+          <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=320,fit=crop,q=95/AzG3MXjOpKfBol0d/4-removebg-preview-YZ9xgPgQgXT5jZqP.png" alt="Estudio Lena" style="height:46px;width:auto;display:block;margin:0 auto 6px;filter:brightness(0) saturate(100%) invert(75%) sepia(60%) saturate(500%) hue-rotate(5deg) brightness(105%)">
+          <h3 style="text-align:center">Cómo armar el croquis</h3>
+          <div class="sub" style="text-align:center">Estudio Lena &amp; Asociados · Pioneros del derecho vial · 1974</div>
+          <div class="steps">
+            <div class="step-item"><div class="step-num">✨</div><div class="step-txt"><b>Lo más rápido:</b> en el panel derecho, en <b>“Describí el choque”</b>, contá con tus palabras cómo fue el siniestro y tocá <b>“Armar croquis automáticamente”</b>. El asistente ubica calles, vehículos y movimientos. Después corregís lo que quieras a mano con los pasos de abajo.</div></div>
+            <div class="step-item"><div class="step-num">1</div><div class="step-txt">O armalo a mano: <b>elegí la calle</b>, o cargá una <b>captura de Google Maps</b> de la esquina real.</div></div>
+            <div class="step-item"><div class="step-num">2</div><div class="step-txt"><b>Agregá los vehículos</b> (auto, moto, camioneta…) con los botones de la derecha.</div></div>
+            <div class="step-item"><div class="step-num">3</div><div class="step-txt"><b>Tocá un vehículo</b> para seleccionarlo. <b>Arrastralo</b> para ubicarlo y usá la barra <b>“Orientación”</b> para girarlo.</div></div>
+            <div class="step-item"><div class="step-num">4</div><div class="step-txt">Con el vehículo donde arranca, tocá <b>“📍 Fijar arranque”</b>. Arrastralo hasta el lugar del choque y tocá <b>“💥 Fijar impacto”</b>. Repetí con cada vehículo.</div></div>
+            <div class="step-item"><div class="step-num">▶</div><div class="step-txt">Tocá <b>Reproducir</b> (barra de abajo) para ver el choque. <b>“🎬 Grabar choque”</b> descarga el video para mandarle al cliente.</div></div>
+          </div>
+          <div class="cam-tip">
+            <b>Mover la cámara:</b> arrastrá sobre el vacío para girar · rueda del mouse para acercar/alejar · click derecho + arrastrar para desplazar.<br>
+            Ya hay un choque de ejemplo cargado: tocá ▶ para verlo funcionar.
+          </div>
+          <button class="gold" style="width:100%;padding:11px" onclick="hideHelp()">Empezar a armar el croquis</button>
+        </div>
+      </div>
+
+      <div id="expModal">
+        <div class="exp-card">
+          <div class="exp-head">
+            <h3>Vincular expediente</h3>
+            <div class="sub">Estudio Lena &amp; Asociados · panel de expedientes</div>
+          </div>
+          <div class="exp-body" id="expBody"></div>
+          <div class="exp-foot">
+            <button onclick="expCerrar()">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside>
+      <!-- ASISTENTE IA -->
+      <div class="group">
+        <h2><span class="dot"></span>Describí el choque</h2>
+        <div class="gbody chat-box">
+          <button class="exp-link" onclick="expAbrir()">📁 Vincular expediente (arma todo solo)</button>
+          <button class="gold" id="saveExpBtn" onclick="guardarCroquisEnExpediente()" style="width:100%;padding:11px;margin-top:8px;display:none">💾 Guardar este croquis en el expediente</button>
+          <div id="chatLog"></div>
+          <textarea id="chatInput" placeholder="Ej.: En la bocacalle de Av. Rivadavia y Belgrano, mi cliente circulaba en moto por Belgrano de norte a sur. Un auto que venía por Rivadavia de oeste a este cruzó sin respetar la prioridad y embistió la moto en el medio del cruce, del lado izquierdo."></textarea>
+          <button class="gold" id="buildAiBtn" onclick="buildFromText()" style="width:100%;padding:11px">✨ Armar croquis automáticamente</button>
+          <p class="ai-note">Funciona gratis, sin internet ni costos. Interpreta los casos típicos (alcance, cruce, frontal); lo que no clave lo corregís a mano.</p>
+        </div>
+      </div>
+
+      <!-- ESCENARIO -->
+      <div class="group">
+        <h2><span class="dot"></span>Escenario</h2>
+        <div class="gbody">
+          <div class="toolbar-sec">Calle real del hecho</div>
+          <label class="field">Dirección (calle, altura, localidad)
+            <input type="text" id="addrInput" placeholder="Int. Irigoin 1432, San Miguel, Buenos Aires" onkeydown="if(event.key==='Enter')buscarDireccion()">
+          </label>
+          <button class="gold" id="addrBtn" onclick="buscarDireccion()" style="width:100%"><i></i>🗺 Buscar el trazado real</button>
+          <p class="hint">Trae el trazado real de las calles desde OpenStreetMap (gratis). Después ubicás los vehículos sobre la bocacalle real.</p>
+          <div id="addrFound" style="display:none"></div>
+
+          <div class="toolbar-sec">Calle genérica (sin dirección)</div>
+          <label class="field">Tipo de calle
+            <select id="roadPreset" onchange="buildRoad(this.value)">
+              <option value="cross">Cruce (4 esquinas)</option>
+              <option value="tee">Cruce en T</option>
+              <option value="straight">Avenida recta</option>
+              <option value="round">Rotonda</option>
+              <option value="none">Sin calle (solo asfalto)</option>
+            </select>
+          </label>
+
+          <div class="toolbar-sec">Plano de Google Maps</div>
+          <p class="hint">Sacá una captura del cruce real en Maps (vista satélite o plano) y cargala como base. Después armás los autos encima sobre la geometría exacta de esa esquina.</p>
+          <label class="filelabel"><button onclick="document.getElementById('refImg').click()" style="width:100%">🛰 Cargar captura de Maps</button></label>
+          <input type="file" id="refImg" accept="image/*">
+          <div id="refControls" style="display:none;flex-direction:column;gap:8px">
+            <label class="field">Ancho real de la captura (metros): <span id="refWv">40</span>
+              <input type="range" id="refW" min="10" max="200" value="40" oninput="updateRef()">
+            </label>
+            <label class="field">Rotación: <span id="refRv">0</span>°
+              <input type="range" id="refR" min="0" max="360" value="0" oninput="updateRef()">
+            </label>
+            <label class="field">Opacidad: <span id="refOv">100</span>%
+              <input type="range" id="refO" min="10" max="100" value="100" oninput="updateRef()">
+            </label>
+            <button class="danger" onclick="removeRef()">Quitar captura</button>
+          </div>
+
+          <div class="btn-row">
+            <button onclick="toggleGrid()" id="gridBtn">▦ Grilla</button>
+            <button onclick="toggleShadows()" id="shadBtn">☼ Sombras</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AGREGAR -->
+      <div class="group">
+        <h2><span class="dot"></span>Agregar al croquis</h2>
+        <div class="gbody">
+          <div class="add-grid">
+            <button onclick="addVehicle('auto')"><span class="ico">🚗</span>Auto</button>
+            <button onclick="addVehicle('moto')"><span class="ico">🏍</span>Moto</button>
+            <button onclick="addVehicle('camion')"><span class="ico">🚚</span>Camioneta</button>
+            <button onclick="addVehicle('camiongrande')"><span class="ico">🚛</span>Camión</button>
+            <button onclick="addVehicle('colectivo')"><span class="ico">🚌</span>Colectivo</button>
+            <button onclick="addVehicle('bici')"><span class="ico">🚲</span>Bici</button>
+            <button onclick="addVehicle('peaton')"><span class="ico">🚶</span>Peatón</button>
+          </div>
+          <div class="toolbar-sec" style="margin-top:10px">Elementos de la calle</div>
+          <div class="add-grid">
+            <button onclick="addProp('semaforo')"><span class="ico">🚦</span>Semáforo</button>
+            <button onclick="addProp('senda')"><span class="ico">🚸</span>Senda peatonal</button>
+            <button onclick="addProp('lomo')"><span class="ico">⛰</span>Lomo de burro</button>
+            <button onclick="addProp('cono')"><span class="ico">🚧</span>Cono / obstáculo</button>
+          </div>
+          <button onclick="resetAcero()" style="width:100%;margin-top:10px">↺ Empezar de cero (todo a 0°)</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2><span class="dot"></span>Plantillas de choque</h2>
+        <div class="gbody">
+          <div class="add-grid">
+            <button onclick="plantilla('alcance')">🚗💨 Alcance</button>
+            <button onclick="plantilla('cruce')">✚ Cruce</button>
+            <button onclick="plantilla('frontal')">⇄ Frontal</button>
+            <button onclick="plantilla('lateral')">⊥ Embestida lateral</button>
+          </div>
+          <p class="hint">Carga un choque típico armado. Después lo movés y ajustás a tu caso con los puntos del recorrido.</p>
+        </div>
+      </div>
+
+      <!-- PROPIEDADES -->
+      <div class="group">
+        <h2><span class="dot"></span>Elemento seleccionado</h2>
+        <div class="gbody" id="propBody">
+          <p class="empty-sel">Tocá un vehículo en la escena para editarlo, moverlo y darle movimiento.</p>
+        </div>
+      </div>
+
+      <!-- ANIMACION -->
+      <div class="group">
+        <h2><span class="dot"></span>Animación del choque</h2>
+        <div class="gbody">
+          <label class="field">Duración total (segundos): <span id="durV">6</span>
+            <input type="range" id="dur" min="2" max="20" value="6" oninput="document.getElementById('durV').textContent=this.value;updateTimeLabel()">
+          </label>
+          <label class="field" style="flex-direction:row;align-items:center;gap:8px;text-transform:none">
+            <input type="checkbox" id="loopChk" style="width:auto;accent-color:var(--gold)"> Repetir en bucle
+          </label>
+          <label class="field" style="flex-direction:row;align-items:center;gap:8px;text-transform:none">
+            <input type="checkbox" id="marksChk" checked style="width:auto;accent-color:var(--gold)"> Marcas de frenada y cruz del impacto
+          </label>
+          <div class="toolbar-sec" style="margin-top:8px">Ambiente</div>
+          <div class="btn-row">
+            <button id="nocheBtn" onclick="toggleNoche()">🌙 Noche</button>
+            <button id="lluviaBtn" onclick="toggleLluvia()">🌧 Lluvia</button>
+          </div>
+          <button id="fpvBtn" onclick="toggleFPV()" style="width:100%;margin-top:6px">🎥 Vista del conductor</button>
+          <div class="toolbar-sec" style="margin-top:10px">Cartel del expediente (arriba en el video)</div>
+          <input type="text" id="cartelExp" placeholder="Causa 1234/24 · Juzgado Civil 3 Morón · Pérez c/ Gómez" oninput="setExpedienteCartel()" style="width:100%;background:var(--panel2);border:1px solid rgba(201,168,76,.25);border-radius:8px;color:var(--txt);padding:8px;font-family:inherit;font-size:13px">
+          <div class="toolbar-sec" style="margin-top:10px">Explicación del hecho (subtítulo)</div>
+          <textarea id="explainText" rows="3" placeholder="Ej.: El demandado circulaba por Rivadavia a alta velocidad y cruzó con el semáforo en rojo, embistiendo a nuestro cliente que cruzaba con prioridad por Belgrano." oninput="updateCaption()" style="width:100%;resize:vertical;background:var(--panel2);border:1px solid rgba(201,168,76,.25);border-radius:8px;color:var(--txt);padding:8px;font-family:inherit;font-size:13px"></textarea>
+          <div class="toolbar-sec" style="margin-top:10px">Narración por etapas (opcional)</div>
+          <textarea id="etapasText" rows="4" placeholder="Una línea por etapa, formato segundos: texto&#10;0: El cliente cruza con prioridad por Belgrano&#10;3: El demandado cruza en rojo por Rivadavia&#10;4: Impacto en el lateral izquierdo" oninput="setEtapas()" style="width:100%;resize:vertical;background:var(--panel2);border:1px solid rgba(201,168,76,.25);border-radius:8px;color:var(--txt);padding:8px;font-family:inherit;font-size:13px"></textarea>
+          <p class="hint">El <b>cartel</b> y el <b>subtítulo</b> (o las <b>etapas</b>, si las cargás) se ven en <b>🖥 Presentar</b> y quedan <b>dentro del video</b> grabado. Las etapas cambian solas según el segundo.</p>
+          <p class="hint"><b>Cómo se arma un movimiento:</b> seleccioná un vehículo, ubicalo donde arranca y tocá <b>“Marcar punto”</b>. Movelo al siguiente lugar y marcá otro. El punto de impacto debe ser un fotograma de los dos vehículos a la vez.</p>
+        </div>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* =========================================================================
+   CROQUIS 3D — Estudio Lena & Asociados
+   Reconstrucción de accidentes de tránsito
+   ========================================================================= */
+
+let scene, camera, renderer, raycaster, clock;
+const groundY = 0;
+let groundPlane;            // invisible plane for raycasting / dragging
+let asphalt;                // visible asphalt
+let roadGroup = new THREE.Group();
+let gridHelper;
+let refMesh = null, refTex = null;
+let vehicles = [];          // array of THREE.Group with userData
+let props = [];             // elementos de calle (semáforos, sendas, carteles)
+let hemiLight=null, dirLight=null;   // luces (día/noche)
+let marksGroup=new THREE.Group();    // marcas de frenada + cruz de impacto
+let esNoche=false, lluvia=null;      // modo nocturno y lluvia
+let hudScene=null, hudCamera=null, hudMesh=null, hudCanvas=null, hudCtx=null, hudTexture=null, hudLastKey='';
+let etapas=[];                       // narración por etapas [{t, texto}]
+let expedienteCartel='';             // datos del expediente (cartel superior)
+let selected = null;
+let selectionRing;
+let pathLine = null;
+let shadowsOn = true;
+let gridOn = true;
+
+// camera orbit state
+const cam = { target:new THREE.Vector3(0,0,0), radius:32, theta:Math.PI*0.25, phi:0.78 };
+
+// animation state
+let playing = false;
+let t = 0;          // 0..1 global timeline
+let duration = 6;
+
+// pointer state
+let isOrbiting=false, isPanning=false, isDragging=false;
+let handleGroup=null, dragHandle=null;   // manijas arrastrables del recorrido
+let dragOffset = new THREE.Vector3();
+let lastX=0,lastY=0;
+
+const COLORS = ['#c9a84c','#3a6ea5','#b5483f','#4c9a6a','#e8e6df','#8b5fb0','#d98a3d','#2b2f3a'];
+
+function webglOk(){
+  try{ const c=document.createElement('canvas');
+    return !!(window.WebGLRenderingContext && (c.getContext('webgl')||c.getContext('experimental-webgl'))); }
+  catch(e){ return false; }
+}
+function showFatal(msg){
+  const s=document.getElementById('stage');
+  s.innerHTML='<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:40px;text-align:center">'
+    +'<div style="max-width:460px"><div style="font-family:var(--serif);font-size:26px;color:var(--gold-soft);margin-bottom:14px">No se pudo iniciar el 3D</div>'
+    +'<p style="color:var(--txt-dim);font-size:14px;line-height:1.7">'+msg+'</p></div></div>';
+}
+
+function boot(){
+  if(typeof THREE==='undefined'){ showFatal('No cargó la librería 3D (sin conexión o bloqueada). Descargá el archivo y abrilo en tu navegador con internet.'); return; }
+  if(!webglOk()){ showFatal('Tu visor no tiene aceleración gráfica (WebGL) habilitada. <b>Descargá este archivo y abrilo directamente en Chrome/Edge</b> haciendo doble click: ahí funciona completo.'); return; }
+  try{ init(); animate(); }
+  catch(err){ showFatal('Ocurrió un error al iniciar. Descargá el archivo y abrilo en tu navegador. ('+err.message+')'); }
+}
+// run after layout so the canvas gets real dimensions
+if(document.readyState==='complete') requestAnimationFrame(boot);
+else window.addEventListener('load', ()=>requestAnimationFrame(boot));
+
+/* ----------------------------------------------------------------- INIT */
+function init(){
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x04050c);
+  scene.fog = new THREE.Fog(0x04050c, 90, 220);
+
+  const canvas = document.getElementById('scene');
+  renderer = new THREE.WebGLRenderer({canvas, antialias:true, preserveDrawingBuffer:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  resize();
+  initHUD();
+
+  camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
+
+  raycaster = new THREE.Raycaster();
+  clock = new THREE.Clock();
+  handleGroup = new THREE.Group(); scene.add(handleGroup);
+  scene.add(marksGroup);
+
+  // lights
+  hemiLight = new THREE.HemisphereLight(0xbfd0e8, 0x202530, 0.85);
+  scene.add(hemiLight);
+  dirLight = new THREE.DirectionalLight(0xfff2d6, 1.05);
+  dirLight.position.set(28, 46, 20);
+  dirLight.castShadow = true;
+  dirLight.shadow.mapSize.set(2048,2048);
+  const d=60;
+  dirLight.shadow.camera.left=-d;dirLight.shadow.camera.right=d;dirLight.shadow.camera.top=d;dirLight.shadow.camera.bottom=-d;
+  dirLight.shadow.camera.near=1;dirLight.shadow.camera.far=160;
+  dirLight.shadow.bias=-0.0004;
+  scene.add(dirLight);
+
+  // asphalt base
+  const aMat = new THREE.MeshStandardMaterial({color:0x1c2028, roughness:.96, metalness:0});
+  asphalt = new THREE.Mesh(new THREE.PlaneGeometry(400,400), aMat);
+  asphalt.rotation.x = -Math.PI/2;
+  asphalt.position.y = -0.02;
+  asphalt.receiveShadow = true;
+  scene.add(asphalt);
+
+  // ground raycast plane
+  groundPlane = new THREE.Mesh(new THREE.PlaneGeometry(400,400), new THREE.MeshBasicMaterial({visible:false}));
+  groundPlane.rotation.x = -Math.PI/2;
+  scene.add(groundPlane);
+
+  // grid
+  gridHelper = new THREE.GridHelper(120, 60, 0x33405c, 0x1e2636);
+  gridHelper.position.y = 0.01;
+  gridHelper.material.opacity = .5; gridHelper.material.transparent = true;
+  scene.add(gridHelper);
+
+  scene.add(roadGroup);
+  buildRoad('cross');
+
+  // selection ring
+  const ringGeo = new THREE.RingGeometry(2.0, 2.35, 48);
+  const ringMat = new THREE.MeshBasicMaterial({color:0xc9a84c, side:THREE.DoubleSide, transparent:true, opacity:.9});
+  selectionRing = new THREE.Mesh(ringGeo, ringMat);
+  selectionRing.rotation.x = -Math.PI/2;
+  selectionRing.position.y = 0.06;
+  selectionRing.visible = false;
+  scene.add(selectionRing);
+
+  updateCamera();
+
+  // events
+  window.addEventListener('resize', resize);
+  // some preview iframes report 0px until laid out: retry a few times + observe
+  [60,200,500,1000].forEach(ms=>setTimeout(resize, ms));
+  if(window.ResizeObserver){ new ResizeObserver(resize).observe(document.getElementById('stage')); }
+  canvas.addEventListener('pointerdown', onDown);
+  window.addEventListener('pointermove', onMove);
+  window.addEventListener('pointerup', onUp);
+  canvas.addEventListener('wheel', onWheel, {passive:false});
+  canvas.addEventListener('contextmenu', e=>e.preventDefault());
+
+  document.getElementById('scrub').addEventListener('input', e=>{
+    t = e.target.value/1000; playing=false; document.getElementById('playBtn').textContent='▶';
+    if(handleGroup) handleGroup.visible=true;
+    if(t<=0.02) resetImpacts();
+    applyAnimation(); updateTimeLabel();
+  });
+  document.getElementById('refImg').addEventListener('change', loadRefImage);
+  document.getElementById('loadScene').addEventListener('change', loadScene);
+  document.getElementById('dur').addEventListener('input', ()=>{ duration=+document.getElementById('dur').value; });
+
+  // start with two demo cars that ALREADY collide, so Play works immediately
+  const a = addVehicle('auto', false); a.userData.name='Vehículo A (cliente)';
+  a.userData.keyframes=[{x:-16,z:1.2,rot:Math.PI/2},{x:1.2,z:1.2,rot:Math.PI/2}]; a.userData.endFrac=0.5;
+  const b = addVehicle('auto', false); b.userData.name='Vehículo B (demandado)'; b.userData.color='#b5483f'; recolor(b,'#b5483f');
+  b.userData.keyframes=[{x:1.6,z:-16,rot:0},{x:1.6,z:1.6,rot:0}]; b.userData.endFrac=0.5;
+  refreshLabels();
+  t=0; applyAnimation(); updateTimeLabel();
+  toast('Probá ▶ abajo: los dos autos chocan en el cruce.');
+  // integración con el panel de expedientes:
+  //   ?exp=ID&mecanica=...&addr=...   -> arma el croquis interpretado para editar (NO toca Supabase)
+  //   ?exp=ID&ver=1                   -> modo visor: carga el croquis guardado y lo reproduce (en el panel)
+  try{
+    const qp=new URLSearchParams(location.search);
+    const exp=qp.get('exp');
+    const mec=qp.get('mecanica');
+    const addr=qp.get('addr');
+    const ver=(qp.get('ver')==='1');
+    const hashTok=(location.hash.match(/token=([^&]+)/)||[])[1];
+    if(hashTok){ try{ SUPA.token=decodeURIComponent(hashTok); }catch(_){ SUPA.token=hashTok; } }
+    if(addr){ const ai=document.getElementById('addrInput'); if(ai) ai.value=addr; }
+    if(exp){ SUPA.pendingExp=exp; SUPA.viewMode=ver; }
+
+    if(ver && exp){
+      // visor embebido (corre hosteado dentro del panel): trae el croquis guardado y lo reproduce
+      setTimeout(()=>{ try{ expAbrir(); }catch(_){} }, 300);
+    } else {
+      // MODO EDICIÓN: siempre mostrar algo. No depende de Supabase ni de internet.
+      if(mec){
+        const ci=document.getElementById('chatInput'); if(ci) ci.value=mec;
+        try{ buildFromText(); }catch(_){ if(vehicles.length===0) plantilla('cruce'); }
+      } else if(!exp){
+        showHelp();
+      }
+      // mejora opcional: si hay calle, dibujar la red real encima (no bloqueante, no rompe nada)
+      if(addr){ setTimeout(()=>{ buscarDireccion().then(()=>{ try{ buildFromText(); }catch(_){} }).catch(()=>{}); }, 50); }
+    }
+  }catch(e){ try{ showHelp(); }catch(_){} }
+  // GARANTÍA: si por lo que sea la escena quedó vacía, armar un caso hipotético para corregir
+  setTimeout(()=>{
+    try{
+      if(vehicles.length===0 && !(new URLSearchParams(location.search).get('ver')==='1')){
+        const t=(document.getElementById('chatInput')||{}).value||'';
+        if(t.trim()){ try{ buildFromText(); }catch(_){ plantilla('cruce'); } }
+        else plantilla('cruce');
+      }
+    }catch(_){}
+  }, 1500);
+}
+
+function resize(){
+  const s=document.getElementById('stage');
+  const w=s.clientWidth||window.innerWidth, h=s.clientHeight||window.innerHeight;
+  if(w<2||h<2) return;
+  renderer.setSize(w,h,false);
+  if(camera){camera.aspect=w/h;camera.updateProjectionMatrix();}
+  if(hudCanvas){ const pr=renderer.getPixelRatio(); hudCanvas.width=w*pr; hudCanvas.height=h*pr; hudLastKey='__'; }
+}
+
+/* --------------------------------------------------------------- CAMERA */
+function updateCamera(){
+  const x = cam.target.x + cam.radius*Math.sin(cam.phi)*Math.sin(cam.theta);
+  const y = cam.target.y + cam.radius*Math.cos(cam.phi);
+  const z = cam.target.z + cam.radius*Math.sin(cam.phi)*Math.cos(cam.theta);
+  camera.position.set(x,y,z);
+  camera.lookAt(cam.target);
+}
+function setView(v){
+  if(v==='top'){ cam.phi=0.0015; cam.theta=0; cam.radius=46; }
+  else { cam.phi=0.78; cam.theta=Math.PI*0.25; cam.radius=34; }
+  updateCamera();
+}
+function frameAll(){
+  if(!vehicles.length){cam.target.set(0,0,0);cam.radius=34;updateCamera();return;}
+  const box=new THREE.Box3();
+  vehicles.forEach(v=>box.expandByObject(v));
+  const c=box.getCenter(new THREE.Vector3());
+  const size=box.getSize(new THREE.Vector3());
+  cam.target.copy(c); cam.target.y=0;
+  cam.radius=Math.max(20, Math.max(size.x,size.z)*1.7);
+  updateCamera();
+}
+
+/* ------------------------------------------------------------- POINTERS */
+function getGroundPoint(e){
+  const r=renderer.domElement.getBoundingClientRect();
+  const mx=((e.clientX-r.left)/r.width)*2-1;
+  const my=-((e.clientY-r.top)/r.height)*2+1;
+  raycaster.setFromCamera({x:mx,y:my}, camera);
+  const hit=raycaster.intersectObject(groundPlane);
+  return hit.length?hit[0].point:null;
+}
+function pickVehicle(e){
+  const r=renderer.domElement.getBoundingClientRect();
+  const mx=((e.clientX-r.left)/r.width)*2-1;
+  const my=-((e.clientY-r.top)/r.height)*2+1;
+  raycaster.setFromCamera({x:mx,y:my}, camera);
+  const hits=raycaster.intersectObjects(vehicles.concat(props), true);
+  if(!hits.length) return null;
+  let o=hits[0].object;
+  while(o.parent && !(o.userData.isVehicle||o.userData.isProp)) o=o.parent;
+  return (o.userData.isVehicle||o.userData.isProp) ? o : null;
+}
+function onDown(e){
+  lastX=e.clientX; lastY=e.clientY;
+  if(e.button===2){ isPanning=true; return; }
+  // 1) ¿agarró una manija del recorrido?
+  const h=pickHandle(e);
+  if(h){
+    const u=h.userData;
+    if(u.kind==='bend'){
+      // insertar un punto nuevo en el medio del tramo y empezar a arrastrarlo (doblar la línea)
+      const kf=selected.userData.keyframes; const s=u.seg;
+      const nx=(kf[s].x+kf[s+1].x)/2, nz=(kf[s].z+kf[s+1].z)/2;
+      kf.splice(s+1,0,{x:nx,z:nz,rot:kf[s].rot});
+      selected.userData._ck=null;
+      dragHandle={idx:s+1};
+    } else {
+      dragHandle={idx:u.idx};
+    }
+    isDragging=false; isOrbiting=false; isPanning=false;
+    drawPath(); refreshHandles();
+    return;
+  }
+  const v=pickVehicle(e);
+  if(v){
+    select(v);
+    const gp=getGroundPoint(e);
+    if(gp){ dragOffset.copy(v.position).sub(gp); dragOffset.y=0; isDragging=true; }
+  } else {
+    isOrbiting=true;
+  }
+}
+function onMove(e){
+  const dx=e.clientX-lastX, dy=e.clientY-lastY;
+  lastX=e.clientX; lastY=e.clientY;
+  if(dragHandle && selected){
+    const gp=getGroundPoint(e);
+    if(gp){
+      const kf=selected.userData.keyframes;
+      kf[dragHandle.idx].x=gp.x; kf[dragHandle.idx].z=gp.z;
+      selected.userData._ck=null;
+      if(!playing){ // el vehículo descansa sobre su punto de arranque
+        selected.position.x=kf[0].x; selected.position.z=kf[0].z;
+        selectionRing.position.set(selected.position.x,0.06,selected.position.z);
+      }
+      drawPath(); refreshHandles();
+    }
+    return;
+  }
+  if(isDragging && selected){
+    const gp=getGroundPoint(e);
+    if(gp){
+      const nx=gp.x+dragOffset.x, nz=gp.z+dragOffset.z;
+      const ddx=nx-selected.position.x, ddz=nz-selected.position.z;
+      selected.position.x=nx; selected.position.z=nz; selected.position.y=0;
+      selectionRing.position.set(nx,0.06,nz);
+      const kf=selected.userData.keyframes;
+      if(kf && kf.length){ kf.forEach(k=>{k.x+=ddx; k.z+=ddz;}); selected.userData._ck=null; drawPath(); refreshHandles(); }
+    }
+  } else if(isOrbiting){
+    cam.theta -= dx*0.005;
+    cam.phi = Math.min(Math.PI*0.495, Math.max(0.0015, cam.phi - dy*0.005));
+    updateCamera();
+  } else if(isPanning){
+    const panSpeed = cam.radius*0.0016;
+    const right=new THREE.Vector3(); const up=new THREE.Vector3();
+    camera.getWorldDirection(right); right.cross(camera.up).normalize();
+    up.set(0,0,0); // pan on ground plane
+    const forward=new THREE.Vector3(); camera.getWorldDirection(forward); forward.y=0; forward.normalize();
+    cam.target.addScaledVector(right, -dx*panSpeed);
+    cam.target.addScaledVector(forward, dy*panSpeed);
+    updateCamera();
+  }
+}
+function onUp(){
+  if(dragHandle){ dragHandle=null; buildPropPanel(); refreshHandles(); }
+  isDragging=false; isOrbiting=false; isPanning=false;
+}
+function onWheel(e){
+  e.preventDefault();
+  cam.radius = Math.min(160, Math.max(6, cam.radius * (1 + Math.sign(e.deltaY)*0.08)));
+  updateCamera();
+}
+
+/* --------------------------------------------------------------- ROADS */
+function clearRoad(){ while(roadGroup.children.length) roadGroup.remove(roadGroup.children[0]); }
+function roadMat(){ return new THREE.MeshStandardMaterial({color:0x2a2e37, roughness:.95}); }
+function lineMat(){ return new THREE.MeshBasicMaterial({color:0xd8d4c4}); }
+
+function addRoadStrip(w,l,x,z,rot){
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(w,l), roadMat());
+  m.rotation.x=-Math.PI/2; m.rotation.z=rot||0; m.position.set(x,0.005,z);
+  m.receiveShadow=true; roadGroup.add(m);
+}
+function addDashes(len, x, z, rot, horiz){
+  // center dashed line
+  const dash=1.6, gap=1.6; const n=Math.floor(len/(dash+gap));
+  for(let i=0;i<n;i++){
+    const seg=new THREE.Mesh(new THREE.PlaneGeometry(0.16, dash), lineMat());
+    seg.rotation.x=-Math.PI/2;
+    let off=-len/2 + i*(dash+gap)+dash/2;
+    if(horiz){ seg.rotation.z=Math.PI/2; seg.position.set(x+off,0.012,z); }
+    else { seg.position.set(x,0.012,z+off); }
+    roadGroup.add(seg);
+  }
+}
+function buildRoad(type){
+  clearRoad();
+  realRoadsLoaded=false;
+  document.getElementById('roadPreset').value=type;
+  const RW=9; // road half-width-ish
+  if(type==='cross'){
+    addRoadStrip(RW, 120, 0, 0);          // vertical road
+    addRoadStrip(120, RW, 0, 0);          // horizontal road
+    addDashes(50,0, 30,0,false); addDashes(50,0,-30,0,false);
+    addDashes(50,30,0,0,true);  addDashes(50,-30,0,0,true);
+  } else if(type==='tee'){
+    addRoadStrip(120, RW, 0, 0);          // horizontal
+    addRoadStrip(RW, 60, 0, -30);         // vertical down only
+    addDashes(50,30,0,0,true); addDashes(50,-30,0,0,true);
+    addDashes(50,0,-30,0,false);
+  } else if(type==='straight'){
+    addRoadStrip(13, 160, 0, 0);
+    addDashes(150,0,0,0,false);
+  } else if(type==='round'){
+    addRoadStrip(RW, 120, 0, 0);
+    addRoadStrip(120, RW, 0, 0);
+    const ring=new THREE.Mesh(new THREE.RingGeometry(7,12,48), roadMat());
+    ring.rotation.x=-Math.PI/2; ring.position.y=0.006; roadGroup.add(ring);
+    const isl=new THREE.Mesh(new THREE.CircleGeometry(7,40), new THREE.MeshStandardMaterial({color:0x33402f,roughness:1}));
+    isl.rotation.x=-Math.PI/2; isl.position.y=0.007; roadGroup.add(isl);
+  }
+}
+
+/* ====================== CALLES REALES (OpenStreetMap) ====================== */
+let realRoadsLoaded=false;
+
+function proj(lat,lon,lat0,lon0){
+  const x=(lon-lon0)*111320*Math.cos(lat0*Math.PI/180);
+  const z=-(lat-lat0)*111320;              // norte (mayor lat) => -Z
+  return {x,z};
+}
+function streetLabel(text){
+  const c=document.createElement('canvas'); c.width=512; c.height=80;
+  const x=c.getContext('2d');
+  x.fillStyle='rgba(8,12,22,0.82)'; roundRect(x,4,18,504,46,12); x.fill();
+  x.strokeStyle='rgba(201,168,76,.6)'; x.lineWidth=2; roundRect(x,4,18,504,46,12); x.stroke();
+  x.fillStyle='#e0c878'; x.font='500 30px Jost, sans-serif'; x.textAlign='center'; x.textBaseline='middle';
+  x.fillText(text, 256, 42, 480);
+  const spr=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c), transparent:true, depthTest:false}));
+  spr.scale.set(9,1.4,1); spr.userData.isStreetLabel=true; return spr;
+}
+function buildSeg(a,b,width){
+  const dx=b.x-a.x, dz=b.z-a.z; const len=Math.hypot(dx,dz); if(len<0.05)return;
+  const mesh=new THREE.Mesh(new THREE.PlaneGeometry(width, len), roadMat());
+  mesh.rotation.x=-Math.PI/2; mesh.rotation.z=Math.atan2(dx,dz);
+  mesh.position.set((a.x+b.x)/2, 0.006, (a.z+b.z)/2);
+  mesh.receiveShadow=true; roadGroup.add(mesh);
+}
+
+async function geocodificar(q){
+  const url='https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=ar&addressdetails=0&q='+encodeURIComponent(q);
+  const r=await fetch(url,{headers:{'Accept':'application/json'}});
+  if(!r.ok) throw new Error('geocodificación HTTP '+r.status);
+  const d=await r.json();
+  if(!d || !d.length) return null;
+  return {lat:parseFloat(d[0].lat), lon:parseFloat(d[0].lon), nombre:d[0].display_name};
+}
+async function traerCalles(lat,lon){
+  const ql='[out:json][timeout:25];(way(around:150,'+lat+','+lon+')[highway~"^(motorway|trunk|primary|secondary|tertiary|residential|unclassified|living_street|service|road|pedestrian)$"];);out geom;';
+  const r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(ql)});
+  if(!r.ok) throw new Error('Overpass HTTP '+r.status);
+  const d=await r.json();
+  return (d.elements||[]).filter(e=>e.geometry && e.geometry.length>1).map(e=>({
+    name:(e.tags&&e.tags.name)||'',
+    lanes:parseInt(e.tags&&e.tags.lanes)||0,
+    hw:(e.tags&&e.tags.highway)||'',
+    geom:e.geometry
+  }));
+}
+function anchoDe(w){
+  if(w.lanes>0) return Math.max(5, w.lanes*3.4);
+  if(/motorway|trunk|primary/.test(w.hw)) return 11;
+  if(/secondary|tertiary/.test(w.hw)) return 9;
+  if(/service|living_street|pedestrian/.test(w.hw)) return 4.5;
+  return 7;
+}
+function construirCallesReales(ways, geo){
+  clearRoad();
+  const lat0=geo.lat, lon0=geo.lon;
+  let maxR=20; const labelByName={};
+  ways.forEach(w=>{
+    const pts=w.geom.map(g=>proj(g.lat,g.lon,lat0,lon0));
+    const width=anchoDe(w);
+    for(let i=0;i<pts.length-1;i++){ buildSeg(pts[i],pts[i+1],width); maxR=Math.max(maxR,Math.hypot(pts[i].x,pts[i].z)); }
+    // discos en los nodos para tapar huecos en curvas/esquinas
+    pts.forEach(p=>{ const c=new THREE.Mesh(new THREE.CircleGeometry(width/2,14), roadMat()); c.rotation.x=-Math.PI/2; c.position.set(p.x,0.005,p.z); roadGroup.add(c); maxR=Math.max(maxR,Math.hypot(p.x,p.z)); });
+    // longitud total para elegir dónde etiquetar cada nombre
+    if(w.name){ let L=0; for(let i=0;i<pts.length-1;i++)L+=Math.hypot(pts[i+1].x-pts[i].x, pts[i+1].z-pts[i].z);
+      if(!labelByName[w.name] || L>labelByName[w.name].L){ const mid=pts[Math.floor(pts.length/2)]; labelByName[w.name]={L, x:mid.x, z:mid.z}; } }
+  });
+  Object.keys(labelByName).forEach(name=>{
+    const s=streetLabel(name); const p=labelByName[name];
+    s.position.set(p.x, 2.2, p.z); roadGroup.add(s);
+  });
+  // encuadrar cámara a la escena
+  cam.target.set(0,0,0); cam.radius=Math.min(140, Math.max(28, maxR*1.6)); cam.phi=0.62; cam.theta=Math.PI*0.18; updateCamera();
+  realRoadsLoaded=true;
+}
+
+async function buscarDireccion(){
+  const q=(document.getElementById('addrInput').value||'').trim();
+  if(!q){ toast('Escribí la dirección: calle, altura y localidad.'); return; }
+  const btn=document.getElementById('addrBtn'); btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Buscando…';
+  const info=document.getElementById('addrFound');
+  try{
+    const geo=await geocodificar(q);
+    if(!geo) throw new Error('No encontré esa dirección. Probá agregando la localidad y provincia.');
+    let ways=[];
+    try{ ways=await traerCalles(geo.lat,geo.lon); }catch(e){ ways=[]; }
+    if(!ways.length){ info.style.display='block'; info.innerHTML='<div class="exp-msg err" style="margin-top:8px">Encontré el punto pero no hay calles mapeadas alrededor. Uso una calle genérica; ajustala a mano.</div>'; buildRoad('cross'); return; }
+    construirCallesReales(ways, geo);
+    info.style.display='block';
+    info.innerHTML='<div class="ro-note" style="margin-top:8px"><i class="ti ti-map-pin"></i> '+geo.nombre.replace(/</g,'&lt;').slice(0,90)+'…</div>';
+    toast('Trazado real cargado. Ubicá los vehículos sobre la bocacalle.');
+  }catch(err){
+    info.style.display='block';
+    info.innerHTML='<div class="exp-msg err" style="margin-top:8px">'+err.message+(location.protocol==='file:'?' (Si lo abriste como archivo local, el navegador puede bloquear el mapa: subilo a tu hosting.)':'')+'</div>';
+  }finally{
+    btn.disabled=false; btn.innerHTML='🗺 Buscar el trazado real';
+  }
+}
+
+/* ------------------------------------------------------------ VEHICLES */
+function makeWheel(r,w){
+  const g=new THREE.CylinderGeometry(r,r,w,18);
+  const m=new THREE.MeshStandardMaterial({color:0x14151a, roughness:.8});
+  const wh=new THREE.Mesh(g,m); wh.rotation.z=Math.PI/2; wh.castShadow=true; return wh;
+}
+function makeLabelSprite(text){
+  const c=document.createElement('canvas'); c.width=512; c.height=128;
+  const ctx=c.getContext('2d');
+  ctx.fillStyle='rgba(10,15,28,0.86)';
+  roundRect(ctx,6,28,500,72,18); ctx.fill();
+  ctx.strokeStyle='#c9a84c'; ctx.lineWidth=3; roundRect(ctx,6,28,500,72,18); ctx.stroke();
+  ctx.fillStyle='#e0c878'; ctx.font='600 44px Jost, sans-serif';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(text, 256, 66, 470);
+  const tex=new THREE.CanvasTexture(c);
+  const spr=new THREE.Sprite(new THREE.SpriteMaterial({map:tex, depthTest:false, transparent:true}));
+  spr.scale.set(7,1.75,1); spr.position.y=4.2; spr.userData.isLabel=true;
+  return spr;
+}
+function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+
+function bodyMat(col){ return new THREE.MeshStandardMaterial({color:new THREE.Color(col), roughness:.45, metalness:.25}); }
+
+function buildModel(type,col){
+  const g=new THREE.Group();
+  const bm=bodyMat(col);
+  const glass=new THREE.MeshStandardMaterial({color:0x223044, roughness:.2, metalness:.5, transparent:true, opacity:.85});
+  if(type==='auto'){
+    const body=new THREE.Mesh(new THREE.BoxGeometry(2.0,0.8,4.2), bm); body.position.y=0.85; body.castShadow=true; g.add(body);
+    const cab=new THREE.Mesh(new THREE.BoxGeometry(1.8,0.75,2.1), glass); cab.position.set(0,1.45,-0.15); cab.castShadow=true; g.add(cab);
+    [[-1.05,1.45],[1.05,1.45],[-1.05,-1.45],[1.05,-1.45]].forEach(p=>{const w=makeWheel(0.45,0.32);w.position.set(p[0],0.45,p[1]);g.add(w);});
+  } else if(type==='camion'){
+    const body=new THREE.Mesh(new THREE.BoxGeometry(2.3,1.6,5.4), bm); body.position.y=1.5; body.castShadow=true; g.add(body);
+    const cab=new THREE.Mesh(new THREE.BoxGeometry(2.2,1.3,1.6), glass); cab.position.set(0,1.35,2.0); cab.castShadow=true; g.add(cab);
+    [[-1.15,2.1],[1.15,2.1],[-1.15,-1.9],[1.15,-1.9]].forEach(p=>{const w=makeWheel(0.6,0.4);w.position.set(p[0],0.6,p[1]);g.add(w);});
+  } else if(type==='camiongrande'){
+    const caja=new THREE.Mesh(new THREE.BoxGeometry(2.7,2.9,6.4), bm); caja.position.set(0,2.35,-1.3); caja.castShadow=true; g.add(caja);
+    const cab=new THREE.Mesh(new THREE.BoxGeometry(2.6,2.2,2.4), bm); cab.position.set(0,1.85,3.0); cab.castShadow=true; g.add(cab);
+    const vid=new THREE.Mesh(new THREE.BoxGeometry(2.45,1.0,0.18), glass); vid.position.set(0,2.35,4.21); g.add(vid);
+    const par=new THREE.Mesh(new THREE.BoxGeometry(2.6,0.5,0.4), new THREE.MeshStandardMaterial({color:0x14151a,roughness:.8})); par.position.set(0,0.6,4.3); g.add(par);
+    [[-1.25,3.0],[1.25,3.0],[-1.25,-1.4],[1.25,-1.4],[-1.25,-3.4],[1.25,-3.4]].forEach(p=>{const w=makeWheel(0.72,0.46);w.position.set(p[0],0.72,p[1]);g.add(w);});
+  } else if(type==='colectivo'){
+    const body=new THREE.Mesh(new THREE.BoxGeometry(2.5,2.4,9.0), bm); body.position.y=1.7; body.castShadow=true; g.add(body);
+    const win=new THREE.Mesh(new THREE.BoxGeometry(2.52,0.9,7.6), glass); win.position.set(0,2.2,0); g.add(win);
+    [[-1.25,3.4],[1.25,3.4],[-1.25,-3.0],[1.25,-3.0]].forEach(p=>{const w=makeWheel(0.62,0.4);w.position.set(p[0],0.62,p[1]);g.add(w);});
+  } else if(type==='moto'){
+    const body=new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,1.8), bm); body.position.y=0.8; body.castShadow=true; g.add(body);
+    const seat=new THREE.Mesh(new THREE.BoxGeometry(0.45,0.25,0.9), new THREE.MeshStandardMaterial({color:0x111,roughness:.7})); seat.position.set(0,1.05,-0.3); g.add(seat);
+    const rider=new THREE.Mesh(new THREE.BoxGeometry(0.55,0.9,0.6), new THREE.MeshStandardMaterial({color:0x2a3550,roughness:.7})); rider.position.set(0,1.55,-0.2); rider.castShadow=true; g.add(rider);
+    const head=new THREE.Mesh(new THREE.SphereGeometry(0.28,16,16), new THREE.MeshStandardMaterial({color:0x161616})); head.position.set(0,2.15,-0.2); g.add(head);
+    [0.95,-0.95].forEach(z=>{const w=makeWheel(0.42,0.18);w.position.set(0,0.42,z);g.add(w);});
+  } else if(type==='bici'){
+    const frame=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.5,1.4), bm); frame.position.set(0,0.85,0); g.add(frame);
+    const rider=new THREE.Mesh(new THREE.BoxGeometry(0.45,0.8,0.45), new THREE.MeshStandardMaterial({color:0x3a6ea5,roughness:.7})); rider.position.set(0,1.55,-0.1); rider.castShadow=true; g.add(rider);
+    const head=new THREE.Mesh(new THREE.SphereGeometry(0.24,16,16), new THREE.MeshStandardMaterial({color:0xddc9a0})); head.position.set(0,2.1,-0.1); g.add(head);
+    [0.7,-0.7].forEach(z=>{const w=makeWheel(0.5,0.08);w.position.set(0,0.5,z);g.add(w);});
+  } else if(type==='peaton'){
+    const body=new THREE.Mesh(new THREE.CylinderGeometry(0.32,0.38,1.3,16), bm); body.position.y=1.0; body.castShadow=true; g.add(body);
+    const head=new THREE.Mesh(new THREE.SphereGeometry(0.32,18,18), new THREE.MeshStandardMaterial({color:0xddc9a0,roughness:.7})); head.position.y=1.95; head.castShadow=true; g.add(head);
+  }
+  // faros blancos (adelante, +Z) y luces rojas (atrás, -Z) para identificar frente/cola
+  const LUCES={
+    auto:        {fz:2.06, bz:-2.06, hw:0.62, y:0.85},
+    camion:      {fz:2.75, bz:-2.7,  hw:0.85, y:1.0},
+    camiongrande:{fz:4.3,  bz:-4.5,  hw:0.95, y:1.0},
+    colectivo:   {fz:4.55, bz:-4.55, hw:0.98, y:1.05},
+    moto:        {fz:0.98, bz:-0.98, hw:0, y:0.9, single:true},
+    bici:        {fz:0.74, bz:-0.74, hw:0, y:0.7, single:true, small:true}
+  };
+  const cfg=LUCES[type];
+  if(cfg){
+    const sz=cfg.small?0.16:0.3;
+    const hl=()=>new THREE.Mesh(new THREE.BoxGeometry(sz,sz*0.7+0.04,0.12), new THREE.MeshStandardMaterial({color:0xfff7d6, emissive:0xfff0b0, emissiveIntensity:1.3}));
+    const tl=()=>new THREE.Mesh(new THREE.BoxGeometry(sz+0.04,sz*0.7+0.06,0.12), new THREE.MeshStandardMaterial({color:0xff3b2e, emissive:0xe02414, emissiveIntensity:1.2}));
+    const put=(m,x,z)=>{ m.position.set(x,cfg.y,z); m.userData.isLight=true; g.add(m); };
+    if(cfg.single){ put(hl(),0,cfg.fz); put(tl(),0,cfg.bz); }
+    else { [-cfg.hw,cfg.hw].forEach(x=>{ put(hl(),x,cfg.fz); put(tl(),x,cfg.bz); }); }
+  }
+  // direction arrow (front = +Z)
+  if(type!=='peaton'){
+    const arrow=new THREE.Mesh(new THREE.ConeGeometry(0.5,1.2,4), new THREE.MeshBasicMaterial({color:0xc9a84c}));
+    arrow.rotation.x=Math.PI/2; arrow.position.set(0,0.2,3.0); arrow.userData.isArrow=true;
+    if(type==='colectivo')arrow.position.z=5.4; if(type==='camion')arrow.position.z=3.4; if(type==='camiongrande')arrow.position.z=5.2;
+    g.add(arrow);
+  }
+  return g;
+}
+
+let vehCount={auto:0,moto:0,camion:0,camiongrande:0,colectivo:0,bici:0,peaton:0};
+const NAMES={auto:'Auto',moto:'Moto',camion:'Camioneta',camiongrande:'Camión',colectivo:'Colectivo',bici:'Bicicleta',peaton:'Peatón'};
+
+/* ---- elementos de calle (semáforos, sendas, carteles) ---- */
+function buildSemaforo(){
+  const g=new THREE.Group();
+  const pole=new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.14,5.2,12), new THREE.MeshStandardMaterial({color:0x20242c,roughness:.7}));
+  pole.position.y=2.6; pole.castShadow=true; g.add(pole);
+  const box=new THREE.Mesh(new THREE.BoxGeometry(0.85,2.2,0.6), new THREE.MeshStandardMaterial({color:0x14171d,roughness:.6}));
+  box.position.set(0,5.4,0); box.castShadow=true; g.add(box);
+  // tres luces: roja arriba, amarilla, verde
+  const defs=[['rojo',0xff3b30,6.0],['amarillo',0xffd23b,5.4],['verde',0x35d04a,4.8]];
+  g.userData.luces={};
+  defs.forEach(([name,col,y])=>{
+    const m=new THREE.Mesh(new THREE.SphereGeometry(0.26,18,18), new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:0.15,roughness:.4}));
+    m.position.set(0,y,0.33); g.add(m); g.userData.luces[name]={mesh:m,col};
+  });
+  return g;
+}
+function buildSenda(){
+  const g=new THREE.Group();
+  for(let i=-3;i<=3;i++){
+    const s=new THREE.Mesh(new THREE.PlaneGeometry(0.6,4), new THREE.MeshBasicMaterial({color:0xf2efe8}));
+    s.rotation.x=-Math.PI/2; s.position.set(i*0.95,0.03,0); g.add(s);
+  }
+  return g;
+}
+function buildLomo(){
+  const g=new THREE.Group();
+  const cyl=new THREE.Mesh(new THREE.CylinderGeometry(0.45,0.45,7,20,1,false,0,Math.PI),
+    new THREE.MeshStandardMaterial({color:0xf0c020,roughness:.7}));
+  cyl.rotation.z=Math.PI/2; cyl.position.y=0.0; g.add(cyl);
+  // franjas negras
+  for(let i=-2;i<=2;i++){
+    const b=new THREE.Mesh(new THREE.BoxGeometry(0.55,0.02,0.5), new THREE.MeshStandardMaterial({color:0x111}));
+    b.position.set(i*1.3,0.46,0); g.add(b);
+  }
+  return g;
+}
+function buildCono(){
+  const g=new THREE.Group();
+  const base=new THREE.Mesh(new THREE.BoxGeometry(0.9,0.1,0.9), new THREE.MeshStandardMaterial({color:0x222})); base.position.y=0.05; g.add(base);
+  const cone=new THREE.Mesh(new THREE.ConeGeometry(0.42,1.1,18), new THREE.MeshStandardMaterial({color:0xff6a00,roughness:.6,emissive:0xff6a00,emissiveIntensity:0.08})); cone.position.y=0.65; g.add(cone);
+  const band=new THREE.Mesh(new THREE.CylinderGeometry(0.32,0.36,0.18,18), new THREE.MeshStandardMaterial({color:0xffffff})); band.position.y=0.62; g.add(band);
+  return g;
+}
+const PROP_NAMES={semaforo:'Semáforo',senda:'Senda peatonal',lomo:'Lomo de burro',cono:'Cono'};
+let propCount={semaforo:0,senda:0,lomo:0,cono:0};
+function buildProp(type){
+  if(type==='semaforo')return buildSemaforo();
+  if(type==='senda')return buildSenda();
+  if(type==='lomo')return buildLomo();
+  return buildCono();
+}
+function setLuces(g, estado){
+  const L=g.userData.luces; if(!L) return;
+  Object.keys(L).forEach(k=>{
+    const on=(k===estado);
+    const mat=L[k].mesh.material;
+    if(on){ mat.color.setHex(L[k].col); mat.emissive.setHex(L[k].col); mat.emissiveIntensity=2.2; }
+    else  { mat.color.setHex(0x191b20); mat.emissive.setHex(0x000000); mat.emissiveIntensity=0; }
+    mat.needsUpdate=true;
+  });
+}
+function aplicarEstadoSemaforo(g, estado){
+  g.userData.estado=estado;   // estado base (inicial)
+  setLuces(g, estado);
+}
+function setSemaforo(estado){
+  if(!selected || selected.userData.type!=='semaforo') return;
+  aplicarEstadoSemaforo(selected, estado);
+  buildPropPanel();
+}
+function addProp(type){
+  const g=buildProp(type);
+  propCount[type]++;
+  g.userData.isProp=true; g.userData.type=type; g.userData.name=`${PROP_NAMES[type]} ${propCount[type]}`;
+  const off=(props.length%4)*3 - 6;
+  g.position.set(cam.target.x+off, 0, cam.target.z - 6);
+  g.rotation.y=0;
+  scene.add(g); props.push(g);
+  if(type==='semaforo'){ aplicarEstadoSemaforo(g,'rojo'); }
+  select(g);
+  toast(PROP_NAMES[type]+' agregado. Arrastralo a su lugar.');
+}
+function volverAlInicio(){
+  // vuelve a la pose de arranque, deshace choques y deja todo listo para reproducir de nuevo
+  playing=false; document.getElementById('playBtn').textContent='▶';
+  t=0; resetImpacts();
+  vehicles.forEach(v=>{
+    v.userData._ck=null;
+    const kf=v.userData.keyframes;
+    if(kf && kf.length){ v.position.set(kf[0].x,0,kf[0].z); }
+    v.rotation.y=0; v.rotation.z=0;
+  });
+  if(selected) selectionRing.position.set(selected.position.x,0.06,selected.position.z);
+  applyAnimation(); drawPath(); refreshHandles(); updateTimeLabel();
+  const sc=document.getElementById('scrub'); if(sc) sc.value=0;
+  if(handleGroup) handleGroup.visible=!!selected;
+  toast('Volvimos al inicio (0°). Tocá ▶ para reproducir de nuevo.');
+}
+function resetAcero(){
+  // empezar de cero: borra recorridos, todo a 0° y acomoda los autos prolijos
+  playing=false; document.getElementById('playBtn').textContent='▶';
+  t=0; resetImpacts();
+  vehicles.forEach((v,i)=>{
+    v.userData.keyframes=[]; v.userData._ck=null;
+    v.rotation.y=0; v.rotation.z=0;
+    v.position.set(cam.target.x + (i%4)*4 - 6, 0, cam.target.z + Math.floor(i/4)*4);
+  });
+  props.forEach(p=>{ p.rotation.y=0; });
+  if(selected) selectionRing.position.set(selected.position.x,0.06,selected.position.z);
+  drawPath(); refreshHandles(); buildPropPanel(); updateTimeLabel();
+  const sc=document.getElementById('scrub'); if(sc) sc.value=0;
+  if(handleGroup) handleGroup.visible=!!selected;
+  toast('Empezamos de cero: recorridos borrados y todo en 0°.');
+}
+
+function addVehicle(type, doSelect=true){
+  const col = COLORS[(vehicles.length)%COLORS.length];
+  const model=buildModel(type,col);
+  vehCount[type]++;
+  model.userData={ isVehicle:true, type, color:col, name:`${NAMES[type]} ${vehCount[type]}`,
+                   keyframes:[], startFrac:0, endFrac:1, autoGiro:true, vel:1 };
+  const lbl=makeLabelSprite(model.userData.name); model.add(lbl);
+  // place near target, offset so they don't stack
+  const off=(vehicles.length%4)*3;
+  model.position.set(cam.target.x + off, 0, cam.target.z + off);
+  model.rotation.y = 0;   // orientación por defecto en 0°
+  scene.add(model); vehicles.push(model);
+  if(doSelect) select(model);
+  return model;
+}
+
+function recolor(v,col){
+  v.userData.color=col;
+  v.traverse(o=>{ if(o.isMesh && o.material && o.material.color && o.geometry && (o.geometry.type==='BoxGeometry'||o.geometry.type==='CylinderGeometry') && !o.userData.isArrow){
+    // only recolor the main body (first big box/cylinder): match against stored
+  }});
+  // simpler: recolor the largest body mesh
+  let big=null,bv=0;
+  v.traverse(o=>{ if(o.isMesh && o.material && o.material.roughness!==undefined){
+    o.geometry.computeBoundingBox();
+    const s=o.geometry.boundingBox.getSize(new THREE.Vector3());
+    const vol=s.x*s.y*s.z;
+    const isGlassOrTire = o.material.color.getHexString()==='223044' || o.material.color.getHexString()==='14151a';
+    if(vol>bv && !o.userData.isArrow && !isGlassOrTire){bv=vol;big=o;}
+  }});
+  if(big) big.material.color.set(col);
+}
+
+function select(v){
+  selected=v;
+  selectionRing.visible=true;
+  selectionRing.position.set(v.position.x,0.06,v.position.z);
+  buildPropPanel();
+  drawPath();
+  refreshHandles();
+}
+function deselect(){ selected=null; selectionRing.visible=false; if(pathLine){scene.remove(pathLine);pathLine=null;} refreshHandles(); buildPropPanel(); }
+
+/* ---- manijas arrastrables del recorrido (arranque / giro / impacto) ---- */
+function makeHandle(x,z,kind,role,idx,seg){
+  const isBend = kind==='bend';
+  const col = role==='arranque'?0x46c46a : role==='impacto'?0xe0564d : 0xddb95e;
+  const geo = isBend ? new THREE.SphereGeometry(0.55,16,16) : new THREE.SphereGeometry(0.95,20,20);
+  const mat = new THREE.MeshBasicMaterial({color: isBend?0xddb95e:col, transparent:true, opacity:isBend?0.55:0.95, depthTest:false});
+  const m = new THREE.Mesh(geo, mat);
+  m.position.set(x, isBend?0.5:0.7, z);
+  m.renderOrder = 999;
+  m.userData = {isHandle:true, kind, idx, seg};
+  // anillo de contorno para que se vea como punto de control
+  const ringG = new THREE.RingGeometry(isBend?0.7:1.15, isBend?0.85:1.35, 28);
+  const ring = new THREE.Mesh(ringG, new THREE.MeshBasicMaterial({color:col, transparent:true, opacity:0.9, side:THREE.DoubleSide, depthTest:false}));
+  ring.rotation.x=-Math.PI/2; ring.position.set(x,0.08,z); ring.renderOrder=998;
+  handleGroup.add(ring);
+  handleGroup.add(m);
+  return m;
+}
+function refreshHandles(){
+  while(handleGroup.children.length) handleGroup.remove(handleGroup.children[0]);
+  if(!selected){ return; }
+  const kf=selected.userData.keyframes||[];
+  // manijas de punto
+  kf.forEach((k,i)=>{
+    const role = i===0?'arranque' : (i===kf.length-1 && kf.length>=2)?'impacto':'giro';
+    makeHandle(k.x,k.z,'move',role,i);
+  });
+  // manijas de "doblar" en el medio de cada tramo
+  for(let i=0;i<kf.length-1;i++){
+    makeHandle((kf[i].x+kf[i+1].x)/2,(kf[i].z+kf[i+1].z)/2,'bend',null,null,i);
+  }
+  handleGroup.visible = !playing;
+}
+function pickHandle(e){
+  if(!handleGroup.children.length) return null;
+  const r=renderer.domElement.getBoundingClientRect();
+  const mx=((e.clientX-r.left)/r.width)*2-1;
+  const my=-((e.clientY-r.top)/r.height)*2+1;
+  raycaster.setFromCamera({x:mx,y:my}, camera);
+  const hits=raycaster.intersectObjects(handleGroup.children,false);
+  const h=hits.find(o=>o.object.userData && o.object.userData.isHandle);
+  return h?h.object:null;
+}
+
+function deleteSelected(){
+  if(!selected)return;
+  scene.remove(selected);
+  vehicles=vehicles.filter(x=>x!==selected);
+  props=props.filter(x=>x!==selected);
+  deselect();
+}
+
+/* ------------------------------------------------------- PROPERTY PANEL */
+function buildPropPanel(){
+  const p=document.getElementById('propBody');
+  if(!selected){ p.innerHTML='<p class="empty-sel">Tocá un vehículo o elemento en la escena para editarlo y moverlo.</p>'; return; }
+  const u=selected.userData;
+  const deg=Math.round((selected.rotation.y*180/Math.PI)%360);
+  if(u.isProp){
+    let estadoUI='';
+    if(u.type==='semaforo'){
+      const e=u.estado||'rojo';
+      estadoUI=`
+        <div class="toolbar-sec">Estado del semáforo</div>
+        <div class="btn-row">
+          <button onclick="setSemaforo('rojo')" style="${e==='rojo'?'background:#c0271d;color:#fff;border-color:#c0271d':''}">🔴 Rojo</button>
+          <button onclick="setSemaforo('amarillo')" style="${e==='amarillo'?'background:#e0b020;color:#1a1305;border-color:#e0b020':''}">🟡 Amarillo</button>
+          <button onclick="setSemaforo('verde')" style="${e==='verde'?'background:#2a9d3f;color:#fff;border-color:#2a9d3f':''}">🟢 Verde</button>
+        </div>
+        <div class="toolbar-sec" style="margin-top:8px">Cambia durante la animación</div>
+        <div class="twocol">
+          <label class="field">Cambia a
+            <select id="pSemCambia">
+              <option value="">— no cambia —</option>
+              <option value="rojo">Rojo</option>
+              <option value="amarillo">Amarillo</option>
+              <option value="verde">Verde</option>
+            </select>
+          </label>
+          <label class="field">a los (seg)
+            <input type="number" id="pSemSeg" min="0" max="20" step="0.5" value="${u.cambiaSeg??3}">
+          </label>
+        </div>
+        <p class="hint">Sirve para mostrar que cruzó en rojo: poné el estado inicial y a qué color cambia en qué segundo.</p>`;
+    }
+    p.innerHTML=`
+      <label class="field">Nombre
+        <input type="text" id="pName" value="${u.name.replace(/"/g,'&quot;')}">
+      </label>
+      <label class="field">Orientación: <span id="pRotV">${((deg+360)%360)}</span>°
+        <input type="range" id="pRot" min="0" max="359" value="${((deg+360)%360)}">
+      </label>
+      ${estadoUI}
+      <p class="hint">Arrastralo en la escena para ubicarlo. Girá con la barra de orientación.</p>
+      <button class="danger" onclick="deleteSelected()">🗑 Eliminar elemento</button>`;
+    const nameEl=document.getElementById('pName'); if(nameEl) nameEl.addEventListener('input',e=>{ u.name=e.target.value; });
+    const semC=document.getElementById('pSemCambia'); const semS=document.getElementById('pSemSeg');
+    if(semC){ if(u.cambiaA) semC.value=u.cambiaA;
+      const upd=()=>{ u.cambiaA=semC.value||null; u.cambiaSeg=parseFloat(semS.value)||0; };
+      semC.addEventListener('change',upd); semS.addEventListener('input',upd); }
+    document.getElementById('pRot').addEventListener('input',e=>{
+      selected.rotation.y=e.target.value*Math.PI/180;
+      document.getElementById('pRotV').textContent=e.target.value;
+    });
+    return;
+  }
+  const kf=u.keyframes.length;
+  p.innerHTML=`
+    <label class="field">Nombre / rol
+      <input type="text" id="pName" value="${u.name.replace(/"/g,'&quot;')}">
+    </label>
+    <div class="toolbar-sec">Color</div>
+    <div class="swatches" id="pSwatch"></div>
+    <label class="field">Orientación: <span id="pRotV">${((deg+360)%360)}</span>°
+      <input type="range" id="pRot" min="0" max="359" value="${((deg+360)%360)}">
+    </label>
+    <div class="toolbar-sec">Movimiento del vehículo</div>
+    <div class="route-status">
+      <span class="pill ${kf>=1?'done':''}">① Arranque ${kf>=1?'✓':'—'}</span>
+      <span class="pill ${kf>=3?'done':''}">↩ Giro ${kf>=3?'✓':'—'}</span>
+      <span class="pill ${kf>=2?'done':''}">② Impacto ${kf>=2?'✓':'—'}</span>
+    </div>
+    <button class="step gold" onclick="setStart()">📍 Fijar punto de ARRANQUE</button>
+    <div class="btn-row">
+      <button onclick="girarVehiculo('izq')">↰ Giro izquierda</button>
+      <button onclick="girarVehiculo('der')">Giro derecha ↱</button>
+    </div>
+    <button class="step" onclick="addMid()">↩ Agregar GIRO manual (punto)</button>
+    <button class="step gold" onclick="setEnd()">💥 Fijar punto de IMPACTO</button>
+    <label class="field" style="flex-direction:row;align-items:center;gap:8px;text-transform:none;margin-top:2px">
+      <input type="checkbox" id="pGiro" ${u.autoGiro!==false?'checked':''} style="width:auto;accent-color:var(--gold)" onchange="toggleGiro(this.checked)"> Doblar siguiendo el recorrido (curva)
+    </label>
+    <div class="toolbar-sec" style="margin-top:6px">Velocidad de este vehículo</div>
+    <div class="btn-row">
+      <button onclick="setVel(0.6)" style="${(u.vel||1)<1?'background:var(--gold);color:#1a1305;border-color:var(--gold)':''}">🐢 Lento</button>
+      <button onclick="setVel(1)" style="${(u.vel||1)===1?'background:var(--gold);color:#1a1305;border-color:var(--gold)':''}">Normal</button>
+      <button onclick="setVel(1.6)" style="${(u.vel||1)>1?'background:var(--gold);color:#1a1305;border-color:var(--gold)':''}">🐇 Rápido</button>
+    </div>
+    ${(()=>{ const k=velocidadKmh(selected); return k!=null && k>0 ? `<p class="hint" style="color:var(--gold2)">Velocidad estimada: <b>~${k} km/h</b> <span style="color:var(--txt-dim)">(según el largo del recorrido y la duración)</span></p>` : ''; })()}
+    <p class="hint"><b>Arrastrá los puntos del recorrido</b> directo en la escena: el verde es el arranque, el rojo el impacto, los dorados los giros. El punto chico en el medio de la línea sirve para <b>doblarla</b> (arrastralo y se crea un giro ahí). Así seguís la calle y esquivás lo que no corresponde (rotondas, veredas).</p>
+    <p class="hint">También podés fijar puntos con los botones: arranque, “Giro izquierda/derecha”, y el impacto. El auto dobla solo y mira hacia donde va.</p>
+    <details>
+      <summary style="cursor:pointer;font-size:11px;color:var(--txt-dim);letter-spacing:.5px">Ajustes avanzados</summary>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+        <div class="twocol">
+          <label class="field">Arranca al %
+            <input type="number" id="pStart" min="0" max="100" value="${Math.round(u.startFrac*100)}">
+          </label>
+          <label class="field">Choca al %
+            <input type="number" id="pEnd" min="0" max="100" value="${Math.round(u.endFrac*100)}">
+          </label>
+        </div>
+        <p class="hint">Para que dos vehículos choquen en el mismo instante, poneles el mismo número en <b>“Choca al %”</b>. Si destildás “doblar siguiendo el recorrido”, el vehículo mantiene la orientación que le marcaste en cada punto (útil para uno parado o en marcha atrás).</p>
+        <button class="danger" onclick="clearKeyframes()">Borrar recorrido</button>
+      </div>
+    </details>
+    <button class="danger" onclick="deleteSelected()">🗑 Eliminar elemento</button>
+  `;
+  // swatches
+  const sw=document.getElementById('pSwatch');
+  COLORS.forEach(c=>{
+    const d=document.createElement('div'); d.className='sw'+(c===u.color?' on':''); d.style.background=c;
+    d.onclick=()=>{ recolor(selected,c); buildPropPanel(); };
+    sw.appendChild(d);
+  });
+  document.getElementById('pName').addEventListener('input',e=>{ u.name=e.target.value; refreshLabels(); });
+  document.getElementById('pRot').addEventListener('input',e=>{
+    selected.rotation.y=e.target.value*Math.PI/180;
+    document.getElementById('pRotV').textContent=e.target.value;
+  });
+  document.getElementById('pStart').addEventListener('change',e=>{ u.startFrac=Math.min(0.99,Math.max(0,e.target.value/100)); });
+  document.getElementById('pEnd').addEventListener('change',e=>{ u.endFrac=Math.min(1,Math.max(0.01,e.target.value/100)); });
+}
+
+function curPose(){ return {x:selected.position.x, z:selected.position.z, rot:selected.rotation.y}; }
+function setStart(){
+  if(!selected)return;
+  const kf=selected.userData.keyframes;
+  if(kf.length===0) kf.push(curPose()); else kf[0]=curPose();
+  buildPropPanel(); drawPath(); refreshHandles(); toast('Arranque fijado para '+selected.userData.name);
+}
+function setEnd(){
+  if(!selected)return;
+  const kf=selected.userData.keyframes;
+  if(kf.length===0){ toast('Primero fijá el ARRANQUE (botón 1).'); return; }
+  if(kf.length===1) kf.push(curPose()); else kf[kf.length-1]=curPose();
+  buildPropPanel(); drawPath(); refreshHandles(); toast('Impacto fijado. Tocá ▶ para ver el choque.');
+}
+function addMid(){
+  if(!selected)return;
+  const kf=selected.userData.keyframes;
+  if(kf.length<2){ toast('Fijá arranque e impacto primero.'); return; }
+  kf.splice(kf.length-1,0,curPose());
+  buildPropPanel(); drawPath(); refreshHandles(); toast('Punto intermedio agregado.');
+}
+function clearKeyframes(){ if(!selected)return; selected.userData.keyframes=[]; buildPropPanel(); drawPath(); refreshHandles(); }
+function toggleGiro(on){ if(!selected)return; selected.userData.autoGiro=on; selected.userData._ck=null; drawPath(); applyAnimation(); }
+function setVel(v){ if(!selected)return; selected.userData.vel=v; buildPropPanel(); if(!playing) applyAnimation(); toast('Velocidad: '+(v<1?'lento':v>1?'rápido':'normal')); }
+function girarVehiculo(dir){
+  if(!selected){ toast('Seleccioná primero un vehículo.'); return; }
+  const h=selected.rotation.y;
+  const x0=selected.position.x, z0=selected.position.z;
+  const ap=6, R=8, ex=7, steps=5;
+  const turn = dir==='der' ? -1 : 1;          // derecha = horario (baja el rumbo)
+  const pts=[{x:x0,z:z0,rot:h}];
+  // tramo recto de aproximación
+  let px=x0+Math.sin(h)*ap, pz=z0+Math.cos(h)*ap, hh=h;
+  pts.push({x:px,z:pz,rot:h});
+  // arco de 90° (dead-reckoning: gira y avanza)
+  const dh=turn*(Math.PI/2)/steps, seg=(Math.PI/2*R)/steps;
+  for(let i=0;i<steps;i++){ hh+=dh; px+=Math.sin(hh)*seg; pz+=Math.cos(hh)*seg; pts.push({x:px,z:pz,rot:hh}); }
+  // salida recta
+  px+=Math.sin(hh)*ex; pz+=Math.cos(hh)*ex; pts.push({x:px,z:pz,rot:hh});
+  selected.userData.keyframes=pts;
+  selected.userData.autoGiro=true; selected.userData._ck=null;
+  buildPropPanel(); drawPath(); refreshHandles(); t=0; applyAnimation(); updateTimeLabel();
+  toast('Giro a la '+(dir==='der'?'derecha':'izquierda')+' listo. Ajustá el impacto si hace falta y dale ▶.');
+}
+
+function drawPath(){
+  if(pathLine){ scene.remove(pathLine); pathLine=null; }
+  if(!selected || !selected.userData.keyframes || selected.userData.keyframes.length<2) return;
+  let pts;
+  if(selected.userData.autoGiro!==false && pathLength(selected.userData.keyframes)>0.6){
+    pts=curveFor(selected).getPoints(48).map(p=>new THREE.Vector3(p.x,0.15,p.z));
+  } else {
+    pts=selected.userData.keyframes.map(k=>new THREE.Vector3(k.x,0.15,k.z));
+  }
+  const geo=new THREE.BufferGeometry().setFromPoints(pts);
+  pathLine=new THREE.Line(geo, new THREE.LineBasicMaterial({color:0xc9a84c}));
+  scene.add(pathLine);
+}
+
+function refreshLabels(){
+  vehicles.forEach(v=>{
+    let lbl=null; v.children.forEach(c=>{if(c.userData&&c.userData.isLabel)lbl=c;});
+    if(lbl){ v.remove(lbl); }
+    const nl=makeLabelSprite(v.userData.name);
+    // keep label height according to model
+    if(v.userData.type==='colectivo')nl.position.y=5.2;
+    else if(v.userData.type==='camiongrande')nl.position.y=5.4;
+    else if(v.userData.type==='camion')nl.position.y=4.6;
+    v.add(nl);
+  });
+}
+
+/* ------------------------------------------------------------ ANIMATION */
+function lerpAngle(a,b,k){ let d=b-a; d=Math.atan2(Math.sin(d),Math.cos(d)); return a+d*k; }
+function pathLength(kf){ let L=0; for(let i=0;i<kf.length-1;i++)L+=Math.hypot(kf[i+1].x-kf[i].x,kf[i+1].z-kf[i].z); return L; }
+function curveFor(v){
+  const kf=v.userData.keyframes;
+  const key=kf.map(k=>k.x.toFixed(2)+','+k.z.toFixed(2)).join(';');
+  if(v.userData._ck!==key){
+    // quitar puntos coincidentes (rompen la curva centripetal)
+    const pts=[];
+    kf.forEach(k=>{ const p=new THREE.Vector3(k.x,0,k.z);
+      if(!pts.length || Math.hypot(p.x-pts[pts.length-1].x, p.z-pts[pts.length-1].z)>0.05) pts.push(p); });
+    if(pts.length<2) pts.push(new THREE.Vector3(kf[kf.length-1].x+0.1,0,kf[kf.length-1].z));
+    v.userData._curve=new THREE.CatmullRomCurve3(pts, false, 'centripetal', 0.5);
+    v.userData._ck=key;
+  }
+  return v.userData._curve;
+}
+
+function applyAnimation(){
+  const orientar = true;   // si el vehículo tiene recorrido, siempre mira hacia donde va (también parado)
+  vehicles.forEach(v=>{
+    if(v.userData.launch && v.userData.launch.active) return; // la física del despido toma el control
+    const kf=v.userData.keyframes;
+    if(kf.length<2) return;
+    const s=v.userData.startFrac, e=v.userData.endFrac;
+    const vel=v.userData.vel||1;
+    let lt=(t-s)*vel/(e-s);
+    lt=Math.min(1,Math.max(0,lt));
+    const mueve=pathLength(kf)>0.6;
+    if(v.userData.autoGiro!==false && mueve){
+      // trayectoria curva: el vehículo dobla y mira hacia donde avanza
+      const c=curveFor(v);
+      const p=c.getPoint(lt); const tan=c.getTangent(lt);
+      v.position.x=p.x; v.position.z=p.z;
+      if(orientar) v.rotation.y=Math.atan2(tan.x, tan.z);
+    } else {
+      // recto, respetando las orientaciones marcadas (parado / marcha atrás)
+      const fpos=lt*(kf.length-1);
+      const i=Math.min(kf.length-2, Math.floor(fpos));
+      const f=fpos-i;
+      const a=kf[i], b=kf[i+1];
+      v.position.x=a.x+(b.x-a.x)*f;
+      v.position.z=a.z+(b.z-a.z)*f;
+      if(orientar) v.rotation.y=lerpAngle(a.rot,b.rot,f);
+    }
+  });
+  if(selected){ selectionRing.position.set(selected.position.x,0.06,selected.position.z); }
+}
+
+function togglePlay(){
+  playing=!playing;
+  document.getElementById('playBtn').textContent=playing?'❚❚':'▶';
+  if(playing){
+    if(t>=1){ t=0; resetImpacts(); }
+    props.forEach(p=>{ p.userData.home={x:p.position.x,z:p.position.z,rotY:p.rotation.y}; p.userData.knock=null; p.position.y=0; p.rotation.x=0; p.rotation.z=0; });
+  }
+  if(handleGroup) handleGroup.visible=!playing;
+}
+function updateTimeLabel(){
+  duration=+document.getElementById('dur').value;
+  document.getElementById('tlabel').textContent=`${(t*duration).toFixed(1)}s / ${duration.toFixed(1)}s`;
+  document.getElementById('scrub').value=Math.round(t*1000);
+}
+
+/* ----------------------------------------------------------- IMPACT FX */
+const RADII={auto:2.3,moto:1.3,camion:3.0,camiongrande:4.4,colectivo:4.3,bici:1.1,peaton:0.8};
+let effects=[];
+let firedPairs=new Set();
+let recoils=[];           // {veh,t,amp}
+let shake={t:0,amp:0};
+let slowmo=0;             // segundos de cámara lenta tras el impacto
+let speedMul=1;           // multiplicador de velocidad de reproducción
+function setSpeed(m, btn){ speedMul=m; document.querySelectorAll('#speedCtl .sp').forEach(b=>b.classList.toggle('on', b===btn)); }
+
+function resetImpacts(){
+  firedPairs.clear(); recoils=[];
+  effects.forEach(e=>e.dispose()); effects=[];
+  shake.t=0; shake.amp=0; slowmo=0;
+  clearMarks();
+  props.forEach(p=>{ if(p.userData.type==='semaforo') setLuces(p, p.userData.estado); });
+  vehicles.forEach(v=>{ if(v.userData.launch) v.userData.launch.active=false; v.rotation.z=0; v.rotation.x=0; v.position.y=0; });
+  props.forEach(p=>{ p.userData.knock=null;
+    if(p.userData.home){ p.position.set(p.userData.home.x,0,p.userData.home.z); p.rotation.set(0,p.userData.home.rotY,0); }
+    else { p.position.y=0; p.rotation.x=0; p.rotation.z=0; } });
+}
+
+function esCliente(v){ return /cliente|actor|v[ií]ctima/.test((v.userData.name||'').toLowerCase()); }
+function lanzarVictima(victim, striker){
+  let dx=victim.position.x-striker.position.x, dz=victim.position.z-striker.position.z;
+  const len=Math.hypot(dx,dz)||1; dx/=len; dz/=len;
+  const tp=victim.userData.type;
+  const vuln=(tp==='peaton'||tp==='bici')?1.0 : (tp==='moto')?0.82 : (tp==='auto')?0.28 : 0.14;
+  const horiz=6+vuln*10, vert=2.5+vuln*7.5;
+  victim.userData.launch={
+    active:true,
+    x:victim.position.x, y:0, z:victim.position.z, rotY:victim.rotation.y, tilt:0,
+    vx:dx*horiz, vy:vert, vz:dz*horiz,
+    spin:(Math.random()<0.5?-1:1)*(2+vuln*7),
+    tumble:vuln>0.6 ? (2+Math.random()*3) : 0
+  };
+}
+
+/* ---- velocidad estimada (km/h) ---- */
+function velocidadKmh(v){
+  if(!v.userData.keyframes || v.userData.keyframes.length<2) return null;
+  const len=pathLength(v.userData.keyframes); // unidades = metros
+  if(len<0.6) return 0;
+  const vel=v.userData.vel||1;
+  const ventana=Math.max(0.05,(v.userData.endFrac - v.userData.startFrac))/vel; // fracción de la línea de tiempo
+  const seg=ventana*duration;
+  return Math.round((len/seg)*3.6);
+}
+
+/* ---- marcas de frenada + cruz del punto de impacto ---- */
+function clearMarks(){ while(marksGroup.children.length){ const m=marksGroup.children[0]; marksGroup.remove(m); if(m.geometry)m.geometry.dispose(); } }
+function marcasActivas(){ const c=document.getElementById('marksChk'); return !c || c.checked; }
+function drawSkid(striker, px, pz){
+  const h=striker.rotation.y;
+  const fx=Math.sin(h), fz=Math.cos(h);
+  const perpx=Math.cos(h), perpz=-Math.sin(h);   // perpendicular al rumbo
+  const L=7, track=0.75;
+  const cx=px - fx*L/2, cz=pz - fz*L/2;
+  [1,-1].forEach(s=>{
+    const b=new THREE.Mesh(new THREE.BoxGeometry(0.16,0.02,L),
+      new THREE.MeshBasicMaterial({color:0x0a0a0a, transparent:true, opacity:0.5}));
+    b.position.set(cx + perpx*track*s, 0.02, cz + perpz*track*s);
+    b.rotation.y=h; marksGroup.add(b);
+  });
+}
+function drawCross(px,pz){
+  [Math.PI/4,-Math.PI/4].forEach(a=>{
+    const b=new THREE.Mesh(new THREE.BoxGeometry(0.32,0.02,3.0),
+      new THREE.MeshBasicMaterial({color:0xff4438}));
+    b.position.set(px,0.05,pz); b.rotation.y=a; marksGroup.add(b);
+  });
+}
+
+/* ---- modo día / noche ---- */
+function setNoche(on){
+  esNoche=on;
+  if(on){ scene.background.setHex(0x05070f); scene.fog.color.setHex(0x05070f);
+          if(hemiLight)hemiLight.intensity=0.22; if(dirLight)dirLight.intensity=0.15; }
+  else  { scene.background.setHex(0x04050c); scene.fog.color.setHex(0x04050c);
+          if(hemiLight)hemiLight.intensity=0.85; if(dirLight)dirLight.intensity=1.05; }
+  const b=document.getElementById('nocheBtn'); if(b) b.textContent = on?'☀️ Día':'🌙 Noche';
+}
+function toggleNoche(){ setNoche(!esNoche); }
+
+/* ---- lluvia ---- */
+function toggleLluvia(){
+  if(!lluvia){
+    const n=1400; const geo=new THREE.BufferGeometry(); const pos=new Float32Array(n*3);
+    for(let i=0;i<n;i++){ pos[i*3]=(Math.random()-0.5)*200; pos[i*3+1]=Math.random()*70; pos[i*3+2]=(Math.random()-0.5)*200; }
+    geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+    lluvia=new THREE.Points(geo, new THREE.PointsMaterial({color:0x9fb4d8, size:0.45, transparent:true, opacity:0.55}));
+    lluvia.userData.vel=Array.from({length:n},()=>45+Math.random()*35);
+    scene.add(lluvia);
+    const b=document.getElementById('lluviaBtn'); if(b) b.textContent='🌧 Lluvia (ON)';
+  } else {
+    scene.remove(lluvia); lluvia.geometry.dispose(); lluvia.material.dispose(); lluvia=null;
+    const b=document.getElementById('lluviaBtn'); if(b) b.textContent='🌧 Lluvia';
+  }
+}
+
+/* ---- cámara primera persona (desde el conductor) ---- */
+let fpv=false;
+function toggleFPV(){
+  if(!selected || !selected.userData.isVehicle){ toast('Seleccioná primero un vehículo.'); return; }
+  fpv=!fpv;
+  const b=document.getElementById('fpvBtn'); if(b) b.textContent = fpv?'🎥 Salir 1ª persona':'🎥 Vista del conductor';
+  if(!fpv) updateCamera();
+}
+function applyFPV(){
+  if(!fpv || !selected) return;
+  const v=selected, h=v.rotation.y;
+  const fx=Math.sin(h), fz=Math.cos(h);
+  camera.position.set(v.position.x - fx*0.2, (v.position.y||0)+1.5, v.position.z - fz*0.2);
+  camera.lookAt(v.position.x + fx*12, 1.2, v.position.z + fz*12);
+}
+
+/* ---- plantillas de choques típicos ---- */
+function plantilla(tipo){
+  let d;
+  if(tipo==='alcance'){
+    d={road:'straight', vehiculos:[
+      {tipo:'auto',color:'#c9a84c',nombre:'Vehículo A (cliente)',inicio:{x:0,z:3},impacto:{x:0,z:3},rumboGrados:0},
+      {tipo:'auto',color:'#b5483f',nombre:'Vehículo B (demandado)',inicio:{x:0,z:-16},impacto:{x:0,z:-1.5}} ]};
+  } else if(tipo==='cruce'){
+    d={road:'cross', vehiculos:[
+      {tipo:'moto',color:'#3b6fd0',nombre:'Vehículo A (cliente)',inicio:{x:0,z:-15},impacto:{x:0,z:0}},
+      {tipo:'auto',color:'#b5483f',nombre:'Vehículo B (demandado)',inicio:{x:-15,z:0},impacto:{x:-1.5,z:0}} ]};
+  } else if(tipo==='frontal'){
+    d={road:'straight', vehiculos:[
+      {tipo:'auto',color:'#c9a84c',nombre:'Vehículo A (cliente)',inicio:{x:0,z:-15},impacto:{x:0,z:-0.9}},
+      {tipo:'auto',color:'#b5483f',nombre:'Vehículo B (demandado)',inicio:{x:0,z:15},impacto:{x:0,z:0.9}} ]};
+  } else { // lateral / embestida en T
+    d={road:'cross', vehiculos:[
+      {tipo:'auto',color:'#c9a84c',nombre:'Vehículo A (cliente)',inicio:{x:0,z:-15},impacto:{x:0,z:0}},
+      {tipo:'auto',color:'#b5483f',nombre:'Vehículo B (demandado)',inicio:{x:15,z:0},impacto:{x:1.5,z:0}} ]};
+  }
+  applyScene(d);
+  toast('Plantilla cargada. Movela y ajustala a tu caso.');
+}
+
+/* ---- modo presentación + explicación ---- */
+function updateCaption(){ hudLastKey='__'; }
+let presentando=false;
+function togglePresentacion(){
+  presentando=!presentando;
+  document.body.classList.toggle('presentando', presentando);
+  if(presentando){
+    deselect();                 // sin anillo ni puntos de edición
+    setCleanView(true);
+    updateCaption();
+    resize();
+    volverAlInicio();
+    toast('Modo presentación. Tocá ▶ para mostrar el hecho. (Salí con la ✕)');
+  } else {
+    setCleanView(false); drawPath(); refreshHandles();
+    resize();
+  }
+}
+
+/* ---- HUD dibujado dentro del canvas (se graba en el video) ---- */
+function initHUD(){
+  hudScene=new THREE.Scene();
+  hudCamera=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+  hudCanvas=document.createElement('canvas');
+  const pr=renderer.getPixelRatio();
+  hudCanvas.width=renderer.domElement.width||1280; hudCanvas.height=renderer.domElement.height||720;
+  hudCtx=hudCanvas.getContext('2d');
+  hudTexture=new THREE.CanvasTexture(hudCanvas);
+  hudTexture.minFilter=THREE.LinearFilter;
+  const mat=new THREE.MeshBasicMaterial({map:hudTexture, transparent:true, depthTest:false, depthWrite:false});
+  hudMesh=new THREE.Mesh(new THREE.PlaneGeometry(2,2), mat);
+  hudScene.add(hudMesh);
+}
+function wrapText(ctx, text, maxW){
+  const words=(text||'').split(/\s+/); const lines=[]; let line='';
+  words.forEach(w=>{ const test=line?line+' '+w:w; if(ctx.measureText(test).width>maxW && line){ lines.push(line); line=w; } else line=test; });
+  if(line) lines.push(line); return lines;
+}
+function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function captionActual(){
+  // etapa activa por tiempo; si no hay etapas, el texto de explicación
+  if(etapas.length){
+    const seg=t*duration; let cur=etapas[0].texto||'';
+    for(const e of etapas){ if(seg>=e.t) cur=e.texto; }
+    return cur;
+  }
+  return (document.getElementById('explainText')||{}).value||'';
+}
+function drawHUD(){
+  const W=hudCanvas.width, H=hudCanvas.height, S=W/1280; // escala
+  hudCtx.clearRect(0,0,W,H);
+  hudCtx.textBaseline='middle';
+  // cartel del expediente (arriba)
+  if(expedienteCartel){
+    hudCtx.font=`600 ${Math.round(26*S)}px Jost, sans-serif`;
+    const tw=Math.min(W*0.9, hudCtx.measureText(expedienteCartel).width+60*S);
+    const bx=(W-tw)/2, by=18*S, bh=46*S;
+    hudCtx.fillStyle='rgba(5,7,15,0.88)'; roundRect(hudCtx,bx,by,tw,bh,12*S); hudCtx.fill();
+    hudCtx.strokeStyle='#c9a84c'; hudCtx.lineWidth=1.5*S; hudCtx.stroke();
+    hudCtx.fillStyle='#f0d080'; hudCtx.textAlign='center';
+    hudCtx.fillText(expedienteCartel, W/2, by+bh/2);
+  }
+  // subtítulo / etapa (abajo)
+  const cap=captionActual();
+  if(cap){
+    hudCtx.font=`500 ${Math.round(30*S)}px Jost, sans-serif`;
+    const maxW=W*0.8;
+    const lines=wrapText(hudCtx, cap, maxW);
+    const lh=40*S, pad=18*S;
+    const bh=lines.length*lh + pad*2;
+    const bw=Math.min(maxW+60*S, W*0.9);
+    const bx=(W-bw)/2, by=H-bh-90*S;
+    hudCtx.fillStyle='rgba(5,7,15,0.86)'; roundRect(hudCtx,bx,by,bw,bh,14*S); hudCtx.fill();
+    hudCtx.strokeStyle='#c9a84c'; hudCtx.lineWidth=1.5*S; hudCtx.stroke();
+    hudCtx.fillStyle='#f2efe8'; hudCtx.textAlign='center';
+    lines.forEach((ln,i)=>hudCtx.fillText(ln, W/2, by+pad+lh/2+i*lh));
+  }
+  // firma del estudio (abajo derecha, sin logo para no romper la grabación)
+  hudCtx.font=`600 ${Math.round(18*S)}px 'Cormorant Garamond', serif`;
+  hudCtx.fillStyle='rgba(221,185,94,0.75)'; hudCtx.textAlign='right';
+  hudCtx.fillText('Estudio Lena & Asociados', W-22*S, H-26*S);
+  hudTexture.needsUpdate=true;
+}
+function hudVisible(){ return presentando || recording; }
+function renderHUD(){
+  if(!hudVisible()) return;
+  const key=expedienteCartel+'|'+captionActual();
+  if(key!==hudLastKey){ drawHUD(); hudLastKey=key; }
+  renderer.autoClear=false; renderer.clearDepth();
+  renderer.render(hudScene, hudCamera);
+  renderer.autoClear=true;
+}
+function setEtapas(){
+  // parsea el textarea: cada línea "segundos: texto"
+  const raw=(document.getElementById('etapasText')||{}).value||'';
+  etapas=[];
+  raw.split('\n').forEach(l=>{ const m=l.match(/^\s*([\d.]+)\s*[:\-]\s*(.+)$/); if(m) etapas.push({t:parseFloat(m[1]), texto:m[2].trim()}); });
+  etapas.sort((a,b)=>a.t-b.t);
+  hudLastKey='__';
+}
+function setExpedienteCartel(){ expedienteCartel=((document.getElementById('cartelExp')||{}).value||'').trim(); hudLastKey='__'; }
+
+function detectImpacts(){
+  for(let i=0;i<vehicles.length;i++){
+    for(let j=i+1;j<vehicles.length;j++){
+      const A=vehicles[i],B=vehicles[j];
+      if(A.userData.keyframes.length<2 && B.userData.keyframes.length<2) continue;
+      const dx=A.position.x-B.position.x, dz=A.position.z-B.position.z;
+      const dist=Math.hypot(dx,dz);
+      const thr=(RADII[A.userData.type]+RADII[B.userData.type])*0.78;
+      const key=i+'-'+j;
+      if(dist<thr && !firedPairs.has(key)){
+        firedPairs.add(key);
+        const px=(A.position.x+B.position.x)/2, pz=(A.position.z+B.position.z)/2;
+        // elegir víctima: nuestro cliente; si ninguno está marcado, el más vulnerable (más liviano)
+        let victim, striker;
+        if(esCliente(A)&&!esCliente(B)){ victim=A; striker=B; }
+        else if(esCliente(B)&&!esCliente(A)){ victim=B; striker=A; }
+        else { victim = RADII[A.userData.type]<=RADII[B.userData.type]?A:B; striker = victim===A?B:A; }
+        spawnImpact(px,pz);
+        slowmo=0.75;
+        recoils.push({veh:striker, t:0.5, amp:0.3});
+        lanzarVictima(victim, striker);
+        if(marcasActivas()){ drawSkid(striker,px,pz); drawCross(px,pz); }
+      }
+    }
+  }
+}
+
+function detectProps(dt){
+  // lomo de burro: el auto sube y baja al cruzarlo. cono: lo voltea.
+  vehicles.forEach(v=>{
+    if(!v.userData.keyframes || v.userData.keyframes.length<2) return;
+    if(v.userData.launch && v.userData.launch.active) return;
+    let bump=0;
+    props.forEach(p=>{
+      const dx=v.position.x-p.position.x, dz=v.position.z-p.position.z;
+      const d=Math.hypot(dx,dz);
+      if(p.userData.type==='lomo'){
+        const R=3.2; if(d<R){ const h=0.55*(1-(d/R)*(d/R)); if(h>bump) bump=h; }
+      } else if(p.userData.type==='cono' && !p.userData.knock && d<1.7){
+        let ux=dx, uz=dz; const ul=Math.hypot(ux,uz)||1; ux/=ul; uz/=ul;
+        p.userData.knock={vx:-ux*7+(Math.random()-0.5)*2, vy:5.5, vz:-uz*7+(Math.random()-0.5)*2, spin:(Math.random()-0.5)*14};
+      }
+    });
+    v.position.y=bump;
+    v.rotation.x = bump>0 ? -bump*0.35 : 0;   // leve cabeceo al subir/bajar
+  });
+  // integrar conos volando/rodando
+  props.forEach(p=>{
+    const k=p.userData.knock; if(!k) return;
+    k.vy-=20*dt;
+    p.position.x+=k.vx*dt; p.position.y+=k.vy*dt; p.position.z+=k.vz*dt;
+    p.rotation.x+=k.spin*dt; p.rotation.z+=k.spin*0.6*dt;
+    if(p.position.y<=0){ p.position.y=0; k.vy*=-0.35; k.vx*=0.6; k.vz*=0.6; k.spin*=0.5;
+      if(Math.abs(k.vy)<0.6 && Math.hypot(k.vx,k.vz)<0.4){ p.userData.knock=null; } }
+  });
+}
+
+function radialSprite(color){
+  const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');
+  const g=x.createRadialGradient(64,64,0,64,64,64);
+  g.addColorStop(0,color);g.addColorStop(.4,color.replace('1)','0.6)'));g.addColorStop(1,'rgba(0,0,0,0)');
+  x.fillStyle=g;x.fillRect(0,0,128,128);
+  return new THREE.CanvasTexture(c);
+}
+function spawnImpact(x,z){
+  // flash
+  const flash=new THREE.Sprite(new THREE.SpriteMaterial({map:radialSprite('rgba(255,240,200,1)'),transparent:true,depthTest:false,blending:THREE.AdditiveBlending}));
+  flash.position.set(x,2,z);flash.scale.set(2,2,2);scene.add(flash);
+  let ft=0;
+  effects.push({update(dt){ft+=dt;flash.scale.setScalar(2+ft*22);flash.material.opacity=Math.max(0,1-ft/0.3);return ft<0.3;},dispose(){scene.remove(flash);}});
+  // shockwave ring
+  const ring=new THREE.Mesh(new THREE.RingGeometry(0.6,1.0,40),new THREE.MeshBasicMaterial({color:0xffd27a,transparent:true,side:THREE.DoubleSide,depthTest:false}));
+  ring.rotation.x=-Math.PI/2;ring.position.set(x,0.3,z);scene.add(ring);
+  let rt=0;
+  effects.push({update(dt){rt+=dt;const s=1+rt*16;ring.scale.set(s,s,s);ring.material.opacity=Math.max(0,1-rt/0.6);return rt<0.6;},dispose(){scene.remove(ring);}});
+  // debris particles
+  const N=80;const geo=new THREE.BufferGeometry();const pos=new Float32Array(N*3);const vel=[];
+  for(let k=0;k<N;k++){pos[k*3]=x;pos[k*3+1]=1.0;pos[k*3+2]=z;
+    const a=Math.random()*Math.PI*2,sp=4+Math.random()*13;
+    vel.push(new THREE.Vector3(Math.cos(a)*sp,5+Math.random()*10,Math.sin(a)*sp));}
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  const pts=new THREE.Points(geo,new THREE.PointsMaterial({color:0xc9a84c,size:0.4,transparent:true,depthTest:false}));
+  scene.add(pts);let pt=0;
+  effects.push({update(dt){pt+=dt;const p=geo.attributes.position.array;
+    for(let k=0;k<N;k++){vel[k].y-=22*dt;p[k*3]+=vel[k].x*dt;p[k*3+1]=Math.max(0.05,p[k*3+1]+vel[k].y*dt);p[k*3+2]+=vel[k].z*dt;}
+    geo.attributes.position.needsUpdate=true;pts.material.opacity=Math.max(0,1-pt/1.0);return pt<1.0;},dispose(){scene.remove(pts);geo.dispose();}});
+  // IMPACTO label
+  const c=document.createElement('canvas');c.width=256;c.height=80;const cx=c.getContext('2d');
+  cx.font='700 46px Jost, sans-serif';cx.textAlign='center';cx.textBaseline='middle';
+  cx.fillStyle='#b5483f';cx.fillText('💥 IMPACTO',128,42);
+  const lbl=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthTest:false}));
+  lbl.position.set(x,3.2,z);lbl.scale.set(6,1.9,1);scene.add(lbl);let lt=0;
+  effects.push({update(dt){lt+=dt;lbl.position.y=3.2+lt*1.6;lbl.material.opacity=lt<0.9?1:Math.max(0,1-(lt-0.9)/0.5);return lt<1.4;},dispose(){scene.remove(lbl);}});
+}
+
+/* --------------------------------------------------------------- RENDER */
+function animate(){
+  requestAnimationFrame(animate);
+  const dt=Math.min(0.05,clock.getDelta());
+  const ts = slowmo>0 ? 0.32 : 1;     // factor de cámara lenta
+  const sdt = dt*ts;
+  if(slowmo>0) slowmo-=dt;
+  if(playing){
+    t += (sdt*speedMul)/duration;
+    if(t>=1){
+      if(document.getElementById('loopChk').checked){ t=0; resetImpacts(); }
+      else { t=1; playing=false; document.getElementById('playBtn').textContent='▶';
+             if(handleGroup && selected) handleGroup.visible=true;
+             if(autoRecording) finishClip(); }
+    }
+    applyAnimation();
+    detectImpacts();
+    detectProps(sdt);
+    // semáforos que cambian durante la animación
+    props.forEach(p=>{ if(p.userData.type==='semaforo'){
+      const show=(p.userData.cambiaA && t*duration>=(p.userData.cambiaSeg||0)) ? p.userData.cambiaA : p.userData.estado;
+      setLuces(p, show);
+    }});
+    // despido de la víctima (física simple con gravedad y vuelco)
+    vehicles.forEach(v=>{
+      const L=v.userData.launch; if(!L||!L.active)return;
+      L.vy-=16*sdt; L.x+=L.vx*sdt; L.z+=L.vz*sdt; L.y+=L.vy*sdt;
+      if(L.y<=0){ L.y=0; L.vy*=-0.32; L.vx*=0.6; L.vz*=0.6; L.spin*=0.5;
+        if(Math.abs(L.vy)<1 && Math.hypot(L.vx,L.vz)<0.5){ L.vy=0;L.vx=0;L.vz=0; } }
+      L.rotY+=L.spin*sdt;
+      if(L.tumble){ L.tilt=Math.min(Math.PI/2, L.tilt+L.tumble*sdt*(L.y>0.1?1:0.4)); }
+      v.position.set(L.x,L.y,L.z); v.rotation.y=L.rotY; v.rotation.z=L.tilt;
+    });
+    // recoil del embistor
+    recoils=recoils.filter(r=>{ r.t-=sdt; if(r.t<=0)return false;
+      const a=r.amp*(r.t/0.5);
+      r.veh.position.x+=(Math.random()-.5)*a; r.veh.position.z+=(Math.random()-.5)*a;
+      r.veh.rotation.y+=(Math.random()-.5)*a*0.25; return true; });
+    updateTimeLabel();
+  }
+  // efectos (escombros, destello, onda) — también en cámara lenta
+  if(effects.length){ effects=effects.filter(e=>{ const alive=e.update(sdt); if(!alive)e.dispose(); return alive; }); }
+  // lluvia (cae siempre)
+  if(lluvia){ const p=lluvia.geometry.attributes.position; const V=lluvia.userData.vel;
+    for(let i=0;i<p.count;i++){ let y=p.getY(i)-V[i]*dt; if(y<0) y=70; p.setY(i,y); }
+    p.needsUpdate=true; }
+  // cámara desde el conductor
+  if(fpv) applyFPV();
+  renderer.render(scene,camera);
+  renderHUD();
+}
+
+/* ----------------------------------------------------- REFERENCE IMAGE */
+function loadRefImage(e){
+  const file=e.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{ setRefTexture(img.src, img.width/img.height); };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function setRefTexture(dataURL, aspect){
+  if(refMesh){ scene.remove(refMesh); }
+  const loader=new THREE.TextureLoader();
+  loader.load(dataURL, tex=>{
+    refTex=tex; tex.colorSpace=THREE.SRGBColorSpace;
+    const w=+document.getElementById('refW').value;
+    const h=w/aspect;
+    const mat=new THREE.MeshBasicMaterial({map:tex, transparent:true, opacity:+document.getElementById('refO').value/100});
+    refMesh=new THREE.Mesh(new THREE.PlaneGeometry(w,h), mat);
+    refMesh.rotation.x=-Math.PI/2;
+    refMesh.rotation.z=+document.getElementById('refR').value*Math.PI/180;
+    refMesh.position.y=0.02;
+    refMesh.userData.aspect=aspect; refMesh.userData.dataURL=dataURL;
+    scene.add(refMesh);
+    document.getElementById('refControls').style.display='flex';
+    toast('Captura cargada. Ajustá ancho y rotación para alinear con la grilla.');
+  });
+}
+function updateRef(){
+  document.getElementById('refWv').textContent=document.getElementById('refW').value;
+  document.getElementById('refRv').textContent=document.getElementById('refR').value;
+  document.getElementById('refOv').textContent=document.getElementById('refO').value;
+  if(!refMesh)return;
+  const aspect=refMesh.userData.aspect;
+  const w=+document.getElementById('refW').value, h=w/aspect;
+  refMesh.geometry.dispose();
+  refMesh.geometry=new THREE.PlaneGeometry(w,h);
+  refMesh.rotation.z=+document.getElementById('refR').value*Math.PI/180;
+  refMesh.material.opacity=+document.getElementById('refO').value/100;
+}
+function removeRef(){
+  if(refMesh){scene.remove(refMesh);refMesh=null;}
+  document.getElementById('refControls').style.display='none';
+  document.getElementById('refImg').value='';
+}
+
+/* --------------------------------------------------------------- TOGGLES */
+function toggleGrid(){ gridOn=!gridOn; gridHelper.visible=gridOn; document.getElementById('gridBtn').classList.toggle('gold',gridOn); }
+function toggleShadows(){
+  shadowsOn=!shadowsOn; renderer.shadowMap.enabled=shadowsOn;
+  scene.traverse(o=>{ if(o.isMesh){o.castShadow=shadowsOn&&!o.userData.isArrow; } });
+  renderer.shadowMap.needsUpdate=true;
+  document.getElementById('shadBtn').classList.toggle('gold',shadowsOn);
+}
+
+/* ---------------------------------------------------------- SCREENSHOT */
+function shoot(){
+  renderer.render(scene,camera);
+  // incluir el HUD (cartel + explicación) en la foto
+  drawHUD(); renderer.autoClear=false; renderer.clearDepth(); renderer.render(hudScene,hudCamera); renderer.autoClear=true;
+  const url=renderer.domElement.toDataURL('image/png');
+  const a=document.createElement('a'); a.href=url; a.download='croquis-lena.png'; a.click();
+  toast('Imagen descargada.');
+}
+
+/* ----------------------------------------------------------- RECORDING */
+let mediaRec=null, recChunks=[], recording=false, autoRecording=false;
+function pickMime(){
+  const opts=['video/mp4;codecs=avc1','video/webm;codecs=vp9','video/webm'];
+  for(const o of opts){ if(MediaRecorder.isTypeSupported(o)) return o; }
+  return '';
+}
+function setCleanView(on){
+  // on=true: oculta ayudas de edición para grabar/foto sin que se vea cargado
+  if(pathLine) pathLine.visible=!on;
+  if(handleGroup) handleGroup.visible = on ? false : (!playing && !!selected);
+  if(selectionRing) selectionRing.visible = on ? false : !!selected;
+}
+function startRec(){
+  setCleanView(true);
+  const stream=renderer.domElement.captureStream(60);
+  const mime=pickMime();
+  mediaRec=new MediaRecorder(stream, mime?{mimeType:mime, videoBitsPerSecond:16000000}:{videoBitsPerSecond:16000000});
+  recChunks=[];
+  mediaRec.ondataavailable=e=>{ if(e.data.size>0)recChunks.push(e.data); };
+  mediaRec.onstop=()=>{
+    const blob=new Blob(recChunks,{type:mediaRec.mimeType});
+    const url=URL.createObjectURL(blob);
+    const ext=mediaRec.mimeType.includes('mp4')?'mp4':'webm';
+    const a=document.createElement('a'); a.href=url; a.download=`reconstruccion-lena.${ext}`; a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+    toast(`Video descargado (.${ext}).`);
+    setCleanView(false); drawPath(); refreshHandles();
+  };
+  mediaRec.start();
+  recording=true;
+}
+function toggleRec(){
+  const b=document.getElementById('recBtn');
+  if(!recording){ startRec(); b.classList.add('active'); b.textContent='⏹ Detener'; toast('Grabando… animá el choque y detené cuando termines.'); }
+  else { mediaRec.stop(); recording=false; b.classList.remove('active'); b.textContent='⏺ Grabar'; }
+}
+function recordClip(){
+  // one-click: reset, record, play once, auto-stop
+  if(recording){ toast('Ya hay una grabación en curso.'); return; }
+  t=0; resetImpacts(); applyAnimation(); updateTimeLabel();
+  startRec(); autoRecording=true;
+  document.getElementById('loopChk').checked=false;
+  playing=true; document.getElementById('playBtn').textContent='❚❚';
+  toast('Grabando la reconstrucción completa…');
+}
+function finishClip(){
+  if(mediaRec && recording){ setTimeout(()=>{ mediaRec.stop(); recording=false; autoRecording=false; },300); }
+}
+
+/* ------------------------------------------------------------ SAVE/LOAD */
+function buildSceneData(includeRef){
+  return {
+    version:1, road:document.getElementById('roadPreset').value, duration:+document.getElementById('dur').value,
+    loop:document.getElementById('loopChk').checked,
+    explain:(document.getElementById('explainText')||{}).value||'',
+    cartel:(document.getElementById('cartelExp')||{}).value||'',
+    etapas:(document.getElementById('etapasText')||{}).value||'',
+    addr:(document.getElementById('addrInput')||{}).value||'',
+    ref: (includeRef && refMesh)?{dataURL:refMesh.userData.dataURL, aspect:refMesh.userData.aspect,
+                  w:+document.getElementById('refW').value, r:+document.getElementById('refR').value, o:+document.getElementById('refO').value}:null,
+    vehicles: vehicles.map(v=>({type:v.userData.type, name:v.userData.name, color:v.userData.color,
+        x:v.position.x, z:v.position.z, rot:v.rotation.y,
+        keyframes:v.userData.keyframes, startFrac:v.userData.startFrac, endFrac:v.userData.endFrac, autoGiro:v.userData.autoGiro!==false, vel:v.userData.vel||1})),
+    props: props.map(p=>({type:p.userData.type, name:p.userData.name, x:p.position.x, z:p.position.z, rot:p.rotation.y, estado:p.userData.estado||null, cambiaA:p.userData.cambiaA||null, cambiaSeg:p.userData.cambiaSeg||null}))
+  };
+}
+function saveScene(){
+  const data=buildSceneData(true);
+  const blob=new Blob([JSON.stringify(data)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='caso-croquis.lena3d.json'; a.click();
+  toast('Caso guardado. Adjuntalo al expediente.');
+}
+function loadSceneData(d){
+  vehicles.forEach(v=>scene.remove(v)); vehicles=[];
+  props.forEach(p=>scene.remove(p)); props=[]; deselect();
+  buildRoad(d.road||'cross');
+  document.getElementById('dur').value=d.duration||6; duration=d.duration||6;
+  document.getElementById('durV').textContent=duration;
+  document.getElementById('loopChk').checked=!!d.loop;
+  { const et=document.getElementById('explainText'); if(et){ et.value=d.explain||''; } }
+  { const ce=document.getElementById('cartelExp'); if(ce){ ce.value=d.cartel||''; } setExpedienteCartel(); }
+  { const ee=document.getElementById('etapasText'); if(ee){ ee.value=d.etapas||''; } setEtapas(); }
+  { const ai=document.getElementById('addrInput'); if(ai && d.addr){ ai.value=d.addr; } }
+  updateCaption();
+  removeRef();
+  if(d.ref){
+    document.getElementById('refW').value=d.ref.w; document.getElementById('refR').value=d.ref.r; document.getElementById('refO').value=d.ref.o;
+    document.getElementById('refWv').textContent=d.ref.w; document.getElementById('refRv').textContent=d.ref.r; document.getElementById('refOv').textContent=d.ref.o;
+    setRefTexture(d.ref.dataURL, d.ref.aspect);
+  }
+  (d.vehicles||[]).forEach(vd=>{
+    const m=buildModel(vd.type, vd.color);
+    m.userData={isVehicle:true, type:vd.type, color:vd.color, name:vd.name,
+                keyframes:vd.keyframes||[], startFrac:vd.startFrac??0, endFrac:vd.endFrac??1, autoGiro:vd.autoGiro!==false, vel:vd.vel||1};
+    m.position.set(vd.x,0,vd.z); m.rotation.y=vd.rot;
+    const lbl=makeLabelSprite(vd.name); m.add(lbl);
+    scene.add(m); vehicles.push(m);
+  });
+  (d.props||[]).forEach(pd=>{
+    const g=buildProp(pd.type);
+    g.userData.isProp=true; g.userData.type=pd.type; g.userData.name=pd.name||PROP_NAMES[pd.type];
+    g.position.set(pd.x,0,pd.z); g.rotation.y=pd.rot||0;
+    if(pd.cambiaA){ g.userData.cambiaA=pd.cambiaA; g.userData.cambiaSeg=pd.cambiaSeg||0; }
+    scene.add(g); props.push(g);
+    if(pd.type==='semaforo' && pd.estado){ aplicarEstadoSemaforo(g, pd.estado); }
+  });
+  refreshLabels(); t=0; applyAnimation(); updateTimeLabel(); frameAll();
+}
+function loadScene(e){
+  const file=e.target.files[0]; if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{ loadSceneData(JSON.parse(ev.target.result)); toast('Caso cargado.'); }
+    catch(err){ toast('No se pudo leer el archivo.'); }
+  };
+  r.readAsText(file);
+}
+
+/* ---------------------------------------------------------- INSTRUCCIONES */
+function showHelp(){ document.getElementById('help').classList.add('show'); }
+function hideHelp(){ document.getElementById('help').classList.remove('show'); }
+
+/* ------------------------------------------------------- ASISTENTE IA */
+function chatMsg(html, cls){
+  const log=document.getElementById('chatLog');
+  const d=document.createElement('div'); d.className='msg '+(cls||'ai'); d.innerHTML=html;
+  log.appendChild(d); log.scrollTop=log.scrollHeight; return d;
+}
+function headingTo(ax,az,bx,bz){ return Math.atan2(bx-ax, bz-az); }
+function parseColor(c){
+  if(typeof c==='string' && /^#?[0-9a-fA-F]{6}$/.test(c.replace('#',''))) return c.startsWith('#')?c:'#'+c;
+  return COLORS[Math.floor(Math.random()*COLORS.length)];
+}
+
+/* ============ VINCULAR EXPEDIENTE (Supabase, SOLO LECTURA) ============ */
+const SUPA={
+  url:'https://iboydjjeaeeayxjvaykr.supabase.co',
+  anon:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlib3lkamplYWVlYXl4anZheWtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0NDY3NjAsImV4cCI6MjA5NDAyMjc2MH0.e8Yy8E4oXvJWgY-AXWhlOtoLBZeZY8w1liLHM4JPY84',
+  token:null, email:null, exps:[], expSel:null, pendingExp:null, viewMode:false
+};
+
+function expAbrir(){
+  if(SUPA.token && SUPA.pendingExp){ const id=SUPA.pendingExp; SUPA.pendingExp=null; expCargarPorId(id); return; }
+  document.getElementById('expModal').classList.add('show');
+  if(SUPA.token) expVistaLista(); else expVistaLogin();
+}
+function expCerrar(){ document.getElementById('expModal').classList.remove('show'); }
+
+function expVistaLogin(){
+  document.getElementById('expBody').innerHTML=`
+    <div class="ro-note">🔒 Esta app <b>lee</b> la mecánica de tus expedientes y, si lo pedís, <b>guarda el croquis</b> en el expediente (columna croquis). No modifica ni borra ningún otro dato.</div>
+    <p class="hint" style="margin-bottom:12px">Ingresá con el mismo usuario que usás en tu panel de expedientes.</p>
+    <label class="field">Email
+      <input type="email" id="expEmail" autocomplete="username" placeholder="tu@correo.com">
+    </label>
+    <label class="field" style="margin-top:9px">Contraseña
+      <input type="password" id="expPass" autocomplete="current-password" onkeydown="if(event.key==='Enter')expLogin()">
+    </label>
+    <button class="gold" style="width:100%;padding:11px;margin-top:14px" id="expLoginBtn" onclick="expLogin()">Ingresar</button>
+    <div id="expMsg"></div>`;
+  setTimeout(()=>{const e=document.getElementById('expEmail'); if(e)e.focus();},50);
+}
+
+async function expLogin(){
+  const email=document.getElementById('expEmail').value.trim();
+  const pass=document.getElementById('expPass').value;
+  if(!email||!pass){ expError('Completá email y contraseña.'); return; }
+  const btn=document.getElementById('expLoginBtn'); btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Ingresando…';
+  try{
+    const r=await fetch(`${SUPA.url}/auth/v1/token?grant_type=password`,{
+      method:'POST', headers:{'apikey':SUPA.anon,'Content-Type':'application/json'},
+      body:JSON.stringify({email,password:pass})
+    });
+    const d=await r.json();
+    if(!r.ok || !d.access_token) throw new Error(d.error_description||d.msg||'No se pudo iniciar sesión');
+    SUPA.token=d.access_token; SUPA.email=email;
+    if(SUPA.pendingExp){ const id=SUPA.pendingExp; SUPA.pendingExp=null; expCerrar(); expCargarPorId(id); }
+    else expVistaLista();
+  }catch(err){
+    btn.disabled=false; btn.innerHTML='Ingresar';
+    expError('No se pudo ingresar: '+err.message);
+  }
+}
+function expError(m){ const e=document.getElementById('expMsg'); if(e)e.innerHTML='<div class="exp-msg err">'+m+'</div>'; }
+
+async function expVistaLista(){
+  document.getElementById('expBody').innerHTML=`
+    <input type="text" id="expSearch" placeholder="Buscar por N° de expediente, actor o demandado…">
+    <div id="expListWrap"><div class="exp-empty"><span class="spinner"></span>  Cargando expedientes…</div></div>`;
+  document.getElementById('expSearch').addEventListener('input', e=>expRender(e.target.value));
+  try{
+    const r=await fetch(`${SUPA.url}/rest/v1/expedientes?select=id,nroexp,nombre,demandado,lugar,mecanica,fecha,hora,vehiculo,estado&order=id.desc&limit=300`,{
+      headers:{'apikey':SUPA.anon,'Authorization':'Bearer '+SUPA.token}
+    });
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    SUPA.exps=await r.json();
+    expRender('');
+  }catch(err){
+    document.getElementById('expListWrap').innerHTML='<div class="exp-msg err">No se pudieron cargar los expedientes: '+err.message+'</div>';
+  }
+}
+
+function expRender(q){
+  q=(q||'').toLowerCase();
+  const wrap=document.getElementById('expListWrap'); if(!wrap)return;
+  const list=SUPA.exps.filter(e=>{
+    const s=((e.nroexp||'')+' '+(e.nombre||'')+' '+(e.demandado||'')).toLowerCase();
+    return s.includes(q);
+  });
+  if(!list.length){ wrap.innerHTML='<div class="exp-empty">Sin resultados.</div>'; return; }
+  wrap.innerHTML='<div class="exp-list">'+list.map((e,i)=>{
+    const tieneMec=e.mecanica && e.mecanica.trim().length>5;
+    const titulo=`<b>${(e.nroexp||'s/nº').toString().replace(/</g,'&lt;')}</b> · ${(e.nombre||'(sin actor)').replace(/</g,'&lt;')}${e.demandado?(' c/ '+e.demandado.replace(/</g,'&lt;')):''}`;
+    const cuerpo=tieneMec ? `<div class="mec">${e.mecanica.replace(/</g,'&lt;').slice(0,160)}</div>` : `<div class="nomec">⚠ Este expediente no tiene cargada la mecánica del hecho.</div>`;
+    return `<button class="exp-item" onclick="expElegir(${SUPA.exps.indexOf(e)})"><span class="ttl">${titulo}</span>${cuerpo}</button>`;
+  }).join('')+'</div>';
+}
+
+async function expElegir(i){
+  const e=SUPA.exps[i]; if(!e)return;
+  await cargarExpediente(e);
+}
+async function cargarExpediente(e){
+  SUPA.expSel=e;
+  expCerrar();
+  mostrarCasoInfo(e);
+  const sb=document.getElementById('saveExpBtn'); if(sb) sb.style.display='block';
+  if(e.lugar) document.getElementById('addrInput').value=e.lugar;
+  // traer el croquis guardado (no viene en el listado por peso)
+  let croquis=e.croquis||null;
+  if(croquis===undefined || croquis===null){
+    try{
+      const r=await fetch(`${SUPA.url}/rest/v1/expedientes?id=eq.${e.id}&select=croquis`,{headers:{'apikey':SUPA.anon,'Authorization':'Bearer '+SUPA.token}});
+      const arr=await r.json(); if(arr&&arr[0]) croquis=arr[0].croquis;
+    }catch(_){ }
+  }
+  if(croquis && croquis.vehicles && croquis.vehicles.length){
+    chatMsg('Expediente <b>'+(e.nroexp||'')+'</b>: cargando el croquis guardado…','ai');
+    loadSceneData(croquis);
+    if(SUPA.viewMode){ entrarSimulacion(); }
+    else toast('Croquis del expediente cargado. Editalo y volvé a guardarlo si querés.');
+    return;
+  }
+  // si no hay croquis guardado, armar desde la mecánica YA (sin esperar nada)
+  if(!e.mecanica || !e.mecanica.trim()){
+    chatMsg('El expediente <b>'+(e.nroexp||'')+'</b> no tiene mecánica cargada. Te dejé un cruce base para armarlo a mano.','err');
+    if(vehicles.length===0) plantilla('cruce');
+    return;
+  }
+  document.getElementById('chatInput').value=e.mecanica.trim();
+  if(!(vehicles.length && vehicles[0].userData.name && /cliente|actor/i.test(vehicles[0].userData.name))){
+    chatMsg('Expediente <b>'+(e.nroexp||'')+'</b> ('+(e.nombre||'')+'): armé el croquis interpretado. Ajustalo y guardalo.','ai');
+    try{ buildFromText(); }catch(_){}        // arma al instante (nunca en blanco)
+  }
+  if(SUPA.viewMode){ setTimeout(entrarSimulacion, 400); }
+  // mejora opcional: dibujar la calle real y re-interpretar encima (si hay red)
+  if(e.lugar){ buscarDireccion().then(()=>{ try{ buildFromText(); }catch(_){} }).catch(()=>{}); }
+}
+function entrarSimulacion(){
+  // modo simulación lista para ver (para el panel): presentación + reproducir
+  if(!presentando) togglePresentacion();
+  setTimeout(()=>{ t=0; if(!playing) togglePlay(); }, 300);
+}
+async function guardarCroquisEnExpediente(){
+  if(!SUPA.expSel){ toast('Primero vinculá un expediente.'); expAbrir(); return; }
+  if(!SUPA.token){ toast('Ingresá a tu cuenta para guardar.'); expAbrir(); return; }
+  const sb=document.getElementById('saveExpBtn'); const prev=sb?sb.innerHTML:''; if(sb){ sb.disabled=true; sb.innerHTML='<span class="spinner"></span> Guardando…'; }
+  try{
+    const data=buildSceneData(true);
+    const r=await fetch(`${SUPA.url}/rest/v1/expedientes?id=eq.${SUPA.expSel.id}`,{
+      method:'PATCH',
+      headers:{'apikey':SUPA.anon,'Authorization':'Bearer '+SUPA.token,'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({croquis:data})
+    });
+    if(!r.ok){ const tx=await r.text(); throw new Error(tx||('HTTP '+r.status)); }
+    SUPA.expSel.croquis=data;
+    toast('✓ Croquis guardado en el expediente '+(SUPA.expSel.nroexp||''));
+  }catch(err){ toast('No se pudo guardar: '+err.message); }
+  finally{ if(sb){ sb.disabled=false; sb.innerHTML=prev; } }
+}
+async function expCargarPorId(id){
+  try{
+    const r=await fetch(`${SUPA.url}/rest/v1/expedientes?id=eq.${id}&select=id,nroexp,nombre,demandado,lugar,mecanica,fecha,hora,croquis`,{
+      headers:{'apikey':SUPA.anon,'Authorization':'Bearer '+SUPA.token}});
+    const arr=await r.json();
+    if(arr&&arr[0]) await cargarExpediente(arr[0]);
+    else toast('No se encontró el expediente.');
+  }catch(err){ toast('No se pudo abrir el expediente: '+err.message); }
+}
+
+function mostrarCasoInfo(e){
+  const fh=[e.fecha||'', e.hora?(e.hora+' hs'):''].filter(Boolean).join(' · ');
+  const partes=(e.nombre||'')+(e.demandado?(' c/ '+e.demandado):'');
+  const el=document.getElementById('casoInfo');
+  el.innerHTML='<div class="l1">Exp. '+((e.nroexp||'s/nº')+'')+(partes?(' — '+partes):'')+'</div>'+
+               '<div class="l2">'+[fh, e.lugar||''].filter(Boolean).join(' · ').replace(/</g,'&lt;')+'</div>';
+  el.classList.add('show');
+  // prefill del cartel del expediente para el video/presentación
+  const cartel=('Exp. '+(e.nroexp||'s/nº'))+(partes?(' · '+partes):'')+(e.lugar?(' · '+e.lugar):'');
+  const ce=document.getElementById('cartelExp'); if(ce && !ce.value.trim()){ ce.value=cartel; setExpedienteCartel(); }
+}
+
+/* ============ INTÉRPRETE LOCAL DEL RELATO (sin IA, sin costo, sin internet) ============ */
+const COLORNOMBRE={'#7a2f3a':'bordó','#b5483f':'rojo','#e8e6df':'blanco','#23252b':'negro','#c0c4cc':'gris','#3a6ea5':'azul','#4c9a6a':'verde','#d9b03d':'amarillo','#d98a3d':'naranja'};
+function colorEn(s){
+  if(/bord[oó]/.test(s))return '#7a2f3a';
+  if(/\brojo|colorad/.test(s))return '#b5483f';
+  if(/blanc/.test(s))return '#e8e6df';
+  if(/negr/.test(s))return '#23252b';
+  if(/gris|platead|\bplata\b/.test(s))return '#c0c4cc';
+  if(/azul/.test(s))return '#3a6ea5';
+  if(/verde/.test(s))return '#4c9a6a';
+  if(/amarill/.test(s))return '#d9b03d';
+  if(/naranj/.test(s))return '#d98a3d';
+  return null;
+}
+function tipoPalabra(w){ w=w.toLowerCase();
+  if(/motociclet|moto/.test(w))return 'moto';
+  if(/camionet|pick|hilux|amarok|ranger|partner|kangoo/.test(w))return 'camion';
+  if(/cami[oó]n/.test(w))return 'camiongrande';
+  if(/colectivo|[oó]mnibus|micro/.test(w))return 'colectivo';
+  if(/biciclet|bici/.test(w))return 'bici';
+  if(/peat[oó]n/.test(w))return 'peaton';
+  return 'auto';
+}
+function escanearMenciones(t){
+  const RE=/motociclet\w*|\bmotos?\b|camionet\w*|pick.?up|cami[oó]n\w*|colectivos?|[oó]mnibus|\bmicros?\b|biciclet\w*|\bbicis?\b|peat[oó]n\w*|autom[oó]vil\w*|\bautos?\b|\bcoches?\b|\brodados?\b|veh[ií]culos?\b|toyota|ford|fiat|renault|peugeot|chevrolet|volkswagen|\bvw\b|etios|corolla|\bgol\b|onix|partner|kangoo|hilux|amarok|ranger/gi;
+  const out=[]; let m;
+  while((m=RE.exec(t))){
+    const tipo=tipoPalabra(m[0]); const last=out[out.length-1];
+    if(last){
+      const between=t.slice(last.end, m.index);
+      // unir solo si son palabras realmente contiguas del mismo vehiculo (ej "Toyota Etios", "auto marca Ford")
+      const contiguas=(m.index-last.end)<14 && (/^[\s,\-]*$/.test(between) || /^\s*(marca|modelo|tipo)\s*$/.test(between));
+      if(contiguas){ last.end=m.index+m[0].length; if(tipo!=='auto'&&last.tipo==='auto')last.tipo=tipo; continue; }
+    }
+    out.push({tipo, idx:m.index, end:m.index+m[0].length});
+  }
+  return out;
+}
+const NOMBRES_DIR={NS:'de norte a sur',SN:'de sur a norte',OE:'de oeste a este',EO:'de este a oeste'};
+function ejeDe(d){ return (d==='NS'||d==='SN')?'V':'H'; }
+function perpDe(d){ return ejeDe(d)==='V'?'OE':'NS'; }
+function dirPos(d){ return {NS:{axis:'V',lane:-1.8,start:-15},SN:{axis:'V',lane:1.8,start:15},
+  OE:{axis:'H',lane:1.8,start:-15},EO:{axis:'H',lane:-1.8,start:15}}[d]; }
+
+function interpretarRelato(txt){
+  const t=txt.toLowerCase();
+  const idx=re=>{ const m=t.match(re); return m?t.indexOf(m[0]):-1; };
+  const ms=escanearMenciones(t);
+  const nearest=i=>{ if(i<0||!ms.length)return null; let b=ms[0],bd=1e9; ms.forEach(m=>{const d=Math.abs(m.idx-i); if(d<bd){bd=d;b=m;}}); return b; };
+  const colorNear=i=>colorEn(t.slice(Math.max(0,i-28), i+50));
+  const NAM={auto:'Auto',moto:'Moto',camion:'Camioneta',camiongrande:'Camión',colectivo:'Colectivo',bici:'Bicicleta',peaton:'Peatón'};
+  const etq=tp=>NAM[tp].toLowerCase();
+  const colorTxt=c=>COLORNOMBRE[c]?(' '+COLORNOMBRE[c]):'';
+  const nom=(tp,c,rol)=>`${NAM[tp]}${colorTxt(c)} (${rol})`;
+
+  const artic=tp=>(tp==='moto'||tp==='bici'||tp==='camion')?'la':'el';
+
+  const calles=(t.match(/\b(calle|avenida|av\.?|avda\.?|pasaje|diagonal|ruta|camino|bulevar|boulevard|colectora)\b/g)||[]).length;
+  const cruceCue = /cruce|bocacalle|esquina|intersecci|prioridad|sin respetar|cruz|sem[aá]foro|al llegar a la (esquina|avenida|calle)/.test(t);
+  const esCruce = cruceCue || calles>=2;
+  const esRetroceso = /marcha atr[aá]s|marcha atras|retroced|en reversa|de reversa|dio (la )?reversa|dando marcha|de cola hacia atr[aá]s/.test(t);
+  const esAlcanceFuerte = /por detr[aá]s|parte trasera|de atr[aá]s|en la cola|de alcance|lo alcanz|impact\w* (en|por|contra) (la )?(parte )?(trasera|atr[aá]s)|colision\w* (contra|con) (la )?(parte )?(trasera|atr[aá]s)/.test(t);
+  const esAlcanceDebil = /detenid|frenad|esperando|parad/.test(t) && /embest|embist|choc|colision|impact/.test(t) && !esCruce;
+  const esAlcance = esAlcanceFuerte || esAlcanceDebil;
+  const esFrontal = /de frente|frontal|mano contraria|carril contrario|invad\w* (el|la|su) (carril|mano)/.test(t);
+  const tipo = esRetroceso?'retroceso' : esAlcance?'alcance' : esFrontal?'frontal' : 'cruce';
+
+  let road, vehiculos, interpretacion;
+
+  if(tipo==='retroceso'){
+    road='straight';
+    const iC=idx(/\bcontra\b|embisti\w* (a|al|contra)|colision\w* (a|al|contra)|impact\w* (a|al|contra)|choc\w* (a|al|contra)/);
+    const iR=idx(/marcha atr[aá]s|marcha atras|retroced|reversa/);
+    const victim = (iC>=0 && ms.find(m=>m.idx>iC)) || ms[ms.length-1] || {tipo:'bici',idx:0};
+    const otros = ms.filter(m=>m!==victim);
+    const striker = otros.length ? otros.reduce((b,m)=>Math.abs(m.idx-iR)<Math.abs(b.idx-iR)?m:b) : {tipo:'auto',idx:0};
+    const vC=colorNear(victim.idx)||'#3a6ea5', sC=colorNear(striker.idx)||'#b5483f';
+    vehiculos=[
+      {tipo:victim.tipo,nombre:nom(victim.tipo,vC,'cliente'),color:vC,inicio:{x:0,z:-3.8},impacto:{x:0,z:-3.8},rumboGrados:0},
+      {tipo:striker.tipo,nombre:nom(striker.tipo,sC,'demandado'),color:sC,inicio:{x:0,z:1.5},impacto:{x:0,z:-1.5},rumboGrados:0}
+    ];
+    interpretacion=`Colisión en marcha atrás: ${artic(striker.tipo)} ${etq(striker.tipo)}${colorTxt(sC)} (demandado) retrocedió e impactó con su parte trasera contra ${artic(victim.tipo)} ${etq(victim.tipo)} (cliente).`;
+  }
+  else if(tipo==='alcance'){
+    road='straight';
+    const iE=idx(/embest|embist|colision|alcanz|impact|choc/);
+    const dem=ms.find(m=>m.idx>iE) || ms[ms.length-1] || {tipo:'auto',idx:0};
+    const cli=ms.find(m=>m!==dem && m.tipo!==dem.tipo) || ms.find(m=>m!==dem) || {tipo:'auto',idx:0};
+    const cC=colorNear(cli.idx)||'#c0c4cc', dC=colorNear(dem.idx)||'#7a2f3a';
+    vehiculos=[
+      {tipo:cli.tipo,nombre:nom(cli.tipo,cC,'actor - detenido'),color:cC,inicio:{x:0,z:2},impacto:{x:0,z:2},rumboGrados:0},
+      {tipo:dem.tipo,nombre:nom(dem.tipo,dC,'demandado'),color:dC,inicio:{x:0,z:-16},impacto:{x:0,z:-1.2}}
+    ];
+    interpretacion=`Colisión por alcance: ${artic(cli.tipo)} ${etq(cli.tipo)} del actor estaba detenid${(cli.tipo==='moto'||cli.tipo==='bici'||cli.tipo==='camion')?'a':'o'} y ${artic(dem.tipo)} ${etq(dem.tipo)}${colorTxt(dC)} ${(cli.tipo==='moto'||cli.tipo==='bici'||cli.tipo==='camion')?'la':'lo'} embistió por detrás.`;
+  }
+  else if(tipo==='frontal'){
+    road='straight';
+    const v1=ms[0]||{tipo:'auto',idx:0}, v2=ms[1]||{tipo:'auto',idx:0};
+    const c1=colorNear(v1.idx)||'#3a6ea5', c2=colorNear(v2.idx)||'#b5483f';
+    vehiculos=[
+      {tipo:v1.tipo,nombre:nom(v1.tipo,c1,'cliente'),color:c1,inicio:{x:0,z:-15},impacto:{x:0,z:-0.8}},
+      {tipo:v2.tipo,nombre:nom(v2.tipo,c2,'demandado'),color:c2,inicio:{x:0,z:15},impacto:{x:0,z:0.8}}
+    ];
+    interpretacion=`Colisión frontal entre el ${etq(v1.tipo)} (cliente) y el ${etq(v2.tipo)}${colorTxt(c2)} (demandado).`;
+  }
+  else { // cruce
+    road='cross';
+    const dirRe=/norte a(l)? sur|sur a(l)? norte|oeste a(l)? este|este a(l)? oeste|hacia el (sur|norte|este|oeste)/g;
+    const dirEn=s=>{ if(/norte a(l)? sur|hacia el sur/.test(s))return'NS'; if(/sur a(l)? norte|hacia el norte/.test(s))return'SN'; if(/oeste a(l)? este|hacia el este/.test(s))return'OE'; if(/este a(l)? oeste|hacia el oeste/.test(s))return'EO'; return null; };
+    let dirs=[],mm; while((mm=dirRe.exec(t))){ const dd=dirEn(mm[0]); if(dd&&dirs[dirs.length-1]!==dd)dirs.push(dd); }
+    let d1=dirs[0]||'OE', d2=dirs[1]||perpDe(d1);
+    if(ejeDe(d1)===ejeDe(d2)) d2=perpDe(d1);
+    const iCli=idx(/cliente|el actor|la actora|circulaba|mi (cliente|representad)|v[ií]ctima/);
+    const iDem=idx(/demandad|embisti|embest|colision|la sra|el sr|conductor|otro (veh|rodado|auto)/);
+    let cli=nearest(iCli)||ms[0]||{tipo:'moto',idx:0};
+    // demandado: excluir al del cliente; preferir un vehículo de tipo distinto; el más cercano a la mención del demandado/embestida
+    const cand=ms.filter(m=>m!==cli);
+    const distintos=cand.filter(m=>m.tipo!==cli.tipo);
+    const pool=distintos.length?distintos:cand;
+    let dem={tipo:'auto',idx:0};
+    if(pool.length){
+      if(iDem>=0){ let b=pool[0],bd=1e9; pool.forEach(m=>{const dd=Math.abs(m.idx-iDem); if(dd<bd){bd=dd;b=m;}}); dem=b; }
+      else dem=pool[0];
+    }
+    const cC=colorNear(cli.idx)||'#3a6ea5', dC=colorNear(dem.idx)||'#b5483f';
+    const A=dirPos(d1), B=dirPos(d2);
+    let vx, hz;
+    if(A.axis==='V')vx=A.lane; else hz=A.lane;
+    if(B.axis==='V')vx=B.lane; else hz=B.lane;
+    if(vx===undefined)vx=0; if(hz===undefined)hz=0;
+    const mkVeh=(d,tp,c,rol)=>{ const p=dirPos(d); const ini=p.axis==='V'?{x:p.lane,z:p.start}:{x:p.start,z:p.lane}; return {tipo:tp,nombre:nom(tp,c,rol),color:c,inicio:ini,impacto:{x:vx,z:hz}}; };
+    vehiculos=[ mkVeh(d1,cli.tipo,cC,'cliente'), mkVeh(d2,dem.tipo,dC,'demandado') ];
+    interpretacion=`Colisión en cruce: ${etq(cli.tipo)} (cliente) circulando ${NOMBRES_DIR[d1]} y ${etq(dem.tipo)}${colorTxt(dC)} (demandado) circulando ${NOMBRES_DIR[d2]} que lo embiste en la bocacalle.`;
+  }
+  return {road, duracion:6, interpretacion, vehiculos};
+}
+
+function buildFromText(){
+  const desc=document.getElementById('chatInput').value.trim();
+  if(!desc){ chatMsg('Escribí o pegá primero la mecánica del hecho.','err'); if(vehicles.length===0) plantilla('cruce'); return; }
+  chatMsg('<b>Relato:</b> '+desc.replace(/</g,'&lt;'),'ai');
+  try{
+    const d=interpretarRelato(desc);
+    applyScene(d);
+    if(vehicles.length===0) plantilla('cruce');   // jamás dejar la escena vacía
+    chatMsg('<b>Croquis armado.</b> '+(d.interpretacion||'')+'<br><span class="ai-note">Revisá la escena y corregí a mano lo que haga falta. Tocá ▶ para ver el choque.</span>','ai');
+  }catch(err){
+    if(vehicles.length===0) plantilla('cruce');
+    chatMsg('No pude interpretar todo el relato; te dejé un cruce base para que lo ajustes a mano. ('+err.message+')','err');
+  }
+}
+
+function applyScene(d){
+  vehicles.forEach(v=>scene.remove(v)); vehicles=[]; deselect();
+  resetImpacts();
+  if(!realRoadsLoaded) buildRoad(d.road||'cross');
+  if(d.duracion){ duration=+d.duracion; document.getElementById('dur').value=duration; document.getElementById('durV').textContent=duration; }
+  (d.vehiculos||[]).forEach(vd=>{
+    const tipo=RADII[vd.tipo]?vd.tipo:'auto';
+    const col=parseColor(vd.color);
+    const m=buildModel(tipo,col);
+    const ini=vd.inicio||{x:-14,z:0}, imp=vd.impacto||{x:0,z:0};
+    let rot;
+    if(typeof vd.rumboGrados==='number') rot=vd.rumboGrados*Math.PI/180;
+    else rot=headingTo(ini.x,ini.z,imp.x,imp.z);
+    const kf=[{x:ini.x,z:ini.z,rot},{x:imp.x,z:imp.z,rot}];
+    const fijo = (typeof vd.rumboGrados==='number');
+    const mueve = (ini.x!==imp.x || ini.z!==imp.z);
+    m.userData={isVehicle:true,type:tipo,color:col,name:vd.nombre||NAMES[tipo],keyframes:kf,startFrac:0,endFrac:mueve?0.5:1,autoGiro:!fijo,vel:1};
+    m.position.set(ini.x,0,ini.z); m.rotation.y=0;
+    m.add(makeLabelSprite(m.userData.name));
+    scene.add(m); vehicles.push(m);
+  });
+  refreshLabels(); t=0; applyAnimation(); updateTimeLabel(); if(!realRoadsLoaded) frameAll();
+}
+
+/* -------------------------------------------------------------- TOAST */
+let toastTimer;
+function toast(msg){
+  const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),3200);
+}
+
+// keyboard
+window.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;
+  if(e.key==='Delete'||e.key==='Backspace') deleteSelected();
+  if(e.key===' '){ e.preventDefault(); togglePlay(); }
+  if(e.key==='Escape') deselect();
+});
+</script>
+</body>
+</html>
