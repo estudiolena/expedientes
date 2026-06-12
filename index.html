@@ -68,6 +68,35 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--g800);
 .stat-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--navy);line-height:1}
 .stat-sub{color:var(--g400);font-size:12px;margin-top:4px}
 
+/* ALERTAS EVENTOS */
+.alertas-card{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:var(--rl);padding:18px 22px;margin-bottom:24px;box-shadow:var(--shl);border:1px solid rgba(201,168,76,.3)}
+.alertas-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.alertas-title{display:flex;align-items:center;gap:9px;color:var(--gold-light);font-weight:600;font-size:14px;letter-spacing:.02em}
+.alertas-count{background:rgba(201,168,76,.2);color:var(--gold-light);font-size:11px;font-weight:600;padding:2px 9px;border-radius:12px}
+.alertas-grid{display:flex;flex-direction:column;gap:7px}
+.alerta-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.06);border-radius:10px;padding:10px 14px;cursor:pointer;transition:background .15s;border-left:3px solid transparent}
+.alerta-item:hover{background:rgba(255,255,255,.12)}
+.alerta-item.al-hoy{border-left-color:#e05d4d;background:rgba(192,57,43,.18)}
+.alerta-item.al-hoy:hover{background:rgba(192,57,43,.28)}
+.alerta-item.al-man{border-left-color:var(--gold)}
+.alerta-item.al-sem{border-left-color:rgba(255,255,255,.25)}
+.alerta-cuando{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:6px;flex-shrink:0;min-width:70px;text-align:center}
+.alc-hoy{background:#e05d4d;color:white}
+.alc-man{background:var(--gold);color:var(--navy)}
+.alc-sem{background:rgba(255,255,255,.12);color:rgba(255,255,255,.75)}
+.alerta-info{flex:1;min-width:0}
+.alerta-titulo{color:white;font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.alerta-meta{color:rgba(255,255,255,.5);font-size:12px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.alerta-tipo{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:10px;flex-shrink:0}
+.alt-audiencia{background:rgba(255,255,255,.12);color:#cfd9f0}
+.alt-vencimiento{background:rgba(224,93,77,.25);color:#ffb3a8}
+.alt-mediacion{background:rgba(201,168,76,.22);color:var(--gold-light)}
+.alt-pericia{background:rgba(26,107,74,.35);color:#9fd9bf}
+.alt-otro{background:rgba(255,255,255,.08);color:rgba(255,255,255,.55)}
+.alt-turno{background:rgba(110,80,170,.35);color:#cdbcf0}
+.nav-cal-badge{margin-left:auto;background:#e05d4d;color:white;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:none;align-items:center;justify-content:center;padding:0 5px}
+@media(max-width:700px){.alerta-tipo{display:none}.alerta-cuando{min-width:56px}}
+
 /* CARDS & TABLES */
 .card{background:var(--white);border:1px solid var(--g100);border-radius:var(--rl);box-shadow:var(--sh);overflow:hidden}
 .card-header{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-bottom:1px solid var(--g100)}
@@ -357,6 +386,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
       <button class="nav-btn" onclick="showView('calendario')">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         Calendario
+        <span class="nav-cal-badge" id="nav-cal-badge"></span>
       </button>
       <div class="nav-label jefe-only" style="display:none">Administración</div>
       <button class="nav-btn jefe-only" style="display:none" onclick="showView('rentabilidad')">
@@ -385,6 +415,13 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
     <div id="view-dashboard">
       <div class="topbar"><div class="topbar-title">Panel de control</div><button class="btn btn-gold" onclick="openExpModal()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nueva carpeta</button></div>
       <div class="content">
+        <div class="alertas-card" id="alertas-card" style="display:none">
+          <div class="alertas-head">
+            <div class="alertas-title"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Atención esta semana<span class="alertas-count" id="alertas-count"></span></div>
+            <button class="btn btn-gold btn-sm" onclick="showView('calendario')">Ver calendario</button>
+          </div>
+          <div class="alertas-grid" id="alertas-grid"></div>
+        </div>
         <div class="stats-grid">
           <div class="stat-card accent"><div class="stat-label">Total expedientes</div><div class="stat-value" id="st-total">0</div><div class="stat-sub">en el sistema</div></div>
           <div class="stat-card"><div class="stat-label">En curso</div><div class="stat-value" id="st-curso" style="color:var(--gold)">0</div><div class="stat-sub">activos</div></div>
@@ -754,7 +791,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
       <div style="background:var(--green-light);border:1px solid #b7e4c7;border-radius:10px;padding:12px;margin-bottom:16px;font-size:13px;color:var(--green);line-height:1.6"><strong>Honorarios automáticos:</strong> 30% cliente + 20% aseguradora = <strong>50% total</strong></div>
       <div class="form-group" style="margin-bottom:16px">
         <label>Monto total de la indemnización ($)</label>
-        <input type="text" id="indem-monto" placeholder="Ej: 15000000" style="font-size:16px;padding:12px 14px" oninput="previewIndem(this.value)">
+        <input type="text" inputmode="numeric" id="indem-monto" placeholder="Ej: 15.000.000" style="font-size:16px;padding:12px 14px" oninput="fmtMontoInput(this);previewIndem(this.value)">
       </div>
       <div id="indem-preview" style="display:none;background:var(--g50);border:1px solid var(--g100);border-radius:10px;padding:14px">
         <div style="font-size:11px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Distribución automática</div>
@@ -913,7 +950,8 @@ async function subirCroquis(expId, input){
 function h(s){if(s==null)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
 let currentUser = null, currentPerfil = null;
-let expedientes = [], perfiles = [], eventos = [];
+let expedientes = [], perfiles = [], eventos = [], turnos = [], usuariosTurnos = [];
+const TURNOS_APP_URL = 'https://benjamin12bonapelch-eng.github.io/turnos-lena/';
 let filtroEstado = '', filtroAsocId = '', currentView = 'dashboard';
 let calStates = {}, _descargaExp = null, _eventoExpId = null, _indemExpId = null;
 
@@ -969,6 +1007,7 @@ async function initApp(user) {
   rb.className = 'role-badge ' + (esJefe ? 'rb-jefe' : (esSecretaria ? 'rb-sec' : 'rb-aso'));
   await loadPerfiles();
   await Promise.all([loadExpedientes(), loadEventos()]);
+  await loadTurnos();
   showLoading(false);
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app-shell').style.display = '';
@@ -1001,6 +1040,35 @@ async function loadEventos() {
   const {data} = await sb.from('eventos').select('*').is('expediente_id',null).order('fecha');
   eventos = data || [];
 }
+async function loadTurnos() {
+  // Trae turnos (no cancelados) con su horario, y el equipo del panel de turnos para mapear nombres.
+  const desde = new Date(); desde.setDate(desde.getDate()-90);
+  const desdeStr = desde.toISOString().slice(0,10);
+  const [{data:disp},{data:ts},{data:us}] = await Promise.all([
+    sb.from('disponibilidad').select('id,fecha,hora_inicio,hora_fin').gte('fecha',desdeStr),
+    sb.from('turnos').select('*').neq('estado','cancelado'),
+    sb.from('usuarios').select('id,auth_id,nombre')
+  ]);
+  usuariosTurnos = us || [];
+  const dispMap = {};
+  (disp||[]).forEach(d=>{ dispMap[d.id]=d; });
+  let lista = (ts||[]).map(t=>{
+    const d = dispMap[t.disponibilidad_id];
+    return d ? {...t, _fecha:d.fecha, _hora:(d.hora_inicio||'').slice(0,5), _horaFin:(d.hora_fin||'').slice(0,5)} : null;
+  }).filter(Boolean);
+  // Asociados: solo turnos asignados a ellos o de sus carpetas (sus expedientes ya vienen filtrados)
+  if(!['jefe','secretaria'].includes(currentPerfil?.rol)){
+    const miUsuario = usuariosTurnos.find(u=>u.auth_id===currentUser.id);
+    const misExp = new Set(expedientes.map(e=>e.id));
+    lista = lista.filter(t=>(miUsuario&&t.abogado_asignado_id===miUsuario.id)||(t.expediente_id&&misExp.has(t.expediente_id)));
+  }
+  turnos = lista;
+}
+function nombreAbogadoTurno(t){
+  if(!t.abogado_asignado_id) return null;
+  const u = usuariosTurnos.find(x=>x.id===t.abogado_asignado_id);
+  return u ? u.nombre : null;
+}
 
 // ── VISTAS ──
 function showView(v) {
@@ -1024,7 +1092,61 @@ function showView(v) {
 }
 
 // ── DASHBOARD ──
+function renderAlertasEventos() {
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const en7 = new Date(hoy); en7.setDate(en7.getDate()+7);
+  const prox = todosEvs()
+    .filter(ev=>{const d=new Date(ev.fecha+'T00:00:00');return d>=hoy&&d<=en7;})
+    .map(ev=>({...ev, _esTurno:false}));
+  // Turnos confirmados de los próximos 7 días (ya filtrados por rol en loadTurnos)
+  turnos.forEach(t=>{
+    if(t.estado!=='confirmado') return;
+    const d = new Date(t._fecha+'T00:00:00');
+    if(d>=hoy && d<=en7){
+      const abog = nombreAbogadoTurno(t);
+      prox.push({_esTurno:true, fecha:t._fecha, hora:t._hora,
+        titulo:`Turno: ${(t.cliente_nombre||'')+' '+(t.cliente_apellido||'')}`.trim()+(t._hora?` — ${t._hora} hs`:''),
+        expediente_id:t.expediente_id||null, abog, sede:t.sede||null});
+    }
+  });
+  prox.sort((a,b)=>a.fecha.localeCompare(b.fecha)||((a.hora||'')+'').localeCompare((b.hora||'')+''));
+
+  const card = document.getElementById('alertas-card');
+  const badge = document.getElementById('nav-cal-badge');
+  if(!prox.length){
+    card.style.display='none';
+    if(badge) badge.style.display='none';
+    return;
+  }
+  card.style.display='block';
+  document.getElementById('alertas-count').textContent = prox.length;
+  if(badge){badge.style.display='inline-flex';badge.textContent=prox.length;}
+
+  const tipoLabel = {audiencia:'Audiencia',vencimiento:'Vencimiento',mediacion:'Mediación',pericia:'Pericia',otro:'Otro'};
+  document.getElementById('alertas-grid').innerHTML = prox.map(ev=>{
+    const exp = ev.expediente_id ? expedientes.find(x=>x.id===ev.expediente_id) : null;
+    const dias = Math.round((new Date(ev.fecha+'T00:00:00')-hoy)/86400000);
+    const cls = dias===0?'al-hoy':dias===1?'al-man':'al-sem';
+    const chip = dias===0?'<span class="alerta-cuando alc-hoy">Hoy</span>':dias===1?'<span class="alerta-cuando alc-man">Mañana</span>':`<span class="alerta-cuando alc-sem">${dias} días</span>`;
+    const tipo = (ev.tipo||'otro').toLowerCase();
+    const click = exp ? `goToDetail('${exp.id}')` : (ev._esTurno ? `window.open(TURNOS_APP_URL,'_blank')` : `showView('calendario')`);
+    const tag = ev._esTurno
+      ? '<span class="alerta-tipo alt-turno">Turno</span>'
+      : `<span class="alerta-tipo alt-${tipoLabel[tipo]?tipo:'otro'}">${tipoLabel[tipo]||'Otro'}</span>`;
+    const extra = ev._esTurno ? `${ev.sede?` · ${ev.sede==='caba'?'CABA':'Morón'}`:''}${ev.abog?` · atiende ${h(ev.abog)}`:''}` : '';
+    return `<div class="alerta-item ${cls}" onclick="${click}">
+      ${chip}
+      <div class="alerta-info">
+        <div class="alerta-titulo">${h(ev.titulo)}</div>
+        <div class="alerta-meta">${fmtFecha(ev.fecha)}${exp?` · ${h(exp.nroexp)||'#'+exp.id.slice(-6)} — ${h(exp.nombre)}`:''}${extra}</div>
+      </div>
+      ${tag}
+    </div>`;
+  }).join('');
+}
+
 function renderDashboard() {
+  renderAlertasEventos();
   document.getElementById('st-total').textContent = expedientes.length;
   document.getElementById('st-curso').textContent = expedientes.filter(e=>e.estado!=='Concluido').length;
   document.getElementById('st-conc').textContent = expedientes.filter(e=>e.estado==='Concluido').length;
@@ -1094,6 +1216,24 @@ function showListView() {
   const dv = document.getElementById('exp-detail');
   dv.classList.remove('open'); dv.innerHTML = '';
   renderExp();
+}
+
+function renderTurnosExp(e){
+  const lista = turnos.filter(t=>t.expediente_id===e.id).sort((a,b)=>b._fecha.localeCompare(a._fecha)||b._hora.localeCompare(a._hora));
+  if(!lista.length) return '<div style="color:var(--g400);font-size:14px;padding:4px 0">Sin turnos vinculados a esta carpeta.</div>';
+  const hoyStr = new Date().toISOString().slice(0,10);
+  const badges = {confirmado:'badge-gold',completado:'badge-green',ausente:'badge-red'};
+  const labels = {confirmado:'Confirmado',completado:'Realizada',ausente:'No se presentó'};
+  return lista.map(t=>{
+    const futuro = t._fecha>=hoyStr && t.estado==='confirmado';
+    const abog = nombreAbogadoTurno(t);
+    return `<div class="gasto-row">
+      <div class="gasto-fecha" style="min-width:120px;${futuro?'color:var(--navy);font-weight:600':''}">${fmtFecha(t._fecha)}</div>
+      <div style="min-width:78px;font-size:13px;color:var(--g600)">${h(t._hora)}${t._horaFin?'–'+h(t._horaFin):''} hs</div>
+      <div class="gasto-desc">${h((t.cliente_nombre||'')+' '+(t.cliente_apellido||''))}${t.sede?` <span style="color:var(--g400);font-size:12px">· ${t.sede==='caba'?'CABA':'Morón'}</span>`:''}${abog?` <span style="color:var(--g400);font-size:12px">· atiende ${h(abog)}</span>`:''}</div>
+      <span class="badge ${badges[t.estado]||'badge-gray'}">${labels[t.estado]||h(t.estado)}</span>
+    </div>`;
+  }).join('');
 }
 
 function showDetailView(e) {
@@ -1198,6 +1338,14 @@ function showDetailView(e) {
     </div>
 
     <div class="full-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="detail-card-title" style="margin-bottom:0">Turnos del cliente</div>
+        <button class="btn btn-outline btn-sm" onclick="window.open(TURNOS_APP_URL,'_blank')">Panel de turnos ↗</button>
+      </div>
+      ${renderTurnosExp(e)}
+    </div>
+
+    <div class="full-card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
         <div class="detail-card-title" style="margin-bottom:0">Gastos</div>
         <span class="badge badge-navy">Total: $${tG.toLocaleString('es-AR')}</span>
@@ -1213,7 +1361,7 @@ function showDetailView(e) {
       </div>
       <div class="add-gasto-form">
         <div class="form-group"><label>Descripción</label><input id="g-desc-${e.id}" placeholder="Sellado, pericia..."></div>
-        <div class="form-group"><label>Monto ($)</label><input type="number" id="g-monto-${e.id}" placeholder="0" min="0"></div>
+        <div class="form-group"><label>Monto ($)</label><input type="text" inputmode="numeric" id="g-monto-${e.id}" placeholder="0" oninput="fmtMontoInput(this)"></div>
         <div class="form-group"><label>Fecha</label><input type="date" id="g-fecha-${e.id}"></div>
         <div class="form-group"><label style="opacity:0">.</label><button class="btn btn-primary btn-sm" onclick="agregarGasto('${e.id}')">+ Agregar</button></div>
       </div>
@@ -1591,10 +1739,11 @@ async function guardarEdicion() {
 // ── GASTOS ──
 async function agregarGasto(expId) {
   const desc = document.getElementById('g-desc-'+expId).value.trim();
-  const monto = document.getElementById('g-monto-'+expId).value;
+  const monto = parseMonto(document.getElementById('g-monto-'+expId).value);
   const fecha = document.getElementById('g-fecha-'+expId).value;
   if(!desc||!monto){showToast('Completá descripción y monto',true);return;}
-  await sb.from('gastos').insert({expediente_id:expId, descripcion:desc, monto:parseFloat(monto), fecha:fecha||null});
+  const {error} = await sb.from('gastos').insert({expediente_id:expId, descripcion:desc, monto:monto, fecha:fecha||null});
+  if(error){showToast('Error al guardar gasto: '+error.message,true);return;}
   await loadExpedientes();
   const e = expedientes.find(x=>x.id===expId);
   if(e) showDetailView(e);
@@ -1906,6 +2055,7 @@ async function guardarEvento(){
   if(error){showToast('Error: '+error.message,true);return;}
   await loadEventos();await loadExpedientes();
   closeEventoModal();showToast('Evento guardado');
+  renderAlertasEventos();
   if(currentView==='dashboard') renderDashboard();
   if(currentView==='calendario') renderCalGlobal();
   const dv=document.getElementById('exp-detail');
@@ -1914,6 +2064,7 @@ async function guardarEvento(){
 async function eliminarEvento(evId,expId){
   await sb.from('eventos').delete().eq('id',evId);
   await loadEventos();await loadExpedientes();
+  renderAlertasEventos();
   if(currentView==='dashboard') renderDashboard();
   if(currentView==='calendario') renderCalGlobal();
   if(expId){const e=expedientes.find(x=>x.id===expId);if(e)renderCalExp(e);}
@@ -2276,6 +2427,14 @@ function confirmarDescarga(){
 
 // ── HELPERS ──
 function estadoBadge(e){const map={'En trámite':'badge-gold','Mediación':'badge-navy','Juicio':'badge-red','Concluido':'badge-green'};return`<span class="badge ${map[e]||'badge-gray'}">${h(e)||'—'}</span>`;}
+// Montos en pesos: formateo de miles en vivo y parseo seguro (acepta "20.000", "1.500.000", "$ 85000")
+function parseMonto(v){
+  return parseInt((v+'').replace(/[^0-9]/g,''),10)||0;
+}
+function fmtMontoInput(el){
+  const n=parseMonto(el.value);
+  el.value = n ? n.toLocaleString('es-AR') : '';
+}
 function fmtFecha(f){if(!f)return'—';const[y,m,d]=f.split('-');const ms=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];return`${parseInt(d)} de ${ms[parseInt(m)-1]} de ${y}`;}
 function fmtSize(b){if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';return(b/1048576).toFixed(1)+' MB';}
 function fmtExt(n){const m=n.match(/\.([a-zA-Z0-9]+)$/);return m?m[1].toUpperCase():'FILE';}
