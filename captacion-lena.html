@@ -119,9 +119,15 @@
   .plan-table th{position:sticky;top:0;background:var(--navy);color:#fff;font-weight:600;font-size:11px;letter-spacing:.5px;text-transform:uppercase;padding:9px 11px;text-align:left;z-index:1}
   .plan-table td{border-bottom:1px solid var(--g100);border-right:1px solid var(--g100);padding:3px 6px;color:var(--g800);max-width:260px;overflow:hidden;text-overflow:ellipsis}
   .plan-table tbody tr:hover{background:var(--g50)}
-  .plan-table input,.plan-table select{border:1px solid transparent;background:transparent;border-radius:6px;padding:5px 7px;font-size:13px;color:var(--g800);width:100%;min-width:90px;font-family:inherit}
-  .plan-table input:focus,.plan-table select:focus{border-color:var(--gold);background:var(--white);outline:none}
-  .plan-table input:hover,.plan-table select:hover{background:var(--g50)}
+  .plan-table input,.plan-table select{border:1px solid var(--g200);background:var(--white);border-radius:6px;padding:5px 7px;font-size:13px;color:var(--g800);width:100%;min-width:90px;font-family:inherit}
+  .plan-table input:focus,.plan-table select:focus{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-pale);outline:none}
+  .plan-table input:hover,.plan-table select:hover{border-color:var(--gold-light)}
+  .plan-tab.nueva{border-style:dashed;color:var(--gold);border-color:var(--gold);background:var(--white)}
+  .plan-actions{display:flex;gap:8px;padding:0 16px 12px;flex-wrap:wrap}
+  .row-add{background:var(--navy);color:#fff;border:none;border-radius:30px;padding:8px 16px;font-size:13px;font-weight:600}
+  .row-add:hover{background:var(--navy-mid)}
+  .row-add.danger{background:var(--white);color:var(--red);border:1px solid rgba(192,57,43,.3)}
+  .row-add.danger:hover{background:var(--red-light)}
 
   /* DASHBOARD */
   .dash-wrap{max-width:1000px;margin:0 auto}
@@ -236,6 +242,16 @@
   .mini-act{background:none;border:1px solid var(--g200);border-radius:7px;font-size:11px;color:var(--navy);padding:5px 9px;font-weight:600}
   .del-ev{background:none;border:none;color:var(--g400);font-size:16px}
   .del-ev:hover{color:var(--red)}
+  .vinc-btn{background:var(--gold-pale);border:1px solid var(--gold);color:var(--navy);border-radius:20px;padding:4px 11px;font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+  .vinc-btn:hover{background:var(--gold);color:#fff}
+  .vinc-btn.ok{background:rgba(39,150,90,.12);border-color:var(--green);color:var(--green)}
+  .vinc-mini{background:none;border:none;color:var(--gold);font-size:11px;font-weight:600;cursor:pointer;text-decoration:underline;margin-left:6px}
+  .vinc-list{display:flex;flex-direction:column;gap:6px;max-height:46vh;overflow-y:auto}
+  .vinc-item{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;background:var(--g50);border:1px solid var(--g100);border-radius:10px;padding:11px 13px;cursor:pointer;font-family:inherit}
+  .vinc-item:hover{background:var(--gold-pale);border-color:var(--gold)}
+  .vinc-item .vi-nom{font-weight:600;color:var(--navy);font-size:14px}
+  .vinc-item .vi-exp{font-size:12px;color:var(--g600);background:var(--white);border:1px solid var(--g200);border-radius:8px;padding:2px 8px;white-space:nowrap}
+  .vinc-empty{text-align:center;color:var(--g400);padding:24px;font-size:13px}
 
   #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:var(--white);padding:13px 22px;border-radius:var(--r);font-size:14px;z-index:60;opacity:0;transition:.3s;box-shadow:var(--shl)}
   #toast.show{transform:translateX(-50%) translateY(0);opacity:1}
@@ -297,11 +313,11 @@
   <div class="view" id="view-planilla">
     <div class="plan-wrap">
       <div class="plan-tabs">
-        <button class="plan-tab active" id="ptab-cli" onclick="setPlan('cliente')">Clientes</button>
-        <button class="plan-tab" id="ptab-pot" onclick="setPlan('potencial')">Futuros clientes</button>
+        <div id="planTabs" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"></div>
         <button class="export-btn" onclick="exportCSV()">⬇ Exportar a Excel</button>
         <div class="plan-note" id="planNote"></div>
       </div>
+      <div class="plan-actions" id="planActions"></div>
       <div class="plan-scroll"><table class="plan-table" id="planTable"></table></div>
     </div>
   </div>
@@ -398,6 +414,16 @@
   </div>
 </div>
 
+<div class="modal-bg" id="vincBg">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-head"><h2>Vincular expediente</h2><button class="x" onclick="cerrarVincular()">✕</button></div>
+    <div class="modal-body">
+      <input id="vincSearch" class="search-inp" placeholder="🔎 Escribí el nombre del expediente…" oninput="filtrarExp(this.value)" style="width:100%;margin-bottom:12px">
+      <div id="vincList" class="vinc-list"></div>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -422,12 +448,14 @@ const CLIENTE_COLS=[
   {f:'telefono',h:'Teléfono',t:'text'},{f:'direccion',h:'Dirección',t:'text'},{f:'lugar_accidente',h:'Lugar del accidente',t:'text'},
   {f:'tipo_accidente',h:'Tipo de accidente',t:'text'},{f:'descripcion',h:'Lesiones',t:'text'},
   {f:'asegurado',h:'Aseg.',t:'aseg'},{f:'compania_seguros',h:'Compañía',t:'text'},
-  {f:'responsable',h:'Resp.',t:'resp'},{f:'ultimo_contacto',h:'Últ. contacto',t:'date'},{f:'notas',h:'Observaciones',t:'text'}];
+  {f:'responsable',h:'Resp.',t:'resp'},{f:'ultimo_contacto',h:'Últ. contacto',t:'date'},{f:'notas',h:'Observaciones',t:'text'},
+  {f:'expediente_id',h:'Carpeta',t:'carpeta'}];
 const POT_COLS=[
   {f:'nombre',h:'Nombre',t:'text'},{f:'apellido',h:'Apellido',t:'text'},{f:'telefono',h:'Teléfono',t:'text'},
   {f:'proximo_contacto',h:'Volver a hablar',t:'pdate'},{f:'responsable',h:'Resp.',t:'resp'}];
 
-let ME=null,LEADS=[],MSGS=[],AGENDA=[],current=null,curView='board';
+let ME=null,LEADS=[],MSGS=[],AGENDA=[],EXPS=[],current=null,curView='board';
+let PLANILLAS=[],customRows=[];
 let boardFilter='all',planSub='cliente',search='',onlyMine=false;
 let currentConv='todos',unread={},pendingFile=null;
 let calMonth=new Date().getMonth(),calYear=new Date().getFullYear(),dayCtx=null;
@@ -449,10 +477,15 @@ async function login(){
   const btn=document.getElementById('loginBtn'),msg=document.getElementById('loginMsg');
   if(!email||!pass){msg.textContent='Completá email y contraseña.';return}
   btn.disabled=true;btn.innerHTML='<span class="loader"></span>';msg.textContent='';
-  const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
-  if(error){msg.textContent='Email o contraseña incorrectos.';btn.disabled=false;btn.textContent='Entrar';return}
-  if(!EQUIPO[data.user.id]){msg.textContent='Este panel es solo para el equipo de captación.';await sb.auth.signOut();btn.disabled=false;btn.textContent='Entrar';return}
-  startApp(data.user);
+  try{
+    const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
+    if(error){msg.textContent=error.message==='Invalid login credentials'?'Email o contraseña incorrectos.':error.message;btn.disabled=false;btn.textContent='Entrar';return}
+    if(!EQUIPO[data.user.id]){msg.textContent='Este panel es solo para el equipo de captación.';await sb.auth.signOut();btn.disabled=false;btn.textContent='Entrar';return}
+    startApp(data.user);
+  }catch(e){
+    msg.textContent='No conecta con el servidor. Abrí la app desde el link de GitHub (https://), no el archivo local.';
+    btn.disabled=false;btn.textContent='Entrar';
+  }
 }
 async function logout(){await sb.auth.signOut();location.reload()}
 async function startApp(user){
@@ -465,7 +498,7 @@ async function startApp(user){
   const opts='<option value="">Sin asignar</option>'+Object.entries(EQUIPO).map(([id,e])=>`<option value="${id}">${e.n}</option>`).join('');
   document.getElementById('mResp').innerHTML=opts;document.getElementById('evResp').innerHTML=opts;
   buildConvBar();
-  await Promise.all([loadLeads(),loadMsgs(),loadAgenda()]);
+  await Promise.all([loadLeads(),loadMsgs(),loadAgenda(),loadPlanillas(),loadExps()]);
   subscribeRealtime();
 }
 
@@ -478,6 +511,11 @@ async function loadLeads(){
   if(curView==='planilla'&&!editing)renderPlanilla();
   if(curView==='agenda')renderCalendar();
   if(curView==='dash')renderDashboard();
+}
+async function loadExps(){
+  const {data,error}=await sb.from('expedientes').select('id,nroexp,nombre').order('creado_at',{ascending:false});
+  if(!error)EXPS=data||[];
+  if(curView==='planilla'&&planSub==='cliente')renderPlanilla();
 }
 function setFilter(f){boardFilter=(boardFilter===f?'all':f);renderStats();renderBoard()}
 function renderStats(){
@@ -528,22 +566,33 @@ function renderHoy(){
   b.innerHTML=`<div class="hoy-title">📅 Hoy hay que retomar / hacer</div><div class="hoy-items">${items.join('')}</div>`;
 }
 function exportCSV(){
-  const cols=planSub==='cliente'?CLIENTE_COLS:POT_COLS;
-  const rows=LEADS.filter(l=>colDe(l)===planSub).filter(matchSearch);
-  const cell=(r,c)=>{
-    let v;
-    if(c.f==='_fecha')v=(r.creado_at||r.ultimo_contacto)?new Date(r.creado_at||r.ultimo_contacto).toLocaleDateString('es-AR'):'';
-    else if(c.t==='resp')v=EQUIPO[r.responsable]?EQUIPO[r.responsable].n:'';
-    else if(c.t==='date'&&r[c.f])v=new Date(r[c.f]).toLocaleDateString('es-AR');
-    else if(c.t==='pdate'&&r[c.f])v=new Date(r[c.f]+'T12:00:00').toLocaleDateString('es-AR');
-    else v=r[c.f]||'';
-    return '"'+String(v).replace(/"/g,'""')+'"';
-  };
-  const lines=[cols.map(c=>'"'+c.h+'"').join(',')].concat(rows.map(r=>cols.map(c=>cell(r,c)).join(',')));
+  let head,lines,fname;
+  if(planSub!=='cliente'&&planSub!=='potencial'){
+    const def=PLANILLAS.find(p=>p.id===planSub);if(!def){toast('Nada para exportar',true);return}
+    const cols=def.columnas||[];
+    head=cols.map(c=>'"'+c.h+'"').join(',');
+    lines=[head].concat(customRows.map(r=>cols.map(c=>'"'+String((r.datos&&r.datos[c.k])||'').replace(/"/g,'""')+'"').join(',')));
+    fname=def.nombre.replace(/[^a-z0-9]+/gi,'_').toLowerCase();
+  }else{
+    const cols=planSub==='cliente'?CLIENTE_COLS:POT_COLS;
+    const rows=LEADS.filter(l=>colDe(l)===planSub).filter(matchSearch);
+    const cell=(r,c)=>{
+      let v;
+      if(c.f==='_fecha')v=(r.creado_at||r.ultimo_contacto)?new Date(r.creado_at||r.ultimo_contacto).toLocaleDateString('es-AR'):'';
+      else if(c.t==='carpeta'){const e=expDe(r.expediente_id);v=e?(e.nroexp||e.nombre||'vinculada'):(r.expediente_id?'vinculada':'')}
+      else if(c.t==='resp')v=EQUIPO[r.responsable]?EQUIPO[r.responsable].n:'';
+      else if(c.t==='date'&&r[c.f])v=new Date(r[c.f]).toLocaleDateString('es-AR');
+      else if(c.t==='pdate'&&r[c.f])v=new Date(r[c.f]+'T12:00:00').toLocaleDateString('es-AR');
+      else v=r[c.f]||'';
+      return '"'+String(v).replace(/"/g,'""')+'"';
+    };
+    lines=[cols.map(c=>'"'+c.h+'"').join(',')].concat(rows.map(r=>cols.map(c=>cell(r,c)).join(',')));
+    fname=planSub==='cliente'?'clientes':'futuros_clientes';
+  }
   const csv='\ufeff'+lines.join('\r\n');
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
-  a.download=(planSub==='cliente'?'clientes':'futuros_clientes')+'_lena.csv';
+  a.download=fname+'_lena.csv';
   document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href),1000);
   toast('Exportado para Excel');
@@ -552,7 +601,8 @@ function cardEl(l){
   const d=diasSin(l.ultimo_contacto),resp=EQUIPO[l.responsable];
   const c=document.createElement('div');c.className='card';c.draggable=true;
   const nom=esc(l.nombre)+(l.apellido?' '+esc(l.apellido):'');
-  c.innerHTML=`<div class="age" style="background:${ageColor(d)}"></div><div class="card-in"><div class="nm">${nom} ${l.fuente?`<span class="src ${esc(l.fuente)}">${esc(l.fuente)}</span>`:''}</div>${l.descripcion?`<div class="desc">${esc(l.descripcion)}</div>`:''}<div class="meta"><span class="days ${ageClass(d)}">${d===0?'contacto hoy':'hace '+d+'d'}</span>${resp?`<span class="resp-av" style="background:${resp.c}" title="${resp.n}">${resp.i}</span>`:'<span style="font-size:10px;color:var(--g400)">sin asignar</span>'}</div></div>`;
+  const vinc=colDe(l)==='cliente'?(l.expediente_id?`<button class="vinc-btn ok" onclick="event.stopPropagation();abrirVincular('${l.id}')">✓ carpeta vinculada</button>`:`<button class="vinc-btn" onclick="event.stopPropagation();abrirVincular('${l.id}')">🔗 Vincular expediente</button>`):'';
+  c.innerHTML=`<div class="age" style="background:${ageColor(d)}"></div><div class="card-in"><div class="nm">${nom} ${l.fuente?`<span class="src ${esc(l.fuente)}">${esc(l.fuente)}</span>`:''}</div>${l.descripcion?`<div class="desc">${esc(l.descripcion)}</div>`:''}<div class="meta"><span class="days ${ageClass(d)}">${d===0?'contacto hoy':'hace '+d+'d'}</span>${resp?`<span class="resp-av" style="background:${resp.c}" title="${resp.n}">${resp.i}</span>`:'<span style="font-size:10px;color:var(--g400)">sin asignar</span>'}</div>${vinc?`<div style="margin-top:8px">${vinc}</div>`:''}</div>`;
   c.addEventListener('dragstart',e=>e.dataTransfer.setData('id',l.id));
   c.addEventListener('click',()=>openModal(l));
   return c;
@@ -655,13 +705,47 @@ async function subirArchivo(ev){
 }
 
 // PLANILLA
-function setPlan(s){planSub=s;document.getElementById('ptab-cli').classList.toggle('active',s==='cliente');document.getElementById('ptab-pot').classList.toggle('active',s==='potencial');renderPlanilla()}
+async function setPlan(s){
+  planSub=s;
+  if(s!=='cliente'&&s!=='potencial'){
+    const {data}=await sb.from('planillas_filas').select('*').eq('planilla_id',s).order('creado_at');
+    customRows=data||[];
+  }
+  renderPlanTabs();renderPlanActions();renderPlanilla();
+}
 function canEditPlan(){return ME&&ME.id===SANTIAGO_ID}
+async function loadPlanillas(){
+  const {data,error}=await sb.from('planillas').select('*').order('creado_at');
+  if(!error)PLANILLAS=data||[];
+  if(curView==='planilla')renderPlanTabs();
+}
+function renderPlanTabs(){
+  const c=document.getElementById('planTabs');if(!c)return;
+  let h=`<button class="plan-tab ${planSub==='cliente'?'active':''}" onclick="setPlan('cliente')">Clientes</button>`;
+  h+=`<button class="plan-tab ${planSub==='potencial'?'active':''}" onclick="setPlan('potencial')">Futuros clientes</button>`;
+  PLANILLAS.forEach(p=>{h+=`<button class="plan-tab ${planSub===p.id?'active':''}" onclick="setPlan('${p.id}')">${esc(p.nombre)}</button>`});
+  if(canEditPlan())h+=`<button class="plan-tab nueva" onclick="nuevaPlanilla()">+ Nueva planilla</button>`;
+  c.innerHTML=h;
+}
+function renderPlanActions(){
+  const a=document.getElementById('planActions');if(!a)return;
+  if(!canEditPlan()){a.innerHTML='';return}
+  let h=`<button class="row-add" onclick="addRow()">+ Agregar fila</button>`;
+  if(planSub!=='cliente'&&planSub!=='potencial')h+=`<button class="row-add danger" onclick="delPlanilla('${planSub}')">Eliminar esta planilla</button>`;
+  a.innerHTML=h;
+}
+function expDe(id){return EXPS.find(e=>e.id===id)}
 function cellHtml(r,col,edit){
   if(col.t==='ro'){
     let v='';
     if(col.f==='_fecha'&&(r.creado_at||r.ultimo_contacto))v=new Date(r.creado_at||r.ultimo_contacto).toLocaleDateString('es-AR');
     return `<td>${esc(v)}</td>`;
+  }
+  if(col.t==='carpeta'){
+    const e=expDe(r.expediente_id);
+    if(r.expediente_id)return `<td><span style="color:var(--green);font-weight:600">✓ ${esc(e?(e.nroexp||e.nombre||'vinculada'):'vinculada')}</span>${edit?`<button class="vinc-mini" onclick="abrirVincular('${r.id}')">cambiar</button>`:''}</td>`;
+    if(!edit)return `<td><span style="color:var(--g400)">sin carpeta</span></td>`;
+    return `<td><button class="vinc-btn" onclick="abrirVincular('${r.id}')">🔗 Vincular</button></td>`;
   }
   const val=r[col.f];
   if(!edit){
@@ -678,14 +762,39 @@ function cellHtml(r,col,edit){
   if(col.t==='aseg')return `<td><select ${oc}><option value="">—</option>${['Sí','No','Se desconoce'].map(o=>`<option ${val===o?'selected':''}>${o}</option>`).join('')}</select></td>`;
   return `<td><input value="${esc(val||'')}" ${oc}></td>`;
 }
+async function vincularCarpeta(leadId,expId){
+  if(!expId)return;
+  const {error}=await sb.from('leads_captacion').update({expediente_id:expId,estado:'cliente',actualizado_at:new Date().toISOString()}).eq('id',leadId);
+  if(error){toast('Error al vincular: '+error.message,true);return}
+  const l=LEADS.find(x=>x.id===leadId);if(l){l.expediente_id=expId;l.estado='cliente'}
+  toast('Cliente vinculado a la carpeta');renderPlanilla();renderBoard();
+}
 function renderPlanilla(){
   const edit=canEditPlan();
   document.getElementById('planNote').innerHTML=edit?'<span class="lock">Modo edición</span> Se guarda solo · todos lo ven en vivo':'<span class="lock">Solo lectura</span> Santiago edita · vos lo ves en vivo';
+  if(planSub==='cliente'||planSub==='potencial')return renderBuiltin(edit);
+  renderCustom(edit);
+}
+function renderBuiltin(edit){
   const cols=planSub==='cliente'?CLIENTE_COLS:POT_COLS;
   const rows=LEADS.filter(l=>colDe(l)===planSub).filter(matchSearch);
-  let html='<thead><tr>'+cols.map(c=>`<th>${c.h}</th>`).join('')+'</tr></thead><tbody>';
-  if(!rows.length)html+=`<tr><td colspan="${cols.length}" style="text-align:center;color:var(--g400);padding:24px">${planSub==='cliente'?'Todavía no hay clientes cerrados':'Sin futuros clientes cargados'}</td></tr>`;
-  rows.forEach(r=>{html+='<tr>'+cols.map(c=>cellHtml(r,c,edit)).join('')+'</tr>'});
+  let html='<thead><tr>'+cols.map(c=>`<th>${c.h}</th>`).join('')+(edit?'<th style="width:40px"></th>':'')+'</tr></thead><tbody>';
+  if(!rows.length)html+=`<tr><td colspan="${cols.length+(edit?1:0)}" style="text-align:center;color:var(--g400);padding:24px">${planSub==='cliente'?'Sin clientes — toc\u00e1 "Agregar fila"':'Sin futuros clientes — toc\u00e1 "Agregar fila"'}</td></tr>`;
+  rows.forEach(r=>{html+='<tr>'+cols.map(c=>cellHtml(r,c,edit)).join('')+(edit?`<td><button class="del-ev" onclick="delLead('${r.id}')" title="Eliminar fila">🗑</button></td>`:'')+'</tr>'});
+  document.getElementById('planTable').innerHTML=html+'</tbody>';
+}
+function renderCustom(edit){
+  const def=PLANILLAS.find(p=>p.id===planSub);
+  if(!def){document.getElementById('planTable').innerHTML='';return}
+  const cols=def.columnas||[];
+  let html='<thead><tr>'+cols.map(c=>`<th>${esc(c.h)}</th>`).join('')+(edit?'<th style="width:40px"></th>':'')+'</tr></thead><tbody>';
+  if(!customRows.length)html+=`<tr><td colspan="${cols.length+1}" style="text-align:center;color:var(--g400);padding:24px">Planilla vacía — toc\u00e1 "Agregar fila"</td></tr>`;
+  customRows.forEach(r=>{
+    html+='<tr>'+cols.map(c=>{
+      const val=(r.datos&&r.datos[c.k])||'';
+      return edit?`<td><input value="${esc(val)}" onchange="saveCustomCell('${r.id}','${c.k}',this)"></td>`:`<td>${esc(val)}</td>`;
+    }).join('')+(edit?`<td><button class="del-ev" onclick="delCustomRow('${r.id}')">🗑</button></td>`:'')+'</tr>';
+  });
   document.getElementById('planTable').innerHTML=html+'</tbody>';
 }
 async function saveCell(id,field,el){
@@ -696,6 +805,79 @@ async function saveCell(id,field,el){
   if(error){toast('Error al guardar: '+error.message,true);return}
   const l=LEADS.find(x=>x.id===id);if(l)l[field]=upd[field];
   renderStats();renderBoard();
+}
+async function saveCustomCell(rowId,key,el){
+  const r=customRows.find(x=>x.id===rowId);if(!r)return;
+  const datos=Object.assign({},r.datos||{});datos[key]=el.value;
+  const {error}=await sb.from('planillas_filas').update({datos,actualizado_at:new Date().toISOString()}).eq('id',rowId);
+  if(error){toast('Error al guardar: '+error.message,true);return}
+  r.datos=datos;
+}
+async function addRow(){
+  if(planSub==='cliente'||planSub==='potencial'){
+    const {error}=await sb.from('leads_captacion').insert({nombre:'(nuevo)',estado:planSub,fuente:'WhatsApp',responsable:ME.id,creado_por:ME.id,ultimo_contacto:new Date().toISOString()});
+    if(error){toast('Error: '+error.message,true);return}
+    toast('Fila agregada — completala en la tabla');await loadLeads();
+  }else{
+    const {data,error}=await sb.from('planillas_filas').insert({planilla_id:planSub,datos:{},creado_por:ME.id}).select().single();
+    if(error){toast('Error: '+error.message,true);return}
+    customRows.push(data);renderPlanilla();toast('Fila agregada');
+  }
+}
+async function nuevaPlanilla(){
+  const nombre=prompt('Nombre de la nueva planilla (ej: Mediaciones, Cobros, Pendientes):');
+  if(!nombre||!nombre.trim())return;
+  const colsStr=prompt('Columnas separadas por coma (ej: Nombre, Teléfono, Estado, Observaciones):');
+  if(!colsStr||!colsStr.trim())return;
+  const columnas=colsStr.split(',').map((h,i)=>({k:'c'+(i+1),h:h.trim()})).filter(c=>c.h);
+  if(!columnas.length){toast('Poné al menos una columna.',true);return}
+  const {data,error}=await sb.from('planillas').insert({nombre:nombre.trim(),columnas,creado_por:ME.id}).select().single();
+  if(error){toast('Error: '+error.message,true);return}
+  PLANILLAS.push(data);customRows=[];toast('Planilla creada');setPlan(data.id);
+}
+async function delCustomRow(id){
+  if(!confirm('¿Eliminar esta fila?'))return;
+  const {error}=await sb.from('planillas_filas').delete().eq('id',id);
+  if(error){toast('Error: '+error.message,true);return}
+  customRows=customRows.filter(r=>r.id!==id);renderPlanilla();
+}
+async function delPlanilla(id){
+  if(!confirm('¿Eliminar esta planilla entera y todas sus filas? No se puede deshacer.'))return;
+  const {error}=await sb.from('planillas').delete().eq('id',id);
+  if(error){toast('Error: '+error.message,true);return}
+  PLANILLAS=PLANILLAS.filter(p=>p.id!==id);planSub='cliente';customRows=[];renderPlanTabs();renderPlanActions();renderPlanilla();toast('Planilla eliminada');
+}
+async function delLead(id){
+  const l=LEADS.find(x=>x.id===id);
+  const nom=l?(l.nombre+(l.apellido?' '+l.apellido:'')):'esta fila';
+  if(!confirm('¿Eliminar la fila de '+nom+'? No se puede deshacer.'))return;
+  const {error}=await sb.from('leads_captacion').delete().eq('id',id);
+  if(error){toast('Error al eliminar: '+error.message,true);return}
+  LEADS=LEADS.filter(x=>x.id!==id);renderPlanilla();renderBoard();renderStats();toast('Fila eliminada');
+}
+let vincLeadId=null;
+function abrirVincular(leadId){
+  vincLeadId=leadId;
+  const s=document.getElementById('vincSearch');s.value='';
+  renderVincList('');
+  document.getElementById('vincBg').classList.add('open');
+  setTimeout(()=>s.focus(),60);
+}
+function cerrarVincular(){document.getElementById('vincBg').classList.remove('open');vincLeadId=null}
+function filtrarExp(q){renderVincList(q)}
+function renderVincList(q){
+  const c=document.getElementById('vincList');
+  if(!EXPS.length){c.innerHTML='<div class="vinc-empty">No hay expedientes cargados en el panel todavía.</div>';return}
+  q=(q||'').trim().toLowerCase();
+  let list=q?EXPS.filter(e=>((e.nombre||'')+' '+(e.nroexp||'')).toLowerCase().includes(q)):EXPS;
+  const tot=list.length;list=list.slice(0,40);
+  if(!list.length){c.innerHTML='<div class="vinc-empty">Sin resultados para "'+esc(q)+'".</div>';return}
+  c.innerHTML=list.map(e=>`<button class="vinc-item" onclick="elegirExp('${e.id}')"><span class="vi-nom">${esc(e.nombre||'(sin nombre)')}</span>${e.nroexp?`<span class="vi-exp">${esc(e.nroexp)}</span>`:''}</button>`).join('')+(tot>40?`<div class="vinc-empty">Mostrando 40 de ${tot}. Afiná la búsqueda.</div>`:'');
+}
+async function elegirExp(expId){
+  const id=vincLeadId;
+  cerrarVincular();
+  if(id)await vincularCarpeta(id,expId);
 }
 
 // DASHBOARD
@@ -835,7 +1017,7 @@ async function delAgenda(id){if(!confirm('¿Eliminar?'))return;await sb.from('ag
 function showView(v){
   curView=v;
   ['board','planilla','agenda','dash','chat'].forEach(x=>{document.getElementById('view-'+x).style.display=x===v?'block':'none';document.getElementById('tab-'+x).classList.toggle('active',x===v)});
-  if(v==='planilla')renderPlanilla();
+  if(v==='planilla'){renderPlanTabs();renderPlanActions();renderPlanilla()}
   if(v==='agenda')renderCalendar();
   if(v==='dash')renderDashboard();
   if(v==='chat'){unread[currentConv]=0;updateBadges();renderChat()}
@@ -845,6 +1027,14 @@ function showView(v){
 function subscribeRealtime(){
   sb.channel('rt-leads').on('postgres_changes',{event:'*',schema:'public',table:'leads_captacion'},()=>loadLeads()).subscribe();
   sb.channel('rt-agenda').on('postgres_changes',{event:'*',schema:'public',table:'agenda_captacion'},()=>loadAgenda()).subscribe();
+  sb.channel('rt-planillas').on('postgres_changes',{event:'*',schema:'public',table:'planillas'},()=>loadPlanillas()).subscribe();
+  sb.channel('rt-exps').on('postgres_changes',{event:'*',schema:'public',table:'expedientes'},()=>loadExps()).subscribe();
+  sb.channel('rt-pfilas').on('postgres_changes',{event:'*',schema:'public',table:'planillas_filas'},async()=>{
+    if(curView!=='planilla'||planSub==='cliente'||planSub==='potencial')return;
+    const ae=document.activeElement;if(ae&&ae.closest&&ae.closest('.plan-table'))return;
+    const {data}=await sb.from('planillas_filas').select('*').eq('planilla_id',planSub).order('creado_at');
+    customRows=data||[];renderPlanilla();
+  }).subscribe();
   sb.channel('rt-msgs').on('postgres_changes',{event:'INSERT',schema:'public',table:'mensajes_equipo'},payload=>{
     const m=payload.new;
     if(!(m.destinatario==null||m.autor===ME.id||m.destinatario===ME.id))return;
