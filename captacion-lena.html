@@ -375,7 +375,10 @@
         <div class="f"><label>Responsable</label><select id="mResp"></select></div>
         <div class="f"><label>Estado</label><select id="mEstado"><option value="potencial">Futuro cliente</option><option value="cliente">Cliente</option></select></div>
       </div>
-      <div class="f"><label>¿Qué día volver a hablar?</label><input id="mProximo" type="date"><div class="hint">Aparece en el calendario como recordatorio para retomar.</div></div>
+      <div class="grid2">
+        <div class="f"><label>Último contacto</label><input id="mUltimo" type="date"><div class="hint">Cuándo hablaste por última vez. Si no fue hoy, <b>cambialo</b> — así el "hace X días" y el "a retomar" salen reales.</div></div>
+        <div class="f"><label>¿Qué día volver a hablar? <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--g400)">— opcional</span></label><input id="mProximo" type="date"><div class="hint">Dejalo <b>vacío</b> si no agendás un día puntual — así no aparece en la agenda de hoy.</div></div>
+      </div>
       <div class="f"><label>Seguimiento / qué le pasó (breve)</label><textarea id="mDesc" placeholder="Choque en moto, pidió presupuesto, etc."></textarea></div>
 
       <div class="actions">
@@ -602,7 +605,7 @@ function cardEl(l){
   const c=document.createElement('div');c.className='card';c.draggable=true;
   const nom=esc(l.nombre)+(l.apellido?' '+esc(l.apellido):'');
   const vinc=colDe(l)==='cliente'?(l.expediente_id?`<button class="vinc-btn ok" onclick="event.stopPropagation();abrirVincular('${l.id}')">✓ carpeta vinculada</button>`:`<button class="vinc-btn" onclick="event.stopPropagation();abrirVincular('${l.id}')">🔗 Vincular expediente</button>`):'';
-  c.innerHTML=`<div class="age" style="background:${ageColor(d)}"></div><div class="card-in"><div class="nm">${nom} ${l.fuente?`<span class="src ${esc(l.fuente)}">${esc(l.fuente)}</span>`:''}</div>${l.descripcion?`<div class="desc">${esc(l.descripcion)}</div>`:''}<div class="meta"><span class="days ${ageClass(d)}">${d===0?'contacto hoy':'hace '+d+'d'}</span>${resp?`<span class="resp-av" style="background:${resp.c}" title="${resp.n}">${resp.i}</span>`:'<span style="font-size:10px;color:var(--g400)">sin asignar</span>'}</div>${vinc?`<div style="margin-top:8px">${vinc}</div>`:''}</div>`;
+  c.innerHTML=`<div class="age" style="background:${ageColor(d)}"></div><div class="card-in"><div class="nm">${nom} ${l.fuente?`<span class="src ${esc(l.fuente)}">${esc(l.fuente)}</span>`:''}</div>${l.descripcion?`<div class="desc">${esc(l.descripcion)}</div>`:''}<div class="meta"><span class="days ${ageClass(d)}">${d===0?'últ. contacto hoy':'hace '+d+'d'}</span>${resp?`<span class="resp-av" style="background:${resp.c}" title="${resp.n}">${resp.i}</span>`:'<span style="font-size:10px;color:var(--g400)">sin asignar</span>'}</div>${vinc?`<div style="margin-top:8px">${vinc}</div>`:''}</div>`;
   c.addEventListener('dragstart',e=>e.dataTransfer.setData('id',l.id));
   c.addEventListener('click',()=>openModal(l));
   return c;
@@ -614,7 +617,7 @@ async function moverLead(id,estado){
   l.estado=estado;renderBoard();renderStats();
 }
 function nuevoLead(estado){
-  current={_new:true,estado:estado||'potencial',fuente:'WhatsApp',responsable:ME.id,ultimo_contacto:new Date().toISOString()};
+  current={_new:true,estado:estado||'potencial',fuente:'WhatsApp',responsable:ME.id,ultimo_contacto:new Date().toISOString(),proximo_contacto:null};
   fillModal(current);document.getElementById('mTitle').textContent='Nuevo';
   document.getElementById('expLink').classList.add('hidden');
   document.getElementById('btnCarpeta').style.display='';document.getElementById('btnSubir').style.display='none';
@@ -634,6 +637,7 @@ function fillModal(l){
   const g=id=>document.getElementById(id);
   g('mNombre').value=l.nombre||'';g('mApellido').value=l.apellido||'';g('mTel').value=l.telefono||'';
   g('mFuente').value=l.fuente||'WhatsApp';g('mResp').value=l.responsable||'';g('mEstado').value=colDe(l);
+  g('mUltimo').value=l.ultimo_contacto?toISODate(l.ultimo_contacto):'';
   g('mProximo').value=l.proximo_contacto||'';g('mDesc').value=l.descripcion||'';
 }
 function closeModal(){document.getElementById('modalBg').classList.remove('open');current=null}
@@ -651,8 +655,10 @@ async function guardarLead(){
     if(dup&&!confirm('Ojo: ya hay un lead con ese teléfono ('+dup.nombre+(dup.apellido?' '+dup.apellido:'')+'). ¿Lo cargás igual?'))return;
   }
   const btn=document.getElementById('saveBtn');btn.disabled=true;btn.innerHTML='<span class="loader"></span>';
+  const ud=document.getElementById('mUltimo').value;
+  if(ud)v.ultimo_contacto=new Date(ud+'T12:00:00').toISOString();
   let error;
-  if(current._new){v.creado_por=ME.id;v.ultimo_contacto=new Date().toISOString();({error}=await sb.from('leads_captacion').insert(v))}
+  if(current._new){v.creado_por=ME.id;if(!v.ultimo_contacto)v.ultimo_contacto=new Date().toISOString();({error}=await sb.from('leads_captacion').insert(v))}
   else({error}=await sb.from('leads_captacion').update(v).eq('id',current.id));
   btn.disabled=false;btn.textContent='Guardar cambios';
   if(error){toast('Error al guardar: '+error.message,true);return}
@@ -679,7 +685,8 @@ async function compartirEnChat(){
 async function crearCarpeta(){
   const v=readModal();if(!v.nombre){toast('Poné el nombre primero.',true);return}
   if(!confirm('¿Crear la carpeta de expediente para '+v.nombre+'?'))return;
-  if(current._new){v.creado_por=ME.id;v.ultimo_contacto=new Date().toISOString();const {data,error}=await sb.from('leads_captacion').insert(v).select().single();if(error){toast('Error: '+error.message,true);return}current=data;}
+  const udc=document.getElementById('mUltimo').value;if(udc)v.ultimo_contacto=new Date(udc+'T12:00:00').toISOString();
+  if(current._new){v.creado_por=ME.id;if(!v.ultimo_contacto)v.ultimo_contacto=new Date().toISOString();const {data,error}=await sb.from('leads_captacion').insert(v).select().single();if(error){toast('Error: '+error.message,true);return}current=data;}
   const exp={nombre:v.nombre+(v.apellido?' '+v.apellido:''),tel:v.telefono,demandado:'A determinar',mecanica:v.descripcion,referido:v.fuente,creado_por:ME.id};
   const {data:e,error:er}=await sb.from('expedientes').insert(exp).select().single();
   if(er){toast('Error creando carpeta: '+er.message,true);return}
