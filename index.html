@@ -2173,71 +2173,151 @@ function abrirDescarga(expId){_descargaExp=expId;document.getElementById('ov-des
 function closeDescarga(){document.getElementById('ov-descarga').classList.remove('open');_descargaExp=null;}
 function confirmarDescarga(){
   const e=expedientes.find(x=>x.id===_descargaExp);if(!e)return;
-  const campo=(label,val)=>val?`<tr><td style="font-weight:600;color:#1a3260;padding:5px 10px;width:200px;border-bottom:1px solid #eeece6;font-size:13px">${label}</td><td style="padding:5px 10px;border-bottom:1px solid #eeece6;font-size:13px">${h(val)}</td></tr>`:'';
-  const sec=(t)=>`<tr><td colspan="2" style="background:#0f1f3d;color:#c9a84c;font-weight:700;padding:7px 10px;font-size:11px;letter-spacing:.08em;text-transform:uppercase">${t}</td></tr>`;
+  const campo=(label,val)=>val?`<tr><td class="k">${label}</td><td class="v">${h(val)}</td></tr>`:'';
+  const sec=(t)=>`<tr class="sec"><td colspan="2">${t}</td></tr>`;
   const gastos=e.gastos||[];
   const tG=gastos.reduce((s,gg)=>s+parseFloat(gg.monto||0),0);
   const ind=parseFloat(e.indemnizacion||0);
   const archivos=e.archivos||[];
   const imgArchivos=archivos.filter(a=>a.tipo&&a.tipo.startsWith('image')&&a.storage_path);
   const otrosArchivos=archivos.filter(a=>!(a.tipo&&a.tipo.startsWith('image')&&a.storage_path));
-  const fechaExp=new Date().toLocaleDateString('es-AR');
-  const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><style>
-    body{font-family:Arial,sans-serif;font-size:13px;color:#2e2c28;margin:0;padding:0}
-    .header{background:#0f1f3d;color:white;padding:22px 30px;display:flex;justify-content:space-between;align-items:center}
-    .logo{font-size:20px;font-weight:700;color:#c9a84c}
-    .logo-sub{font-size:10px;color:rgba(255,255,255,.5);margin-top:2px;text-transform:uppercase;letter-spacing:.08em}
-    .exp-badge{background:#c9a84c;color:#0f1f3d;padding:5px 12px;border-radius:5px;font-weight:700;font-size:13px}
-    .body{padding:22px 30px}
-    table{width:100%;border-collapse:collapse;margin-bottom:16px}
-    h2{font-size:11px;color:#c9a84c;text-transform:uppercase;letter-spacing:.1em;margin:16px 0 6px}
-    .mecanica{background:#f8f7f4;border:1px solid #eeece6;border-radius:6px;padding:11px;line-height:1.7;white-space:pre-wrap;font-size:13px;margin:8px 0 14px}
-    .footer{border-top:2px solid #eeece6;padding:10px 30px;font-size:11px;color:#9a9690;display:flex;justify-content:space-between}
-    @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+  const fechaExp=new Date().toLocaleDateString('es-AR',{day:'2-digit',month:'long',year:'numeric'});
+  const expRef=h(e.nroexp)||'Exp. #'+e.id.slice(-6);
+  const nl2br=(s)=>h(s).replace(/\n/g,'<br>');
+
+  const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Carpeta — ${h(e.nombre)||expRef}</title>
+  <style>
+    @page{ size:A4; margin:16mm 14mm 18mm; }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{font-family:"Segoe UI",Arial,Helvetica,sans-serif;font-size:12.5px;color:#23211d;background:#f3f2ef;line-height:1.5}
+    .page{max-width:820px;margin:18px auto 60px;background:#fff;box-shadow:0 6px 26px rgba(0,0,0,.12)}
+    .header{background:#0f1f3d;color:#fff;padding:24px 32px;display:flex;justify-content:space-between;align-items:flex-start}
+    .brand{font-size:23px;font-weight:800;color:#c9a84c;letter-spacing:.3px;line-height:1}
+    .brand-sub{font-size:9.5px;color:rgba(255,255,255,.55);margin-top:6px;text-transform:uppercase;letter-spacing:.16em}
+    .header-right{text-align:right}
+    .exp-badge{display:inline-block;background:#c9a84c;color:#0f1f3d;padding:6px 13px;border-radius:6px;font-weight:800;font-size:12.5px;letter-spacing:.02em}
+    .exp-date{font-size:10px;color:rgba(255,255,255,.6);margin-top:7px}
+    .body{padding:26px 32px 10px}
+    .title{font-size:22px;font-weight:800;color:#0f1f3d;margin:0 0 3px;line-height:1.15}
+    .meta{color:#8a857d;font-size:11.5px;margin-bottom:18px}
+    .meta strong{color:#4a4640}
+    .meta .chip{display:inline-block;background:#f1efe9;border:1px solid #e7e4dc;color:#4a4640;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:600;margin-right:6px}
+    .resumen{background:#fbf7ec;border:1px solid #ecdcae;border-left:4px solid #c9a84c;border-radius:8px;padding:13px 16px;margin:0 0 18px;line-height:1.65;color:#4a4136;font-size:12.5px}
+    .resumen b{display:block;color:#0f1f3d;font-size:10px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;font-weight:800}
+    table{width:100%;border-collapse:collapse;margin-bottom:14px}
+    tr{break-inside:avoid}
+    td.k{font-weight:700;color:#1a3260;padding:6px 12px;width:210px;border-bottom:1px solid #efece6;vertical-align:top}
+    td.v{padding:6px 12px;border-bottom:1px solid #efece6;vertical-align:top;word-break:break-word}
+    tr.sec td{background:#0f1f3d;color:#c9a84c;font-weight:800;padding:8px 12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+    tr.sec{break-after:avoid}
+    h2{font-size:10.5px;color:#0f1f3d;text-transform:uppercase;letter-spacing:.11em;margin:20px 0 7px;padding-bottom:5px;border-bottom:2px solid #c9a84c;break-after:avoid}
+    .block{background:#f8f7f4;border:1px solid #efece6;border-radius:8px;padding:12px 14px;line-height:1.7;white-space:pre-wrap;font-size:12.5px;margin:6px 0 14px;break-inside:avoid}
+    .notas{background:#0f1f3d;color:#e8eaf0;border-radius:8px;padding:14px 16px;white-space:pre-wrap;font-size:11.5px;line-height:1.65;margin:6px 0 16px;font-family:"Consolas","SF Mono",Menlo,monospace}
+    .gtab th{background:#f1efe9;text-align:left;padding:7px 12px;font-size:10px;color:#8a857d;text-transform:uppercase;letter-spacing:.05em}
+    .gtab td{padding:6px 12px;border-bottom:1px solid #efece6}
+    .gtab tfoot td{font-weight:800;border-top:2px solid #0f1f3d;border-bottom:none}
+    .foto{break-inside:avoid;margin-bottom:16px}
+    .foto-cap{font-size:10px;color:#8a857d;margin-bottom:5px}
+    .foto img{max-width:100%;max-height:560px;border-radius:8px;border:1px solid #e7e4dc;display:block}
+    .otro{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid #efece6;border-radius:8px;margin-bottom:7px;break-inside:avoid}
+    .otro a{background:#0f1f3d;color:#fff;padding:5px 11px;border-radius:6px;text-decoration:none;font-size:10.5px;font-weight:600}
+    .firma{margin:38px 0 8px;display:flex;justify-content:space-between;gap:40px;break-inside:avoid}
+    .firma .ln{flex:1;text-align:center;color:#8a857d;font-size:10.5px;padding-top:6px;border-top:1px solid #b9b4aa}
+    .pie{border-top:2px solid #efece6;padding:11px 32px;font-size:10px;color:#9a958c;display:flex;justify-content:space-between;align-items:center}
+    .floatbar{position:fixed;left:0;right:0;bottom:0;background:#0f1f3d;padding:11px;text-align:center;box-shadow:0 -3px 14px rgba(0,0,0,.22);z-index:50}
+    .floatbar button{background:#c9a84c;color:#0f1f3d;border:none;padding:11px 26px;border-radius:9px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit}
+    .floatbar .hint{display:block;color:rgba(255,255,255,.6);font-size:11px;margin-top:7px}
+    @media print{
+      body{background:#fff}
+      .page{max-width:none;margin:0;box-shadow:none}
+      .noprint{display:none!important}
+      .pie{position:fixed;bottom:0;left:0;right:0;border-top:1px solid #ddd;padding:6px 14px}
+      .header,tr.sec td,.notas,.exp-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    }
   </style></head><body>
-  <div class="header">
-    <div><div class="logo">Lena & Asociados</div><div class="logo-sub">Accidentes de Tránsito · Carpeta de Expediente</div></div>
-    <div class="exp-badge">${h(e.nroexp)||'Exp. #'+e.id.slice(-6)}</div>
+  <div class="page">
+    <div class="header">
+      <div><div class="brand">Lena &amp; Asociados</div><div class="brand-sub">Accidentes de Tránsito · Carpeta de Expediente</div></div>
+      <div class="header-right"><div class="exp-badge">${expRef}</div><div class="exp-date">Exportado el ${fechaExp}</div></div>
+    </div>
+    <div class="body">
+      <div class="title">${h(e.nombre)||'—'}</div>
+      <div class="meta"><span class="chip">${h(e.estado)||'Sin estado'}</span><span class="chip">Abogado/a: ${h(e.asignado?.nombre)||'—'}</span></div>
+      ${e.resumen?`<div class="resumen"><b>Resumen del caso</b>${nl2br(e.resumen)}</div>`:''}
+      <table>
+        ${sec('Datos de la víctima')}
+        ${campo('DNI',e.dni)}${campo('Edad',e.edad)}${campo('Fecha de nac.',e.fecha_nacimiento)}${campo('Nacionalidad',e.nacionalidad)}${campo('Estado civil',e.estado_civil)}${campo('Domicilio',e.domicilio)}${campo('Teléfono',e.tel)}${campo('Email',e.email)}${campo('Cónyuge',e.conyuge)}${campo('DNI cónyuge',e.conyuge_dni)}${campo('Padre',e.padre)}${campo('DNI padre',e.padre_dni)}${campo('Madre',e.madre)}${campo('DNI madre',e.madre_dni)}
+        ${e.victima2_nombre?sec('Segunda víctima')+campo('Nombre',e.victima2_nombre)+campo('DNI',e.victima2_dni)+campo('Edad',e.victima2_edad)+campo('Nacionalidad',e.victima2_nacionalidad)+campo('Estado civil',e.victima2_estado_civil)+campo('Domicilio',e.victima2_domicilio)+campo('Teléfono',e.victima2_tel)+campo('Cónyuge',e.victima2_conyuge)+campo('DNI cónyuge',e.victima2_conyuge_dni)+campo('Padre',e.victima2_padre)+campo('Madre',e.victima2_madre):''}
+        ${sec('Demandado')}
+        ${campo('Nombre',e.demandado)}${campo('DNI',e.demandado_dni)}${campo('Domicilio',e.demandado_dom)}${campo('Teléfono',e.demandado_tel)}${campo('Titular póliza',e.titular_poliza)}${campo('Dom. titular póliza',e.titular_dom)}${campo('Tel. titular',e.titular_tel)}${campo('Titular del vehículo',e.titular_vehiculo)}${campo('Dom. titular vehículo',e.titular_vehiculo_dom)}${campo('Vehículo',e.vehiculo)}${campo('Dominio/Patente',e.dominio)}
+        ${sec('Compañía de seguros')}
+        ${campo('Aseguradora',e.seguro)}${campo('N° póliza',e.poliza)}${campo('STRO',e.stro)}${campo('Dom. aseguradora',e.seguro_domicilio)}${campo('Tel. aseguradora',e.seguro_tel)}${campo('Contacto en Cía.',e.contacto_cia)}
+        ${sec('Datos del hecho')}
+        ${campo('Fecha',e.fecha)}${campo('Hora',e.hora)}${campo('Lugar',e.lugar)}
+      </table>
+      ${e.mecanica?`<h2>Mecánica del hecho</h2><div class="block">${h(e.mecanica)}</div>`:''}
+      <table>
+        ${(e.revision_medica||e.lesiones)?sec('Parte médico'):''}
+        ${campo('Revisación médica',e.revision_medica)}${campo('Lesiones',e.lesiones)}
+        ${(e.testigo_hecho_1||e.testigo_hecho_2)?sec('Testigos del hecho')+campo('Testigo 1',e.testigo_hecho_1)+campo('Testigo 2',e.testigo_hecho_2):''}
+        ${(e.testigo_beneficio_1)?sec('Testigos del beneficio')+campo('Testigo 1',e.testigo_beneficio_1)+campo('Testigo 2',e.testigo_beneficio_2)+campo('Testigo 3',e.testigo_beneficio_3):''}
+        ${sec('Datos judiciales')}
+        ${campo('N° expediente',e.nroexp)}${campo('UFI',e.ufi)}${campo('IPP',e.ipp)}${campo('Comisaría',e.comisaria)}${campo('Observaciones',e.obs)}
+        ${ind>0?sec('Indemnización y honorarios')+campo('Monto indemnización','$'+ind.toLocaleString('es-AR'))+campo('Honorario cliente 30%','$'+Math.round(ind*.3).toLocaleString('es-AR'))+campo('Honorario aseguradora 20%','$'+Math.round(ind*.2).toLocaleString('es-AR'))+campo('Total honorarios','$'+Math.round(ind*.5).toLocaleString('es-AR')):''}
+      </table>
+      ${e.notas?`<h2>Notas internas</h2><div class="notas">${h(e.notas)}</div>`:''}
+      <h2>Gastos del expediente</h2>
+      <table class="gtab"><thead><tr><th>Fecha</th><th>Descripción</th><th style="text-align:right">Monto</th></tr></thead>
+      <tbody>${gastos.length?gastos.map(gg=>`<tr><td>${gg.fecha||'—'}</td><td>${h(gg.descripcion)||''}</td><td style="text-align:right;font-weight:700">$${parseFloat(gg.monto).toLocaleString('es-AR')}</td></tr>`).join(''):'<tr><td colspan="3" style="color:#9a958c">Sin gastos cargados</td></tr>'}</tbody>
+      ${gastos.length?`<tfoot><tr><td colspan="2" style="text-align:right">Total gastos</td><td style="text-align:right">$${tG.toLocaleString('es-AR')}</td></tr></tfoot>`:''}
+      </table>
+      ${imgArchivos.length?`<h2>Fotos adjuntas</h2>${imgArchivos.map(a=>`<div class="foto"><div class="foto-cap">${h(a.nombre)}</div><img src="${a.storage_path}" alt="${h(a.nombre)}"></div>`).join('')}`:''}
+      ${otrosArchivos.length?`<h2>Otros archivos</h2>${otrosArchivos.map(a=>`<div class="otro"><div style="flex:1"><div style="font-weight:600">${h(a.nombre)}</div><div style="font-size:10px;color:#9a958c">${h(a.tamanio)||''}</div></div>${a.storage_path?`<a href="${a.storage_path}" download="${h(a.nombre)}">Descargar</a>`:''}</div>`).join('')}`:''}
+      <div class="firma">
+        <div class="ln">Firma del cliente</div>
+        <div class="ln">Lena &amp; Asociados</div>
+      </div>
+    </div>
+    <div class="pie"><span>Lena &amp; Asociados — Sistema de Expedientes</span><span>Documento confidencial · ${expRef}</span></div>
   </div>
-  <div class="body">
-  <table>
-    <tr><td colspan="2" style="padding:10px 10px 3px;font-size:19px;font-weight:700;color:#0f1f3d">${h(e.nombre)||'—'}</td></tr>
-    <tr><td colspan="2" style="padding:0 10px 10px;color:#9a9690;font-size:12px">Abogado/a: <strong>${h(e.asignado?.nombre)||'—'}</strong> &nbsp;·&nbsp; Estado: <strong>${h(e.estado)||'—'}</strong> &nbsp;·&nbsp; Exportado: ${fechaExp}</td></tr>
-    ${sec('Datos de la víctima')}
-    ${campo('DNI',e.dni)}${campo('Edad',e.edad)}${campo('Fecha de nac.',e.fecha_nacimiento)}${campo('Nacionalidad',e.nacionalidad)}${campo('Estado civil',e.estado_civil)}${campo('Domicilio',e.domicilio)}${campo('Teléfono',e.tel)}${campo('Email',e.email)}${campo('Cónyuge',e.conyuge)}${campo('DNI cónyuge',e.conyuge_dni)}${campo('Padre',e.padre)}${campo('DNI padre',e.padre_dni)}${campo('Madre',e.madre)}${campo('DNI madre',e.madre_dni)}
-    ${e.victima2_nombre?sec('Segunda víctima')+campo('Nombre',e.victima2_nombre)+campo('DNI',e.victima2_dni)+campo('Edad',e.victima2_edad)+campo('Nacionalidad',e.victima2_nacionalidad)+campo('Estado civil',e.victima2_estado_civil)+campo('Domicilio',e.victima2_domicilio)+campo('Teléfono',e.victima2_tel)+campo('Cónyuge',e.victima2_conyuge)+campo('DNI cónyuge',e.victima2_conyuge_dni)+campo('Padre',e.victima2_padre)+campo('Madre',e.victima2_madre):''}
-    ${sec('Demandado')}
-    ${campo('Nombre',e.demandado)}${campo('DNI',e.demandado_dni)}${campo('Domicilio',e.demandado_dom)}${campo('Teléfono',e.demandado_tel)}${campo('Titular póliza',e.titular_poliza)}${campo('Dom. titular póliza',e.titular_dom)}${campo('Tel. titular',e.titular_tel)}${campo('Titular del vehículo',e.titular_vehiculo)}${campo('Dom. titular vehículo',e.titular_vehiculo_dom)}${campo('Vehículo',e.vehiculo)}${campo('Dominio/Patente',e.dominio)}
-    ${sec('Compañía de seguros')}
-    ${campo('Aseguradora',e.seguro)}${campo('N° póliza',e.poliza)}${campo('STRO',e.stro)}${campo('Dom. aseguradora',e.seguro_domicilio)}${campo('Tel. aseguradora',e.seguro_tel)}${campo('Contacto en Cía.',e.contacto_cia)}
-    ${sec('Mecánica del hecho')}
-    ${campo('Fecha',e.fecha)}${campo('Hora',e.hora)}${campo('Lugar',e.lugar)}
-  </table>
-  ${e.mecanica?`<div class="mecanica">${h(e.mecanica)}</div>`:''}
-  <table>
-    ${campo('Revisación médica',e.revision_medica)}${campo('Lesiones',e.lesiones)}
-    ${(e.testigo_hecho_1||e.testigo_hecho_2)?sec('Testigos del hecho')+campo('Testigo 1',e.testigo_hecho_1)+campo('Testigo 2',e.testigo_hecho_2):''}
-    ${(e.testigo_beneficio_1)?sec('Testigos del beneficio')+campo('Testigo 1',e.testigo_beneficio_1)+campo('Testigo 2',e.testigo_beneficio_2)+campo('Testigo 3',e.testigo_beneficio_3):''}
-    ${sec('Datos judiciales')}
-    ${campo('N° expediente',e.nroexp)}${campo('UFI',e.ufi)}${campo('IPP',e.ipp)}${campo('Comisaría',e.comisaria)}${campo('Observaciones',e.obs)}
-    ${ind>0?sec('Indemnización y honorarios')+campo('Monto indemnización','$'+ind.toLocaleString('es-AR'))+campo('Honorario cliente 30%','$'+Math.round(ind*.3).toLocaleString('es-AR'))+campo('Honorario aseguradora 20%','$'+Math.round(ind*.2).toLocaleString('es-AR'))+campo('Total honorarios','$'+Math.round(ind*.5).toLocaleString('es-AR')):''}
-  </table>
-  <h2>Gastos del expediente</h2>
-  <table><thead><tr style="background:#f8f7f4"><th style="text-align:left;padding:6px 10px;font-size:11px;color:#9a9690">Fecha</th><th style="text-align:left;padding:6px 10px;font-size:11px;color:#9a9690">Descripción</th><th style="text-align:right;padding:6px 10px;font-size:11px;color:#9a9690">Monto</th></tr></thead>
-  <tbody>${gastos.length?gastos.map(gg=>`<tr><td style="padding:4px 10px;border-bottom:1px solid #eeece6">${gg.fecha||'—'}</td><td style="padding:4px 10px;border-bottom:1px solid #eeece6">${gg.descripcion||''}</td><td style="padding:4px 10px;border-bottom:1px solid #eeece6;text-align:right;font-weight:600">$${parseFloat(gg.monto).toLocaleString('es-AR')}</td></tr>`).join(''):'<tr><td colspan="3" style="padding:8px 10px;color:#9a9690">Sin gastos</td></tr>'}</tbody>
-  ${gastos.length?`<tfoot><tr><td colspan="2" style="padding:6px 10px;font-weight:700;text-align:right;border-top:2px solid #0f1f3d">Total gastos</td><td style="padding:6px 10px;font-weight:700;text-align:right;border-top:2px solid #0f1f3d">$${tG.toLocaleString('es-AR')}</td></tr></tfoot>`:''}
-  </table>
-  ${imgArchivos.length?`<h2>Fotos adjuntas</h2>${imgArchivos.map(a=>`<div style="margin-bottom:14px"><div style="font-size:11px;color:#9a9690;margin-bottom:4px">${a.nombre}</div><img src="${a.storage_path}" style="max-width:100%;border-radius:6px;border:1px solid #eeece6" alt="${a.nombre}"></div>`).join('')}`:''}
-  ${otrosArchivos.length?`<h2>Otros archivos</h2>${otrosArchivos.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 10px;border:1px solid #eeece6;border-radius:6px;margin-bottom:6px"><div style="flex:1"><div style="font-weight:600">${a.nombre}</div><div style="font-size:11px;color:#9a9690">${a.tamanio||''}</div></div>${a.storage_path?`<a href="${a.storage_path}" download="${a.nombre}" style="background:#0f1f3d;color:white;padding:4px 10px;border-radius:5px;text-decoration:none;font-size:11px">Descargar</a>`:''}</div>`).join('')}`:''}
-  </div>
-  <div class="footer"><span>Lena & Asociados — Sistema de Expedientes</span><span>Documento confidencial</span></div>
+  <div class="floatbar noprint"><button onclick="window.print()">Guardar como PDF</button><span class="hint">Elegí «Guardar como PDF» como destino. Si no se abrió solo, tocá el botón.</span></div>
+  <script>
+    (function(){
+      var printed=false;
+      function doPrint(){ if(printed)return; printed=true; try{ window.focus(); window.print(); }catch(e){} }
+      function whenReady(){
+        var imgs=[].slice.call(document.images);
+        var pend=imgs.filter(function(im){return !im.complete;});
+        if(!pend.length){ setTimeout(doPrint,300); return; }
+        var left=pend.length;
+        function done(){ if(--left<=0) setTimeout(doPrint,300); }
+        pend.forEach(function(im){ im.addEventListener('load',done); im.addEventListener('error',done); });
+        setTimeout(doPrint,5000);
+      }
+      if(document.readyState==='complete') whenReady(); else window.addEventListener('load',whenReady);
+    })();
+  <\/script>
   </body></html>`;
-  const blob=new Blob([html],{type:'text/html'});
-  const url=URL.createObjectURL(blob);
-  const w=window.open(url,'_blank');
-  if(w) setTimeout(()=>w.print(),800);
+
+  // Abrir en pestaña nueva (gesto del usuario → no debería bloquearse). Fallback a iframe oculto.
+  let w=null;
+  try{ w=window.open('','_blank'); }catch(err){ w=null; }
+  if(w&&w.document){
+    w.document.open(); w.document.write(html); w.document.close();
+  }else{
+    let f=document.getElementById('pdf-print-frame');
+    if(f) f.remove();
+    f=document.createElement('iframe');
+    f.id='pdf-print-frame';
+    f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
+    document.body.appendChild(f);
+    const fd=f.contentWindow.document;
+    fd.open(); fd.write(html); fd.close();
+    showToast('Si no se abrió el PDF, revisá el bloqueo de pop-ups del navegador.');
+  }
   closeDescarga();
-  showToast('PDF listo');
 }
 function estadoBadge(e){const map={'En trámite':'badge-gold','Mediación':'badge-navy','Juicio':'badge-red','Concluido':'badge-green'};return`<span class="badge ${map[e]||'badge-gray'}">${h(e)||'—'}</span>`;}
 function parseMonto(v){ return parseInt((v+'').replace(/[^0-9]/g,''),10)||0; }
