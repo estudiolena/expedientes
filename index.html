@@ -291,6 +291,54 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
   .rent-kpi-grid{grid-template-columns:1fr 1fr}
   .toast{left:14px;right:14px;bottom:14px}
 }
+/* ===== Escáner / recorte de documentos ===== */
+.esc-overlay{position:fixed;inset:0;background:rgba(8,14,28,.78);z-index:400;display:none;align-items:stretch;justify-content:center;backdrop-filter:blur(3px)}
+.esc-overlay.open{display:flex}
+.esc-modal{background:var(--cream);width:100%;max-width:1080px;margin:auto;max-height:96vh;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.5)}
+.esc-head{background:var(--navy);color:#fff;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.esc-head .t{font-family:'DM Serif Display',serif;font-size:18px;color:var(--gold-light)}
+.esc-head .s{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;letter-spacing:.04em}
+.esc-close{background:rgba(255,255,255,.08);border:none;color:#fff;width:34px;height:34px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.esc-close:hover{background:rgba(255,255,255,.16)}
+.esc-body{display:flex;flex:1;min-height:0;overflow:hidden}
+.esc-stage{flex:1;display:flex;flex-direction:column;min-width:0;padding:16px 18px;gap:12px}
+.esc-canvas-wrap{flex:1;display:flex;align-items:center;justify-content:center;background:#0d1426;border-radius:12px;overflow:hidden;position:relative;min-height:240px}
+.esc-canvas-wrap canvas{touch-action:none;cursor:crosshair;max-width:100%;max-height:100%;display:block}
+.esc-empty{color:rgba(255,255,255,.5);font-size:14px;text-align:center;padding:30px}
+.esc-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(13,20,38,.92);color:#fff;font-size:13px;text-align:center;padding:20px}
+.esc-spin{width:34px;height:34px;border:3px solid rgba(201,168,76,.25);border-top-color:var(--gold);border-radius:50%;animation:escspin .8s linear infinite}
+@keyframes escspin{to{transform:rotate(360deg)}}
+.esc-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.esc-tbtn{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--g200);color:var(--g800);padding:8px 13px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.esc-tbtn:hover{border-color:var(--navy-light);background:var(--g50)}
+.esc-tbtn svg{flex-shrink:0}
+.esc-nav{display:flex;align-items:center;gap:10px;margin-left:auto;font-size:13px;color:var(--g600);font-weight:600}
+.esc-nav button{background:var(--navy);border:none;color:#fff;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.esc-nav button:disabled{opacity:.35;cursor:not-allowed}
+.esc-side{width:188px;flex-shrink:0;background:#fff;border-left:1px solid var(--g100);padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:9px}
+.esc-side-h{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g400);padding:2px 2px 6px}
+.esc-thumb{position:relative;border:2px solid transparent;border-radius:9px;overflow:hidden;cursor:pointer;background:var(--g50);aspect-ratio:4/3}
+.esc-thumb.active{border-color:var(--gold)}
+.esc-thumb.excluida{opacity:.4}
+.esc-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.esc-thumb .chk{position:absolute;top:5px;left:5px;width:20px;height:20px;border-radius:5px;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;border:1.5px solid var(--g200)}
+.esc-thumb.incluida .chk{background:var(--green);border-color:var(--green)}
+.esc-thumb .nm{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));color:#fff;font-size:9px;padding:10px 5px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.esc-foot{padding:13px 22px;border-top:1px solid var(--g100);display:flex;align-items:center;gap:12px;justify-content:space-between;background:#fff;flex-shrink:0;flex-wrap:wrap}
+.esc-foot .info{font-size:12px;color:var(--g600)}
+.esc-foot .info b{color:var(--navy)}
+.esc-print{background:var(--gold);color:var(--navy);border:none;padding:11px 24px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.esc-print:hover{background:var(--gold-light)}
+.esc-print:disabled{opacity:.5;cursor:not-allowed}
+.esc-hint{font-size:11px;color:var(--g400);width:100%}
+@media(max-width:760px){
+  .esc-modal{max-height:100vh;border-radius:0;max-width:none}
+  .esc-body{flex-direction:column-reverse}
+  .esc-side{width:auto;border-left:none;border-bottom:1px solid var(--g100);flex-direction:row;overflow-x:auto;overflow-y:hidden;max-height:96px}
+  .esc-side-h{display:none}
+  .esc-thumb{width:88px;flex-shrink:0;aspect-ratio:4/3}
+}
+
 </style>
 </head>
 <body>
@@ -757,6 +805,47 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 </div>
 <div class="loading-overlay" id="loading"><div class="loading-box"><div class="spinner"></div>Cargando...</div></div>
 <div class="toast" id="toast"><span id="toast-msg"></span></div>
+
+<!-- ===== Escáner / recorte de documentos ===== -->
+<div class="esc-overlay" id="esc-overlay" onclick="if(event.target.id==='esc-overlay')escCerrar()">
+  <div class="esc-modal">
+    <div class="esc-head">
+      <div>
+        <div class="t">Escanear e imprimir documentos</div>
+        <div class="s" id="esc-sub">—</div>
+      </div>
+      <button class="esc-close" onclick="escCerrar()" aria-label="Cerrar"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="esc-body">
+      <div class="esc-stage">
+        <div class="esc-canvas-wrap" id="esc-canvas-wrap">
+          <canvas id="esc-canvas"></canvas>
+          <div class="esc-loading" id="esc-loading"><div class="esc-spin"></div><div id="esc-loading-txt">Cargando…</div></div>
+        </div>
+        <div class="esc-toolbar" id="esc-toolbar">
+          <button class="esc-tbtn" onclick="escAuto()" title="Volver a detectar el documento"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9 9 0 0 0-6.5 2.8L3 8"/><path d="M3 3v5h5"/></svg> Detectar</button>
+          <button class="esc-tbtn" onclick="escSinRecorte()" title="Usar la foto entera, sin recortar"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg> Sin recorte</button>
+          <button class="esc-tbtn" onclick="escRotar()" title="Rotar 90°"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg> Rotar</button>
+          <button class="esc-tbtn" id="esc-incluir-btn" onclick="escToggleIncluir()" title="Incluir o sacar esta foto de la impresión"></button>
+          <div class="esc-nav">
+            <button id="esc-prev" onclick="escNav(-1)" aria-label="Anterior">‹</button>
+            <span id="esc-pos">1 / 1</span>
+            <button id="esc-next" onclick="escNav(1)" aria-label="Siguiente">›</button>
+          </div>
+        </div>
+      </div>
+      <div class="esc-side" id="esc-side">
+        <div class="esc-side-h">Fotos del expediente</div>
+      </div>
+    </div>
+    <div class="esc-foot">
+      <div class="info" id="esc-info">—</div>
+      <button class="esc-print" id="esc-print" onclick="escImprimir()"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Imprimir documentos</button>
+      <div class="esc-hint">Arrastrá las 4 esquinas para ajustar el recorte de cada documento. Lo que quede dentro del marco es lo que se imprime, enderezado. Las fotos que no sean documentos sacalas con «Sin recorte» o quitalas de la impresión.</div>
+    </div>
+  </div>
+</div>
+
 <div class="lightbox" id="lightbox" onclick="if(event.target.id==='lightbox')cerrarFoto()">
   <button class="lightbox-close" onclick="cerrarFoto()" aria-label="Cerrar"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   <img id="lightbox-img" src="" alt="">
@@ -1262,6 +1351,10 @@ function showDetailView(e) {
         <div class="detail-card-title" style="margin-bottom:0">Archivos adjuntos</div>
         <div style="display:flex;gap:8px;align-items:center">
           <span class="badge badge-navy">${archivos.length} archivo${archivos.length!==1?'s':''}</span>
+          <button class="btn btn-outline btn-sm" onclick="escAbrir('${e.id}')" ${archivos.filter(a=>a.tipo&&a.tipo.startsWith('image')).length?'':'disabled style="opacity:.45"'} title="Recortar e imprimir los documentos de las fotos">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>
+            Escanear e imprimir
+          </button>
           <label class="btn btn-gold btn-sm" style="cursor:pointer">
             <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             Subir
@@ -2423,6 +2516,389 @@ function showToast(msg,error=false){const t=document.getElementById('toast');doc
 function showLoading(show){document.getElementById('loading').classList.toggle('show',show);}
 function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('backdrop').classList.toggle('open');}
 function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('backdrop').classList.remove('open');}
+
+/* ===================== ESCÁNER / RECORTE DE DOCUMENTOS ===================== */
+let _esc = null;            // estado actual del escáner
+let _cvState = 'none';      // none | loading | ready | fail
+let _cvPromise = null;
+const ESC_OPENCV_URL = 'https://docs.opencv.org/4.x/opencv.js';
+
+/* --- Carga perezosa de OpenCV.js (solo la primera vez que se abre el escáner) --- */
+function ensureOpenCV(){
+  if(_cvState==='ready') return Promise.resolve(true);
+  if(_cvState==='fail')  return Promise.resolve(false);
+  if(_cvPromise) return _cvPromise;
+  _cvState='loading';
+  _cvPromise = (async()=>{
+    try{
+      await cargarLib(ESC_OPENCV_URL);
+      await new Promise((res)=>{
+        let done=false;
+        const ok=()=>{ if(done)return; done=true; res(); };
+        if(window.cv && cv.Mat){ ok(); return; }
+        if(window.cv){ try{ cv.onRuntimeInitialized = ok; }catch(_){} }
+        const iv=setInterval(()=>{ if(window.cv && cv.Mat){ clearInterval(iv); ok(); } },60);
+        setTimeout(()=>{ clearInterval(iv); ok(); }, 22000);
+      });
+      if(window.cv && cv.Mat){ _cvState='ready'; return true; }
+      _cvState='fail'; return false;
+    }catch(err){ console.error('OpenCV no cargó:', err); _cvState='fail'; return false; }
+  })();
+  return _cvPromise;
+}
+
+/* --- Abrir el escáner para un expediente --- */
+async function escAbrir(expId){
+  const e = expedientes.find(x=>x.id===expId);
+  if(!e){ showToast('No encuentro el expediente.'); return; }
+  const imgs = (e.archivos||[]).filter(a=>a.tipo && a.tipo.startsWith('image') && a.storage_path);
+  if(!imgs.length){ showToast('Este expediente no tiene fotos para escanear.'); return; }
+
+  _esc = { expId, nroexp: e.nroexp || ('#'+e.id.slice(-6)), nombre: e.nombre||'', items:[], idx:0, drag:null, scale:1, ready:false };
+  document.getElementById('esc-sub').textContent = (e.nroexp || ('Exp. #'+e.id.slice(-6))) + ' · ' + (e.nombre||'');
+  document.getElementById('esc-side').innerHTML = '<div class="esc-side-h">Fotos del expediente</div>';
+  document.getElementById('esc-overlay').classList.add('open');
+  escSetLoading(true, 'Preparando imágenes…');
+
+  // Arranca OpenCV en paralelo (no bloquea: si tarda o falla, igual se ajusta a mano)
+  const cvP = ensureOpenCV();
+
+  // Bajar cada foto como blob (mismo origen → el canvas no se bloquea)
+  for(const a of imgs){
+    try{
+      const resp = await fetch(a.storage_path);
+      const blob = await resp.blob();
+      const url  = URL.createObjectURL(blob);
+      const img  = await escCargarImg(url);
+      _esc.items.push({ archId:a.id, nombre:a.nombre||'foto', src:url, img, natW:img.naturalWidth, natH:img.naturalHeight, rot:0, corners:null, incluir:true });
+    }catch(err){
+      console.error('No pude preparar la imagen', a.nombre, err);
+    }
+  }
+
+  if(!_esc.items.length){ escSetLoading(false); showToast('No pude cargar las fotos (revisá la conexión).', true); escCerrar(); return; }
+
+  const cvOk = await cvP;
+  escSetLoading(true, cvOk ? 'Detectando documentos…' : 'Listo. Ajustá las esquinas a mano.');
+
+  // Detección automática por imagen (o recuadro por defecto)
+  for(const it of _esc.items){
+    let c = null;
+    if(cvOk){ try{ c = escAutoDetect(it.img, it.natW, it.natH); }catch(_){ c=null; } }
+    it.corners = c || escDefaultCorners(it.natW, it.natH);
+  }
+
+  _esc.ready = true;
+  escSetLoading(false);
+  escRenderSide();
+  escDraw();
+  escUpdateFoot();
+}
+
+function escCargarImg(url){
+  return new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=url; });
+}
+function escSetLoading(show, txt){
+  const el=document.getElementById('esc-loading');
+  if(txt) document.getElementById('esc-loading-txt').textContent=txt;
+  el.style.display = show ? 'flex' : 'none';
+}
+
+/* --- Esquinas por defecto (margen pequeño) --- */
+function escDefaultCorners(w,h){
+  const m=Math.round(Math.min(w,h)*0.03);
+  return [{x:m,y:m},{x:w-m,y:m},{x:w-m,y:h-m},{x:m,y:h-m}];
+}
+
+/* --- Detección automática del documento con OpenCV --- */
+function escAutoDetect(imgEl, natW, natH){
+  if(_cvState!=='ready') return null;
+  let src=null, proc=null, gray=null, blur=null, edges=null, kernel=null, contours=null, hier=null;
+  try{
+    src = cv.imread(imgEl);
+    // Trabajar sobre versión reducida para velocidad
+    const maxDim=820, sc=Math.min(1, maxDim/Math.max(natW,natH));
+    const rw=Math.max(1,Math.round(natW*sc)), rh=Math.max(1,Math.round(natH*sc));
+    proc=new cv.Mat(); cv.resize(src,proc,new cv.Size(rw,rh),0,0,cv.INTER_AREA);
+    gray=new cv.Mat(); cv.cvtColor(proc,gray,cv.COLOR_RGBA2GRAY);
+    blur=new cv.Mat(); cv.GaussianBlur(gray,blur,new cv.Size(5,5),0);
+    edges=new cv.Mat(); cv.Canny(blur,edges,60,180);
+    kernel=cv.Mat.ones(5,5,cv.CV_8U); cv.dilate(edges,edges,kernel);
+    contours=new cv.MatVector(); hier=new cv.Mat();
+    cv.findContours(edges,contours,hier,cv.RETR_LIST,cv.CHAIN_APPROX_SIMPLE);
+    const areaTot=rw*rh; let best=null, bestArea=0;
+    for(let i=0;i<contours.size();i++){
+      const cnt=contours.get(i);
+      const a=cv.contourArea(cnt);
+      if(a>0.18*areaTot){
+        const peri=cv.arcLength(cnt,true);
+        const approx=new cv.Mat();
+        cv.approxPolyDP(cnt,approx,0.02*peri,true);
+        if(approx.rows===4 && cv.isContourConvex(approx) && a>bestArea){
+          bestArea=a;
+          const pts=[];
+          for(let k=0;k<4;k++) pts.push({x:approx.data32S[k*2]/sc, y:approx.data32S[k*2+1]/sc});
+          best=pts;
+        }
+        approx.delete();
+      }
+      cnt.delete();
+    }
+    return best ? escOrderCorners(best) : null;
+  } finally {
+    [src,proc,gray,blur,edges,kernel,contours,hier].forEach(m=>{ try{ m&&m.delete&&m.delete(); }catch(_){ } });
+  }
+}
+
+/* --- Ordenar 4 puntos como tl, tr, br, bl --- */
+function escOrderCorners(p){
+  const bySum=[...p].sort((a,b)=>(a.x+a.y)-(b.x+b.y));
+  const tl=bySum[0], br=bySum[3];
+  const rest=p.filter(q=>q!==tl&&q!==br);
+  const tr = rest[0].x>rest[1].x ? rest[0] : rest[1];
+  const bl = rest[0].x>rest[1].x ? rest[1] : rest[0];
+  return [tl,tr,br,bl];
+}
+
+/* --- Dibujo del canvas con la foto + marco editable --- */
+function escDraw(){
+  if(!_esc || !_esc.items.length) return;
+  const it=_esc.items[_esc.idx];
+  const wrap=document.getElementById('esc-canvas-wrap');
+  const canvas=document.getElementById('esc-canvas');
+  const pad=16;
+  const maxW=Math.max(120, wrap.clientWidth - pad*2);
+  const maxH=Math.max(120, wrap.clientHeight - pad*2);
+  const scale=Math.min(maxW/it.natW, maxH/it.natH);
+  _esc.scale=scale;
+  canvas.width=Math.round(it.natW*scale);
+  canvas.height=Math.round(it.natH*scale);
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.drawImage(it.img,0,0,canvas.width,canvas.height);
+
+  const cs=it.corners.map(c=>({x:c.x*scale,y:c.y*scale}));
+  // Oscurecer lo que queda afuera del marco
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0,0,canvas.width,canvas.height);
+  ctx.moveTo(cs[0].x,cs[0].y);
+  for(let i=1;i<4;i++) ctx.lineTo(cs[i].x,cs[i].y);
+  ctx.closePath();
+  ctx.fillStyle='rgba(8,12,24,.55)';
+  ctx.fill('evenodd');
+  ctx.restore();
+  // Marco
+  ctx.beginPath();
+  ctx.moveTo(cs[0].x,cs[0].y);
+  for(let i=1;i<4;i++) ctx.lineTo(cs[i].x,cs[i].y);
+  ctx.closePath();
+  ctx.strokeStyle='#e8c96a'; ctx.lineWidth=2.5; ctx.stroke();
+  // Handles
+  cs.forEach(c=>{
+    ctx.beginPath(); ctx.arc(c.x,c.y,11,0,Math.PI*2);
+    ctx.fillStyle='rgba(15,31,61,.55)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(c.x,c.y,9,0,Math.PI*2);
+    ctx.fillStyle='#c9a84c'; ctx.fill();
+    ctx.lineWidth=2; ctx.strokeStyle='#fff'; ctx.stroke();
+  });
+
+  // Estado de la barra
+  document.getElementById('esc-pos').textContent=(_esc.idx+1)+' / '+_esc.items.length;
+  document.getElementById('esc-prev').disabled=_esc.idx<=0;
+  document.getElementById('esc-next').disabled=_esc.idx>=_esc.items.length-1;
+  const ib=document.getElementById('esc-incluir-btn');
+  ib.innerHTML = it.incluir
+    ? '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> En la impresión'
+    : '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Excluida';
+  ib.style.borderColor = it.incluir ? 'var(--green)' : 'var(--g200)';
+  ib.style.color = it.incluir ? 'var(--green)' : 'var(--g600)';
+}
+
+/* --- Miniaturas laterales --- */
+function escRenderSide(){
+  const side=document.getElementById('esc-side');
+  side.innerHTML='<div class="esc-side-h">Fotos del expediente</div>'+
+    _esc.items.map((it,i)=>`
+      <div class="esc-thumb ${i===_esc.idx?'active':''} ${it.incluir?'incluida':'excluida'}" onclick="escGo(${i})">
+        <img src="${it.src}" alt="">
+        <div class="chk">${it.incluir?'<svg width="12" height="12" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>':''}</div>
+        <div class="nm">${h(it.nombre)}</div>
+      </div>`).join('');
+}
+
+function escUpdateFoot(){
+  const inc=_esc.items.filter(it=>it.incluir).length;
+  document.getElementById('esc-info').innerHTML=`<b>${inc}</b> de ${_esc.items.length} foto${_esc.items.length!==1?'s':''} se van a imprimir`;
+  document.getElementById('esc-print').disabled = inc===0;
+}
+
+/* --- Navegación --- */
+function escGo(i){ if(!_esc)return; _esc.idx=Math.max(0,Math.min(_esc.items.length-1,i)); escRenderSide(); escDraw(); }
+function escNav(d){ escGo(_esc.idx+d); }
+function escToggleIncluir(){ const it=_esc.items[_esc.idx]; it.incluir=!it.incluir; escRenderSide(); escDraw(); escUpdateFoot(); }
+function escSinRecorte(){ const it=_esc.items[_esc.idx]; it.corners=[{x:0,y:0},{x:it.natW,y:0},{x:it.natW,y:it.natH},{x:0,y:it.natH}]; escDraw(); }
+async function escAuto(){
+  const it=_esc.items[_esc.idx];
+  const ok=await ensureOpenCV();
+  if(!ok){ showToast('El detector automático no está disponible. Ajustá las esquinas a mano.'); return; }
+  let c=null; try{ c=escAutoDetect(it.img,it.natW,it.natH); }catch(_){ c=null; }
+  if(c){ it.corners=c; escDraw(); } else { showToast('No detecté un documento claro. Movélo a mano.'); }
+}
+
+/* --- Rotar 90° (rasteriza la imagen rotada y reinicia el marco) --- */
+async function escRotar(){
+  const it=_esc.items[_esc.idx];
+  const c=document.createElement('canvas');
+  c.width=it.natH; c.height=it.natW;
+  const x=c.getContext('2d');
+  x.translate(c.width/2,c.height/2); x.rotate(Math.PI/2); x.drawImage(it.img,-it.natW/2,-it.natH/2);
+  const url=c.toDataURL('image/jpeg',0.95);
+  const img=await escCargarImg(url);
+  it.img=img; it.natW=img.naturalWidth; it.natH=img.naturalHeight;
+  let nc=null; if(_cvState==='ready'){ try{ nc=escAutoDetect(img,it.natW,it.natH); }catch(_){ } }
+  it.corners=nc||escDefaultCorners(it.natW,it.natH);
+  escRenderSide(); escDraw();
+}
+
+/* --- Interacción: arrastrar las esquinas --- */
+(function(){
+  const canvas=document.getElementById('esc-canvas');
+  if(!canvas) return;
+  function pos(ev){
+    const r=canvas.getBoundingClientRect();
+    return { x:(ev.clientX-r.left)*(canvas.width/r.width), y:(ev.clientY-r.top)*(canvas.height/r.height) };
+  }
+  canvas.addEventListener('pointerdown',ev=>{
+    if(!_esc||!_esc.ready) return;
+    const it=_esc.items[_esc.idx], p=pos(ev), s=_esc.scale;
+    let hit=-1, dmin=26;
+    it.corners.forEach((c,i)=>{ const d=Math.hypot(c.x*s-p.x,c.y*s-p.y); if(d<dmin){ dmin=d; hit=i; } });
+    if(hit>=0){ _esc.drag=hit; canvas.setPointerCapture(ev.pointerId); }
+  });
+  canvas.addEventListener('pointermove',ev=>{
+    if(!_esc||_esc.drag==null) return;
+    const it=_esc.items[_esc.idx], p=pos(ev), s=_esc.scale;
+    it.corners[_esc.drag]={ x:Math.max(0,Math.min(it.natW,p.x/s)), y:Math.max(0,Math.min(it.natH,p.y/s)) };
+    escDraw();
+  });
+  function end(ev){ if(_esc&&_esc.drag!=null){ _esc.drag=null; try{ canvas.releasePointerCapture(ev.pointerId); }catch(_){ } } }
+  canvas.addEventListener('pointerup',end);
+  canvas.addEventListener('pointercancel',end);
+})();
+
+/* --- Producir el documento recortado/enderezado --- */
+function escWarp(it){
+  const [tl,tr,br,bl]=it.corners;
+  const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+  let W=Math.round(Math.max(dist(tl,tr),dist(bl,br)));
+  let H=Math.round(Math.max(dist(tl,bl),dist(tr,br)));
+  W=Math.max(40,W); H=Math.max(40,H);
+  const cap=2200, big=Math.max(W,H);
+  if(big>cap){ const r=cap/big; W=Math.round(W*r); H=Math.round(H*r); }
+
+  if(_cvState==='ready'){
+    let src=null,dst=null,M=null,sM=null,dM=null;
+    try{
+      src=cv.imread(it.img);
+      sM=cv.matFromArray(4,1,cv.CV_32FC2,[tl.x,tl.y, tr.x,tr.y, br.x,br.y, bl.x,bl.y]);
+      dM=cv.matFromArray(4,1,cv.CV_32FC2,[0,0, W,0, W,H, 0,H]);
+      M=cv.getPerspectiveTransform(sM,dM);
+      dst=new cv.Mat();
+      cv.warpPerspective(src,dst,M,new cv.Size(W,H),cv.INTER_LINEAR,cv.BORDER_CONSTANT,new cv.Scalar(255,255,255,255));
+      const out=document.createElement('canvas');
+      cv.imshow(out,dst);
+      const url=out.toDataURL('image/jpeg',0.92);
+      return { url, w:W, h:H };
+    } finally {
+      [src,dst,M,sM,dM].forEach(m=>{ try{ m&&m.delete&&m.delete(); }catch(_){ } });
+    }
+  }
+  // Fallback sin OpenCV: recorte rectangular (bounding box, sin enderezar)
+  const xs=it.corners.map(c=>c.x), ys=it.corners.map(c=>c.y);
+  const x0=Math.max(0,Math.min(...xs)), y0=Math.max(0,Math.min(...ys));
+  const x1=Math.min(it.natW,Math.max(...xs)), y1=Math.min(it.natH,Math.max(...ys));
+  const cw=Math.max(1,Math.round(x1-x0)), ch=Math.max(1,Math.round(y1-y0));
+  const out=document.createElement('canvas'); out.width=cw; out.height=ch;
+  out.getContext('2d').drawImage(it.img,x0,y0,cw,ch,0,0,cw,ch);
+  return { url:out.toDataURL('image/jpeg',0.92), w:cw, h:ch };
+}
+
+/* --- Imprimir todos los documentos incluidos (uno por hoja) --- */
+async function escImprimir(){
+  if(!_esc) return;
+  const incl=_esc.items.filter(it=>it.incluir);
+  if(!incl.length){ showToast('No hay fotos seleccionadas para imprimir.'); return; }
+  escSetLoading(true,'Procesando documentos…');
+  await new Promise(r=>setTimeout(r,30));
+
+  const docs=[];
+  for(const it of incl){
+    try{ const d=escWarp(it); docs.push({ url:d.url, nombre:it.nombre, apaisado:d.w>=d.h }); }
+    catch(err){ console.error('No pude procesar', it.nombre, err); }
+  }
+  escSetLoading(false);
+  if(!docs.length){ showToast('No se pudo procesar ningún documento.', true); return; }
+
+  const ref=h(_esc.nroexp), titulo=h(_esc.nombre)||ref;
+  const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentos — ${titulo}</title>
+<style>
+  @page{ size:A4; margin:8mm; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#e9e8e4}
+  .hoja{width:194mm;min-height:281mm;margin:10px auto;background:#fff;box-shadow:0 5px 22px rgba(0,0,0,.14);display:flex;flex-direction:column;page-break-after:always;overflow:hidden}
+  .hoja:last-child{page-break-after:auto}
+  .cap{font-family:Arial,Helvetica,sans-serif;font-size:10px;color:#6a665f;padding:6px 10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;flex-shrink:0}
+  .cap .ref{color:#0f1f3d;font-weight:700}
+  .pic{flex:1;display:flex;align-items:center;justify-content:center;padding:6mm;min-height:0}
+  .pic img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+  .floatbar{position:fixed;left:0;right:0;bottom:0;background:#0f1f3d;padding:11px;text-align:center;box-shadow:0 -3px 14px rgba(0,0,0,.22);z-index:50}
+  .floatbar button{background:#c9a84c;color:#0f1f3d;border:none;padding:11px 26px;border-radius:9px;font-size:14px;font-weight:800;cursor:pointer;font-family:Arial,sans-serif}
+  .floatbar .hint{display:block;color:rgba(255,255,255,.6);font-size:11px;margin-top:6px}
+  @media print{ html,body{background:#fff} .hoja{margin:0;box-shadow:none;width:auto;min-height:auto} .noprint{display:none!important} .cap{-webkit-print-color-adjust:exact;print-color-adjust:exact} }
+</style></head><body>
+${docs.map((d,i)=>`<div class="hoja"><div class="cap"><span class="ref">${ref}</span><span>${h(d.nombre)} · ${i+1}/${docs.length}</span></div><div class="pic"><img src="${d.url}" alt=""></div></div>`).join('')}
+<div class="floatbar noprint"><button onclick="window.print()">Imprimir</button><span class="hint">Cada documento ocupa una hoja A4. Si no se abrió el diálogo solo, tocá «Imprimir».</span></div>
+<script>
+  (function(){
+    var printed=false;
+    function doPrint(){ if(printed)return; printed=true; try{ window.focus(); window.print(); }catch(e){} }
+    function whenReady(){
+      var imgs=[].slice.call(document.images);
+      var pend=imgs.filter(function(im){return !im.complete;});
+      if(!pend.length){ setTimeout(doPrint,250); return; }
+      var left=pend.length;
+      function done(){ if(--left<=0) setTimeout(doPrint,250); }
+      pend.forEach(function(im){ im.addEventListener('load',done); im.addEventListener('error',done); });
+      setTimeout(doPrint,6000);
+    }
+    if(document.readyState==='complete') whenReady(); else window.addEventListener('load',whenReady);
+  })();
+<\/script>
+</body></html>`;
+
+  let w=null;
+  try{ w=window.open('','_blank'); }catch(err){ w=null; }
+  if(w&&w.document){ w.document.open(); w.document.write(html); w.document.close(); }
+  else{
+    let f=document.getElementById('esc-print-frame'); if(f) f.remove();
+    f=document.createElement('iframe'); f.id='esc-print-frame';
+    f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
+    document.body.appendChild(f);
+    const fd=f.contentWindow.document; fd.open(); fd.write(html); fd.close();
+    showToast('Si no se abrió la impresión, revisá el bloqueo de pop-ups.');
+  }
+}
+
+/* --- Cerrar y liberar memoria --- */
+function escCerrar(){
+  document.getElementById('esc-overlay').classList.remove('open');
+  if(_esc){ _esc.items.forEach(it=>{ try{ URL.revokeObjectURL(it.src); }catch(_){ } }); }
+  _esc=null;
+}
+window.addEventListener('resize',()=>{ if(_esc&&_esc.ready) escDraw(); });
+
 </script>
 </body>
 </html>
