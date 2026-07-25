@@ -1014,7 +1014,7 @@ async function loadExpedientes() {
   const esSecretaria = currentPerfil?.rol === 'secretaria';
   const esAsociado = currentPerfil?.rol === 'asociado' || currentPerfil?.rol === 'empleado';
   let q = sb.from('expedientes').select('*, gastos(*), eventos(*), archivos(id,nombre,tipo,tamanio,fecha,expediente_id)').order('creado_at',{ascending:false});
-  if(esAsociado) q = q.eq('asignado_a', currentUser.id);
+  if(esAsociado) q = q.or(`asignado_a.eq.${currentUser.id},creado_por.eq.${currentUser.id}`);
   const {data, error} = await q;
   if(error || !data){ console.error('Error al cargar expedientes:', error); return; }
   data.forEach(e=>{ e.asignado = perfiles.find(p=>p.id===e.asignado_a) || null; });
