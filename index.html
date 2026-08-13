@@ -339,6 +339,72 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
   .esc-thumb{width:88px;flex-shrink:0;aspect-ratio:4/3}
 }
 
+/* ===== TAREAS ===== */
+.tk-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.tk-seg{display:inline-flex;background:var(--g100);border-radius:9px;padding:3px}
+.tk-seg button{border:none;background:none;padding:8px 14px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;color:var(--g600)}
+.tk-seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.tk-board{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tk-col{background:var(--g50);border:1px solid var(--g100);border-radius:var(--rl);padding:14px;min-height:160px}
+.tk-col-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.tk-col-title{font-weight:600;font-size:14px;color:var(--navy)}
+.tk-col-count{background:#fff;border:1px solid var(--g200);color:var(--g600);font-size:12px;font-weight:600;min-width:22px;height:22px;border-radius:11px;display:flex;align-items:center;justify-content:center;padding:0 6px}
+.tk-col-empty{color:var(--g400);font-size:13px;text-align:center;padding:22px 8px;border:1.5px dashed var(--g200);border-radius:10px}
+.tk-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
+.tk-card{background:#fff;border:1px solid var(--g100);border-radius:12px;padding:13px 14px;margin-bottom:11px;cursor:pointer;box-shadow:0 1px 3px rgba(15,31,61,.05);transition:all .15s;border-left:3px solid var(--g200)}
+.tk-card:hover{box-shadow:var(--sh);transform:translateY(-1px)}
+.tk-card.p-alta{border-left-color:var(--red)}
+.tk-card.p-media{border-left-color:var(--gold)}
+.tk-card.p-baja{border-left-color:var(--green)}
+.tk-card-title{font-weight:600;font-size:14px;color:var(--navy);line-height:1.3}
+.tk-card-desc{font-size:12.5px;color:var(--g600);margin:5px 0 10px;line-height:1.4}
+.tk-card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px;color:var(--g400)}
+.tk-mini-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:10px;flex-shrink:0}
+.tk-card-foot{display:flex;align-items:center;gap:10px;margin-top:10px;padding-top:9px;border-top:1px solid var(--g100)}
+.tk-foot-item{display:flex;align-items:center;gap:4px;font-size:11.5px;color:var(--g600)}
+.tk-exp-link{display:inline-flex;align-items:center;gap:4px;font-size:11px;background:var(--navy);color:#fff;padding:2px 7px;border-radius:6px;font-weight:500}
+.tk-venc{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600}
+.tk-venc.tarde{color:var(--red)}
+.tk-venc.pronto{color:#b8860b}
+.tk-venc.ok{color:var(--g600)}
+.tk-eye{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:5px}
+.tk-eye-estudio{background:var(--green-light);color:var(--green)}
+.tk-eye-priv{background:var(--g100);color:var(--g600)}
+.tk-vis-toggle{display:flex;gap:10px;flex-wrap:wrap}
+.tk-vis-opt{flex:1;min-width:180px;border:1.5px solid var(--g200);border-radius:10px;padding:12px;cursor:pointer;transition:all .15s}
+.tk-vis-opt.on{border-color:var(--gold);background:var(--gold-pale)}
+.tk-vis-opt .vt{font-weight:600;font-size:13px;color:var(--navy);display:flex;align-items:center;gap:6px}
+.tk-vis-opt .vd{font-size:11.5px;color:var(--g600);margin-top:3px}
+.tk-people{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:14px}
+.tk-person{display:flex;align-items:center;gap:8px}
+.tk-person .pl{font-size:10px;color:var(--g400);text-transform:uppercase;letter-spacing:.05em}
+.tk-person .pn{font-size:13px;font-weight:600;color:var(--navy)}
+.tk-state-picker{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+.tk-state-picker button{border:1.5px solid var(--g200);background:#fff;padding:6px 12px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12.5px;cursor:pointer;color:var(--g600)}
+.tk-state-picker button.on{border-color:var(--navy);background:var(--navy);color:#fff}
+.tk-chat{padding:16px 22px;background:var(--g50);max-height:300px;overflow-y:auto;border-radius:12px}
+.tk-chat-empty{color:var(--g400);font-size:13px;text-align:center;padding:18px}
+.tk-msg{display:flex;gap:9px;margin-bottom:14px}
+.tk-msg-body{background:#fff;border:1px solid var(--g100);border-radius:12px;border-top-left-radius:3px;padding:9px 12px;max-width:80%}
+.tk-msg-name{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:2px}
+.tk-msg-text{font-size:13.5px;color:var(--g800);line-height:1.4;white-space:pre-wrap}
+.tk-msg-time{font-size:10.5px;color:var(--g400);margin-top:3px}
+.tk-msg.mine{flex-direction:row-reverse}
+.tk-msg.mine .tk-msg-body{background:var(--gold-pale);border-color:transparent;border-top-left-radius:12px;border-top-right-radius:3px}
+.tk-chat-input{display:flex;gap:8px;margin-top:12px;align-items:center}
+.tk-chat-input input[type=text]{flex:1;padding:10px 14px;border:1.5px solid var(--g200);border-radius:20px;font-size:14px;font-family:'DM Sans',sans-serif}
+.tk-chat-input input[type=text]:focus{outline:none;border-color:var(--gold)}
+.tk-chat-send{background:var(--gold);border:none;color:var(--navy);width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tk-chat-attach{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--g200);background:#fff;color:var(--g600);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.tk-chat-attach:hover{border-color:var(--gold);color:var(--navy)}
+.tk-file-chip{display:inline-flex;align-items:center;gap:7px;margin-top:3px;padding:8px 11px;background:var(--g50);border:1px solid var(--g200);border-radius:9px;text-decoration:none;color:var(--navy);font-size:13px;font-weight:500;max-width:230px}
+.tk-file-chip:hover{border-color:var(--gold)}
+.tk-file-chip .fn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tk-file-img{max-width:210px;max-height:180px;border-radius:9px;display:block;margin-top:3px;border:1px solid var(--g200)}
+.btn-danger{background:var(--red-light);color:var(--red);border-color:transparent}
+.btn-danger:hover{background:var(--red);color:#fff}
+.alerta-tipo.alt-tarea{background:#eaf0fb;color:#2f5aa8}
+@media(max-width:900px){.tk-board{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -375,6 +441,11 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
       <button class="nav-btn" onclick="showView('expedientes')">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         Expedientes
+      </button>
+      <button class="nav-btn" onclick="showView('tareas')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Tareas
+        <span class="nav-cal-badge" id="nav-tareas-badge"></span>
       </button>
       <div class="nav-label">Gestión</div>
       <button class="nav-btn" onclick="showView('gastos')">
@@ -464,6 +535,22 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
           </div>
         </div>
         <div class="detail-view" id="exp-detail"></div>
+      </div>
+    </div>
+
+    <div id="view-tareas" style="display:none">
+      <div class="topbar"><div class="topbar-title">Tareas</div><button class="btn btn-gold" onclick="openTareaModal()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nueva tarea</button></div>
+      <div class="content">
+        <div class="tk-toolbar">
+          <div class="search-wrap" style="flex:1;min-width:220px"><svg class="search-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="search-input" id="tk-q" placeholder="Buscar tarea, cliente, expediente..." oninput="renderTareas()"></div>
+          <select id="tk-f-asig" onchange="renderTareas()" style="padding:10px 13px;border:1.5px solid var(--g200);border-radius:9px;font-size:14px;background:#fff;font-family:'DM Sans',sans-serif"><option value="">Todos los asignados</option></select>
+          <select id="tk-f-prio" onchange="renderTareas()" style="padding:10px 13px;border:1.5px solid var(--g200);border-radius:9px;font-size:14px;background:#fff;font-family:'DM Sans',sans-serif"><option value="">Toda prioridad</option><option value="alta">Alta</option><option value="media">Media</option><option value="baja">Baja</option></select>
+          <div class="tk-seg" id="tk-scope">
+            <button class="on" data-s="mias" onclick="tkSetScope('mias')">Mis tareas</button>
+            <button data-s="todas" onclick="tkSetScope('todas')">Todas las que veo</button>
+          </div>
+        </div>
+        <div class="tk-board" id="tk-board"></div>
       </div>
     </div>
 
@@ -869,6 +956,47 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
   <div class="docview-body" id="docview-body"></div>
 </div>
 
+<!-- MODAL NUEVA TAREA -->
+<div class="overlay" id="ov-tarea" onclick="if(event.target.id==='ov-tarea')closeTareaModal()">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="tk-modal-title">Nueva tarea</div><button class="close-btn" onclick="closeTareaModal()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="form-section">
+        <div class="form-grid cols-2">
+          <div class="form-group" style="grid-column:span 2"><label>Título de la tarea</label><input id="tk-titulo" placeholder="Ej: Presentar contestación de demanda"></div>
+          <div class="form-group" style="grid-column:span 2"><label>Detalle</label><textarea id="tk-desc" rows="3" placeholder="Qué hay que hacer, aclaraciones, etc."></textarea></div>
+          <div class="form-group"><label>Asignar a</label><select id="tk-asig"></select></div>
+          <div class="form-group"><label>Prioridad</label><select id="tk-prio"><option value="alta">Alta</option><option value="media" selected>Media</option><option value="baja">Baja</option></select></div>
+          <div class="form-group"><label>Vence</label><input type="date" id="tk-venc"></div>
+          <div class="form-group"><label>Expediente vinculado (opcional)</label><select id="tk-exp"></select></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">¿Quién la puede ver?</div>
+        <div class="tk-vis-toggle">
+          <div class="tk-vis-opt on" id="tk-vo-priv" onclick="tkSetVis('asignado')">
+            <div class="vt"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Solo asignado</div>
+            <div class="vd">La ven el asignado, el creador y el Director Jurídico.</div>
+          </div>
+          <div class="tk-vis-opt" id="tk-vo-est" onclick="tkSetVis('estudio')">
+            <div class="vt"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Todo el estudio</div>
+            <div class="vd">La ve cualquier miembro del estudio.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeTareaModal()">Cancelar</button><button class="btn btn-gold" onclick="guardarTarea()" id="tk-btn-guardar">Crear tarea</button></div>
+  </div>
+</div>
+
+<!-- MODAL DETALLE TAREA + CHAT -->
+<div class="overlay" id="ov-tarea-det" onclick="if(event.target.id==='ov-tarea-det')closeTareaDet()">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-header"><div class="modal-title">Detalle de la tarea</div><button class="close-btn" onclick="closeTareaDet()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div id="tk-det-content"></div>
+  </div>
+</div>
+
 <script>
 const SUPA_URL = 'https://iboydjjeaeeayxjvaykr.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlib3lkamplYWVlYXl4anZheWtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0NDY3NjAsImV4cCI6MjA5NDAyMjc2MH0.e8Yy8E4oXvJWgY-AXWhlOtoLBZeZY8w1liLHM4JPY84';
@@ -942,6 +1070,7 @@ function h(s){if(s==null)return '';return String(s).replace(/&/g,'&amp;').replac
 
 let currentUser = null, currentPerfil = null;
 let expedientes = [], perfiles = [], eventos = [], turnos = [], usuariosTurnos = [];
+let tareas = [], tkScope = 'mias', tkVisSel = 'asignado', tkDetId = null, tkEditId = null;
 const TURNOS_APP_URL = 'https://benjamin12bonapelch-eng.github.io/turnos-lena/';
 let filtroEstado = '', filtroAsocId = '', currentView = 'dashboard';
 let calStates = {}, _descargaExp = null, _eventoExpId = null, _indemExpId = null;
@@ -998,6 +1127,7 @@ async function initApp(user) {
   await loadPerfiles();
   await Promise.all([loadExpedientes(), loadEventos()]);
   await loadTurnos();
+  await loadTareas();
   showLoading(false);
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app-shell').style.display = '';
@@ -1056,18 +1186,289 @@ function nombreAbogadoTurno(t){
   return u ? u.nombre : null;
 }
 
+// ===================== TAREAS =====================
+const TK_ESTADOS = [['pendiente','Pendiente'],['en_curso','En curso'],['hecha','Hecha']];
+const TK_SVG = {
+  cal:'<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+  eyeOn:'<svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+  lock:'<svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+  chat:'<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+  exp:'<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>'
+};
+
+async function loadTareas(){
+  const esJefe = currentPerfil?.rol === 'jefe';
+  let q = sb.from('tareas').select('*, tarea_comentarios(*)').order('creado_at',{ascending:false});
+  if(!esJefe) q = q.or(`asignado_a.eq.${currentUser.id},creado_por.eq.${currentUser.id},visibilidad.eq.estudio`);
+  const {data,error} = await q;
+  if(error){ console.error('Error al cargar tareas:', error); tareas=[]; return; }
+  tareas = (data||[]).map(t=>({...t, comentarios:(t.tarea_comentarios||[]).sort((a,b)=>(a.creado_at||'').localeCompare(b.creado_at||''))}));
+}
+
+function tkPuedeVer(t){
+  if(currentPerfil?.rol==='jefe') return true;
+  if(t.visibilidad==='estudio') return true;
+  return t.asignado_a===currentUser?.id || t.creado_por===currentUser?.id;
+}
+function tkPerfil(id){ return perfiles.find(p=>p.id===id) || null; }
+function tkIni(p){ return (p?.nombre||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
+function tkAvClass(p){ return p?.rol==='jefe'?'av-jefe':p?.rol==='secretaria'?'av-sec':'av-aso'; }
+function tkFirst(p){ return (p?.nombre||'—').split(' ')[0]; }
+function tkExp(id){ return id ? expedientes.find(e=>e.id===id) : null; }
+function fmtFechaCorta(f){ if(!f) return '—'; const[y,m,d]=f.split('-'); const ms=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']; return parseInt(d)+' '+ms[parseInt(m)-1]; }
+function tkFmtTs(iso){ if(!iso) return ''; const d=new Date(iso); const ms=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']; return d.getDate()+' '+ms[d.getMonth()]+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+function tkVencInfo(fecha, estado){
+  if(!fecha) return {cls:'ok', txt:'sin fecha', dias:null};
+  const hoy=new Date(); hoy.setHours(0,0,0,0);
+  const dias=Math.round((new Date(fecha+'T00:00:00')-hoy)/86400000);
+  const f=fmtFechaCorta(fecha);
+  if(estado==='hecha') return {cls:'ok', txt:f, dias};
+  if(dias<0) return {cls:'tarde', txt:'venció '+f, dias};
+  if(dias===0) return {cls:'pronto', txt:'vence hoy', dias};
+  if(dias===1) return {cls:'pronto', txt:'vence mañana', dias};
+  if(dias<=2) return {cls:'pronto', txt:'vence '+f, dias};
+  return {cls:'ok', txt:f, dias};
+}
+
+function tkSetScope(s){ tkScope=s; document.querySelectorAll('#tk-scope button').forEach(b=>b.classList.toggle('on',b.dataset.s===s)); renderTareas(); }
+function tkVisibles(){ return tareas.filter(tkPuedeVer); }
+
+function renderTareas(){
+  const fa=document.getElementById('tk-f-asig');
+  if(fa && fa.options.length<=1){
+    perfiles.forEach(p=>{ const o=document.createElement('option'); o.value=p.id; o.textContent=p.nombre; fa.appendChild(o); });
+  }
+  const q=(document.getElementById('tk-q')?.value||'').toLowerCase();
+  const faV=fa?.value||'';
+  const fpV=document.getElementById('tk-f-prio')?.value||'';
+  let list=tkVisibles();
+  if(tkScope==='mias') list=list.filter(t=>t.asignado_a===currentUser?.id||t.creado_por===currentUser?.id);
+  if(faV) list=list.filter(t=>t.asignado_a===faV);
+  if(fpV) list=list.filter(t=>t.prioridad===fpV);
+  if(q) list=list.filter(t=>{ const e=tkExp(t.expediente_id); return ((t.titulo||'')+' '+(t.descripcion||'')+' '+(e?(e.nroexp||'')+' '+(e.nombre||''):'')).toLowerCase().includes(q); });
+
+  const board=document.getElementById('tk-board');
+  if(board) board.innerHTML = TK_ESTADOS.map(([k,lbl])=>{
+    const items=list.filter(t=>t.estado===k);
+    const dot=k==='pendiente'?'var(--g400)':k==='en_curso'?'var(--gold)':'var(--green)';
+    const cards=items.length?items.map(tkCardHTML).join(''):'<div class="tk-col-empty">Sin tareas</div>';
+    return `<div class="tk-col"><div class="tk-col-head"><span class="tk-dot" style="background:${dot}"></span><span class="tk-col-title">${lbl}</span><span class="tk-col-count">${items.length}</span></div>${cards}</div>`;
+  }).join('');
+  tkUpdateBadge();
+}
+
+function tkUpdateBadge(){
+  const mis = tareas.filter(t=>t.asignado_a===currentUser?.id && t.estado!=='hecha').length;
+  const b=document.getElementById('nav-tareas-badge');
+  if(b){ b.textContent=mis; b.style.display=mis?'inline-flex':'none'; }
+}
+
+function tkCardHTML(t){
+  const a=tkPerfil(t.asignado_a), e=tkExp(t.expediente_id), vi=tkVencInfo(t.vence,t.estado);
+  const eye = t.visibilidad==='estudio'
+    ? `<span class="tk-eye tk-eye-estudio">${TK_SVG.eyeOn}Estudio</span>`
+    : `<span class="tk-eye tk-eye-priv">${TK_SVG.lock}Privada</span>`;
+  const chatN = (t.comentarios&&t.comentarios.length)? `<span class="tk-foot-item">${TK_SVG.chat}${t.comentarios.length}</span>` : '';
+  return `<div class="tk-card p-${t.prioridad}" onclick="openTareaDet('${t.id}')">
+    <div class="tk-card-title">${h(t.titulo)}</div>
+    ${t.descripcion?`<div class="tk-card-desc">${h(t.descripcion)}</div>`:''}
+    <div class="tk-card-meta">
+      <span class="tk-mini-av ${tkAvClass(a)}">${tkIni(a)}</span><span style="color:var(--g600);font-weight:500">${h(tkFirst(a))}</span>
+      ${eye}
+      ${t.vence?`<span class="tk-venc ${vi.cls}">${TK_SVG.cal}${vi.txt}</span>`:''}
+    </div>
+    <div class="tk-card-foot">
+      ${e?`<span class="tk-exp-link">${TK_SVG.exp}Exp. ${h(e.nroexp)||'#'+e.id.slice(-6)}</span>`:''}
+      ${chatN}
+      <span class="tk-foot-item" style="margin-left:auto;text-transform:capitalize">${t.prioridad}</span>
+    </div>
+  </div>`;
+}
+
+// --- Crear / editar ---
+function tkFillModalSelects(){
+  document.getElementById('tk-asig').innerHTML=perfiles.map(p=>`<option value="${p.id}">${h(p.nombre)}</option>`).join('');
+  document.getElementById('tk-exp').innerHTML='<option value="">Sin expediente</option>'+expedientes.map(e=>`<option value="${e.id}">Exp. ${h(e.nroexp)||'#'+e.id.slice(-6)} · ${h(e.nombre)}</option>`).join('');
+}
+function openTareaModal(){
+  tkEditId=null;
+  document.getElementById('tk-modal-title').textContent='Nueva tarea';
+  document.getElementById('tk-btn-guardar').textContent='Crear tarea';
+  tkFillModalSelects();
+  document.getElementById('tk-titulo').value='';
+  document.getElementById('tk-desc').value='';
+  document.getElementById('tk-venc').value='';
+  document.getElementById('tk-prio').value='media';
+  document.getElementById('tk-asig').value=currentUser?.id||'';
+  document.getElementById('tk-exp').value='';
+  tkSetVis('asignado');
+  document.getElementById('ov-tarea').classList.add('open');
+}
+function tkEditTarea(id){
+  const t=tareas.find(x=>x.id===id); if(!t) return;
+  tkEditId=id;
+  document.getElementById('tk-modal-title').textContent='Editar tarea';
+  document.getElementById('tk-btn-guardar').textContent='Guardar cambios';
+  tkFillModalSelects();
+  document.getElementById('tk-titulo').value=t.titulo||'';
+  document.getElementById('tk-desc').value=t.descripcion||'';
+  document.getElementById('tk-venc').value=t.vence||'';
+  document.getElementById('tk-prio').value=t.prioridad||'media';
+  document.getElementById('tk-asig').value=t.asignado_a||'';
+  document.getElementById('tk-exp').value=t.expediente_id||'';
+  tkSetVis(t.visibilidad||'asignado');
+  closeTareaDet();
+  document.getElementById('ov-tarea').classList.add('open');
+}
+function tkSetVis(v){ tkVisSel=v; document.getElementById('tk-vo-priv').classList.toggle('on',v==='asignado'); document.getElementById('tk-vo-est').classList.toggle('on',v==='estudio'); }
+function closeTareaModal(){ document.getElementById('ov-tarea').classList.remove('open'); tkEditId=null; }
+
+async function guardarTarea(){
+  const titulo=document.getElementById('tk-titulo').value.trim();
+  if(!titulo){ showToast('Poné un título',true); return; }
+  const payload={
+    titulo, descripcion:document.getElementById('tk-desc').value.trim()||null,
+    asignado_a:document.getElementById('tk-asig').value||null,
+    prioridad:document.getElementById('tk-prio').value,
+    vence:document.getElementById('tk-venc').value||null,
+    expediente_id:document.getElementById('tk-exp').value||null,
+    visibilidad:tkVisSel
+  };
+  const btn=document.getElementById('tk-btn-guardar'); btn.disabled=true;
+  let error;
+  if(tkEditId){ ({error}=await sb.from('tareas').update(payload).eq('id',tkEditId)); }
+  else { payload.creado_por=currentUser.id; payload.estado='pendiente'; ({error}=await sb.from('tareas').insert(payload)); }
+  btn.disabled=false;
+  if(error){ showToast('No se pudo guardar',true); console.error(error); return; }
+  const editando=!!tkEditId;
+  closeTareaModal();
+  await loadTareas(); renderTareas();
+  if(currentView==='dashboard') renderDashboard();
+  showToast(editando?'Tarea actualizada':'Tarea creada');
+}
+
+// --- Detalle + chat ---
+async function tkSignAdjuntos(t){
+  const pend=(t.comentarios||[]).filter(m=>m.storage_key && !m._url);
+  if(!pend.length) return;
+  try{
+    const {data}=await sb.storage.from('carpetas').createSignedUrls(pend.map(m=>m.storage_key),7200);
+    if(data) pend.forEach((m,i)=>{ if(data[i]&&data[i].signedUrl) m._url=data[i].signedUrl; });
+  }catch(err){ console.error('Error firmando adjuntos de tarea:', err); }
+}
+function tkAdjuntoHTML(m){
+  const esImg=(m.archivo_tipo||'').startsWith('image');
+  if(esImg && m._url){
+    return `<a href="${m._url}" target="_blank" rel="noopener"><img class="tk-file-img" src="${m._url}" alt="${h(m.archivo_nombre||'imagen')}"></a>`;
+  }
+  const attrs = m._url ? `href="${m._url}" target="_blank" rel="noopener"` : 'href="#" onclick="return false" style="opacity:.6"';
+  return `<a ${attrs} class="tk-file-chip"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg><span class="fn">${h(m.archivo_nombre||'Archivo')}</span></a>`;
+}
+async function openTareaDet(id, confirmDel){
+  tkDetId=id; const t=tareas.find(x=>x.id===id); if(!t) return;
+  await tkSignAdjuntos(t);
+  const a=tkPerfil(t.asignado_a), c=tkPerfil(t.creado_por), e=tkExp(t.expediente_id);
+  const puedeBorrar = currentPerfil?.rol==='jefe' || t.creado_por===currentUser.id;
+  const puedeEditar = puedeBorrar || t.asignado_a===currentUser.id;
+  const vi=tkVencInfo(t.vence,t.estado);
+  const chat=(t.comentarios&&t.comentarios.length)? t.comentarios.map(m=>{
+    const au=tkPerfil(m.autor_id); const mine=m.autor_id===currentUser.id;
+    const cont=(m.texto?`<div class="tk-msg-text">${h(m.texto)}</div>`:'')+(m.storage_key?tkAdjuntoHTML(m):'');
+    return `<div class="tk-msg ${mine?'mine':''}"><span class="tk-mini-av ${tkAvClass(au)}">${tkIni(au)}</span><div class="tk-msg-body"><div class="tk-msg-name">${h(tkFirst(au))}</div>${cont}<div class="tk-msg-time">${tkFmtTs(m.creado_at)}</div></div></div>`;
+  }).join('') : '<div class="tk-chat-empty">Sin mensajes todavía. Escribí el primero.</div>';
+  const prioBadge = t.prioridad==='alta'?'badge-red':t.prioridad==='media'?'badge-gold':'badge-green';
+
+  const footer = confirmDel
+    ? `<div style="display:flex;align-items:center;gap:8px;color:var(--red);font-size:13px;font-weight:600">¿Seguro que la eliminás?</div>
+       <div style="display:flex;gap:8px"><button class="btn btn-outline" onclick="openTareaDet('${t.id}')">No</button><button class="btn btn-danger" onclick="tkBorrarConfirmado('${t.id}')">Sí, eliminar</button></div>`
+    : `${puedeBorrar?`<button class="btn btn-danger" onclick="openTareaDet('${t.id}',true)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Eliminar</button>`:`<span style="font-size:12px;color:var(--g400)">Solo el creador o el Director pueden eliminar</span>`}
+       <div style="display:flex;gap:8px">${puedeEditar?`<button class="btn btn-outline" onclick="tkEditTarea('${t.id}')">Editar</button>`:''}<button class="btn btn-gold" onclick="closeTareaDet()">Cerrar</button></div>`;
+
+  document.getElementById('tk-det-content').innerHTML = `
+    <div class="modal-body" style="padding-bottom:6px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <div>
+          <div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy)">${h(t.titulo)}</div>
+          ${t.descripcion?`<div style="font-size:13.5px;color:var(--g600);margin-top:5px;line-height:1.5">${h(t.descripcion)}</div>`:''}
+        </div>
+        <span class="badge ${prioBadge}" style="text-transform:capitalize">${t.prioridad}</span>
+      </div>
+      <div class="tk-people">
+        <div class="tk-person"><span class="tk-mini-av ${tkAvClass(a)}">${tkIni(a)}</span><div><div class="pl">Asignada a</div><div class="pn">${h(a?.nombre||'—')}</div></div></div>
+        <div class="tk-person"><span class="tk-mini-av ${tkAvClass(c)}">${tkIni(c)}</span><div><div class="pl">Creada por</div><div class="pn">${h(c?.nombre||'—')}</div></div></div>
+        ${t.vence?`<div class="tk-person"><div><div class="pl">Vence</div><div class="pn tk-venc ${vi.cls}" style="font-size:13px">${vi.txt}</div></div></div>`:''}
+        ${e?`<div class="tk-person"><div><div class="pl">Expediente</div><div class="pn">Exp. ${h(e.nroexp)||'#'+e.id.slice(-6)} · ${h(e.nombre)}</div></div></div>`:''}
+        <div class="tk-person"><div><div class="pl">Visibilidad</div><div class="pn">${t.visibilidad==='estudio'?'Todo el estudio':'Solo asignado + creador'}</div></div></div>
+      </div>
+      <div class="tk-state-picker">
+        ${TK_ESTADOS.map(([k,l])=>`<button class="${t.estado===k?'on':''}" onclick="tkSetEstado('${t.id}','${k}')">${l}</button>`).join('')}
+      </div>
+    </div>
+    <div style="padding:0 22px 6px"><div style="font-size:12px;font-weight:600;color:var(--g600);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Chat de la tarea</div>
+      <div class="tk-chat" id="tk-chat-scroll">${chat}</div>
+      <div class="tk-chat-input"><label class="tk-chat-attach" title="Adjuntar archivo"><input type="file" style="display:none" onchange="tkSubirAdjunto(this)"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></label><input type="text" id="tk-chat-msg" placeholder="Escribí un mensaje para el equipo..." onkeydown="if(event.key==='Enter')tkEnviarMsg()"><button class="tk-chat-send" onclick="tkEnviarMsg()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div>
+    </div>
+    <div class="modal-footer" style="justify-content:space-between">${footer}</div>`;
+  document.getElementById('ov-tarea-det').classList.add('open');
+  const cs=document.getElementById('tk-chat-scroll'); if(cs) cs.scrollTop=cs.scrollHeight;
+}
+function closeTareaDet(){ document.getElementById('ov-tarea-det').classList.remove('open'); tkDetId=null; }
+
+async function tkSetEstado(id,k){
+  const patch={estado:k, completado_at: k==='hecha'? new Date().toISOString(): null};
+  const {error}=await sb.from('tareas').update(patch).eq('id',id);
+  if(error){ showToast('No se pudo actualizar',true); return; }
+  const t=tareas.find(x=>x.id===id); if(t){ t.estado=k; t.completado_at=patch.completado_at; }
+  openTareaDet(id); renderTareas();
+  if(currentView==='dashboard') renderDashboard();
+}
+async function tkEnviarMsg(){
+  const inp=document.getElementById('tk-chat-msg'); const txt=(inp?.value||'').trim(); if(!txt||!tkDetId) return;
+  const {data,error}=await sb.from('tarea_comentarios').insert({tarea_id:tkDetId,autor_id:currentUser.id,texto:txt}).select().single();
+  if(error){ showToast('No se pudo enviar',true); return; }
+  const t=tareas.find(x=>x.id===tkDetId); if(t){ t.comentarios=t.comentarios||[]; t.comentarios.push(data); }
+  await openTareaDet(tkDetId); renderTareas();
+}
+async function tkSubirAdjunto(input){
+  const f=input.files&&input.files[0]; if(!f||!tkDetId) return;
+  input.value='';
+  if(f.size > 25*1024*1024){ showToast('El archivo supera 25 MB',true); return; }
+  showLoading(true);
+  const safe=(f.name||'archivo').replace(/[^a-zA-Z0-9._-]/g,'_');
+  const key='tareas/'+tkDetId+'/'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'_'+safe;
+  const {error:upErr}=await sb.storage.from('carpetas').upload(key,f,{contentType:f.type||'application/octet-stream',upsert:false});
+  if(upErr){ showLoading(false); showToast('No se pudo subir: '+upErr.message,true); return; }
+  const {data,error}=await sb.from('tarea_comentarios').insert({tarea_id:tkDetId,autor_id:currentUser.id,texto:null,storage_key:key,archivo_nombre:f.name,archivo_tipo:f.type||null}).select().single();
+  if(error){ await sb.storage.from('carpetas').remove([key]); showLoading(false); showToast('No se pudo guardar el adjunto',true); return; }
+  const t=tareas.find(x=>x.id===tkDetId); if(t){ t.comentarios=t.comentarios||[]; t.comentarios.push(data); }
+  showLoading(false);
+  await openTareaDet(tkDetId); renderTareas();
+  showToast('Archivo enviado');
+}
+async function tkBorrarConfirmado(id){
+  const {error}=await sb.from('tareas').delete().eq('id',id);
+  if(error){ showToast('No se pudo eliminar',true); return; }
+  tareas=tareas.filter(x=>x.id!==id);
+  closeTareaDet(); renderTareas();
+  if(currentView==='dashboard') renderDashboard();
+  showToast('Tarea eliminada');
+}
+
+function tkParaMi(t){ return currentPerfil?.rol==='jefe' || t.asignado_a===currentUser?.id || t.creado_por===currentUser?.id || t.visibilidad==='estudio'; }
+
 function showView(v) {
   if((v==='rentabilidad'||v==='equipo') && currentPerfil?.rol!=='jefe') return;
   currentView = v;
-  ['dashboard','expedientes','gastos','calendario','rentabilidad','equipo'].forEach(id => {
+  ['dashboard','expedientes','tareas','gastos','calendario','rentabilidad','equipo'].forEach(id => {
     const el = document.getElementById('view-'+id);
     if(el) el.style.display = id===v ? '' : 'none';
   });
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  ['dashboard','expedientes','gastos','calendario','rentabilidad','equipo'].forEach((id,i) => {
+  ['dashboard','expedientes','tareas','gastos','calendario','rentabilidad','equipo'].forEach((id,i) => {
     if(id===v) document.querySelectorAll('.nav-btn')[i]?.classList.add('active');
   });
   if(v==='dashboard') renderDashboard();
+  if(v==='tareas') renderTareas();
   if(v==='expedientes') { showListView(); renderExp(); }
   if(v==='gastos') renderGastos();
   if(v==='calendario') renderCalGlobal();
@@ -1092,6 +1493,14 @@ function renderAlertasEventos() {
         expediente_id:t.expediente_id||null, abog, sede:t.sede||null});
     }
   });
+  tareas.forEach(t=>{
+    if(t.estado==='hecha' || !t.vence || !tkParaMi(t)) return;
+    const d = new Date(t.vence+'T00:00:00');
+    if(d>=hoy && d<=en7){
+      const asig = tkPerfil(t.asignado_a);
+      prox.push({_esTarea:true, tareaId:t.id, fecha:t.vence, titulo:t.titulo, expediente_id:t.expediente_id||null, asigNombre:asig?tkFirst(asig):null});
+    }
+  });
   prox.sort((a,b)=>a.fecha.localeCompare(b.fecha)||((a.hora||'')+'').localeCompare((b.hora||'')+''));
   const card = document.getElementById('alertas-card');
   const badge = document.getElementById('nav-cal-badge');
@@ -1110,11 +1519,13 @@ function renderAlertasEventos() {
     const cls = dias===0?'al-hoy':dias===1?'al-man':'al-sem';
     const chip = dias===0?'<span class="alerta-cuando alc-hoy">Hoy</span>':dias===1?'<span class="alerta-cuando alc-man">Mañana</span>':`<span class="alerta-cuando alc-sem">${dias} días</span>`;
     const tipo = (ev.tipo||'otro').toLowerCase();
-    const click = exp ? `goToDetail('${exp.id}')` : (ev._esTurno ? `window.open(TURNOS_APP_URL,'_blank')` : `showView('calendario')`);
-    const tag = ev._esTurno
-      ? '<span class="alerta-tipo alt-turno">Turno</span>'
-      : `<span class="alerta-tipo alt-${tipoLabel[tipo]?tipo:'otro'}">${tipoLabel[tipo]||'Otro'}</span>`;
-    const extra = ev._esTurno ? `${ev.sede?` · ${ev.sede==='caba'?'CABA':'Morón'}`:''}${ev.abog?` · atiende ${h(ev.abog)}`:''}` : '';
+    const click = ev._esTarea ? `openTareaDet('${ev.tareaId}')` : (exp ? `goToDetail('${exp.id}')` : (ev._esTurno ? `window.open(TURNOS_APP_URL,'_blank')` : `showView('calendario')`));
+    const tag = ev._esTarea
+      ? '<span class="alerta-tipo alt-tarea">Tarea</span>'
+      : (ev._esTurno
+        ? '<span class="alerta-tipo alt-turno">Turno</span>'
+        : `<span class="alerta-tipo alt-${tipoLabel[tipo]?tipo:'otro'}">${tipoLabel[tipo]||'Otro'}</span>`);
+    const extra = ev._esTarea ? (ev.asigNombre?` · para ${h(ev.asigNombre)}`:'') : (ev._esTurno ? `${ev.sede?` · ${ev.sede==='caba'?'CABA':'Morón'}`:''}${ev.abog?` · atiende ${h(ev.abog)}`:''}` : '');
     return `<div class="alerta-item ${cls}" onclick="${click}">
       ${chip}
       <div class="alerta-info">
@@ -1145,17 +1556,26 @@ function renderDashboard() {
     `<tr><td colspan="4"><div class="empty-state"><div class="empty-title">Sin expedientes aún</div></div></td></tr>`;
   const hoy = new Date(); hoy.setHours(0,0,0,0);
   const en30 = new Date(hoy); en30.setDate(en30.getDate()+30);
-  const todos = todosEvs();
-  const prox = todos.filter(ev=>{const d=new Date(ev.fecha+'T00:00:00');return d>=hoy&&d<=en30;}).sort((a,b)=>a.fecha.localeCompare(b.fecha)).slice(0,5);
+  let prox = todosEvs().filter(ev=>{const d=new Date(ev.fecha+'T00:00:00');return d>=hoy&&d<=en30;}).map(ev=>({...ev,_esTarea:false}));
+  tareas.forEach(t=>{
+    if(t.estado==='hecha' || !t.vence || !tkParaMi(t)) return;
+    const d = new Date(t.vence+'T00:00:00');
+    if(d>=hoy && d<=en30){
+      const asig=tkPerfil(t.asignado_a);
+      prox.push({_esTarea:true, tareaId:t.id, fecha:t.vence, titulo:t.titulo, expediente_id:t.expediente_id||null, asigNombre:asig?tkFirst(asig):null});
+    }
+  });
+  prox = prox.sort((a,b)=>a.fecha.localeCompare(b.fecha)).slice(0,6);
   const listaEl = document.getElementById('proximos-list');
   listaEl.innerHTML = prox.length ? prox.map(ev=>{
     const exp = ev.expediente_id ? expedientes.find(x=>x.id===ev.expediente_id) : null;
     const dias = Math.round((new Date(ev.fecha+'T00:00:00')-hoy)/86400000);
     const col = dias<=3?'#c0392b':dias<=7?'var(--gold)':'var(--navy)';
-    return `<div class="ev-item"><div class="ev-dot" style="background:${col}"></div><div class="ev-info">
-      <div class="ev-title-t">${h(ev.titulo)}</div>
+    const click = ev._esTarea ? ` onclick="openTareaDet('${ev.tareaId}')" style="cursor:pointer"` : '';
+    return `<div class="ev-item"${click}><div class="ev-dot" style="background:${col}"></div><div class="ev-info">
+      <div class="ev-title-t">${ev._esTarea?'<span style="display:inline-block;font-size:9px;font-weight:700;background:#eaf0fb;color:#2f5aa8;padding:1px 6px;border-radius:5px;margin-right:6px;vertical-align:1px;text-transform:uppercase;letter-spacing:.04em">Tarea</span>':''}${h(ev.titulo)}</div>
       <div class="ev-meta-t">${fmtFecha(ev.fecha)} · <span style="color:${col};font-weight:600">${dias===0?'Hoy':dias===1?'Mañana':'en '+dias+' días'}</span></div>
-      ${exp?`<div class="ev-exp-tag">${h(exp.nroexp)||'#'+exp.id.slice(-6)} — ${h(exp.nombre)}</div>`:''}
+      ${exp?`<div class="ev-exp-tag">${h(exp.nroexp)||'#'+exp.id.slice(-6)} — ${h(exp.nombre)}</div>`:ev._esTarea&&ev.asigNombre?`<div class="ev-exp-tag">Para ${h(ev.asigNombre)}</div>`:''}
     </div></div>`;
   }).join('') : '<div style="color:var(--g400);font-size:13px;text-align:center;padding:14px">Sin eventos próximos</div>';
 }
