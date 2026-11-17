@@ -1245,6 +1245,76 @@ table.liq tbody tr:hover{background:none}
 .es-pila-lista .es-row:first-child{border-top:none}
 @media(max-width:760px){.es-pila-head{padding:14px 16px}.es-tipos{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding:0 16px 4px;scrollbar-width:none}.es-chip{flex-shrink:0}}
 [data-mode=dark] .es-pila-ico i:nth-child(3){background:linear-gradient(160deg,#3a3420,#2a2516);color:var(--gold-light)}
+.es-editar{margin-top:18px;border:1px solid var(--g100);border-radius:12px;padding:0 14px}
+.es-editar summary{cursor:pointer;list-style:none;padding:13px 0;font-size:14px;font-weight:600;color:var(--g800);display:flex;align-items:center;justify-content:space-between}
+.es-editar summary::-webkit-details-marker{display:none}
+.es-editar summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--g400);border-bottom:2px solid var(--g400);transform:rotate(45deg);transition:transform .2s;margin-right:4px}
+.es-editar[open] summary::after{transform:rotate(-135deg)}
+.es-editar[open]{padding-bottom:14px}
+.es-nota{margin-top:4px}
+
+/* ===================== v7: ajustes para el celular ===================== */
+@media(max-width:900px){
+  /* tablas de carpetas como tarjetas */
+  #exp-tbody,#dash-tbody{display:block}
+  #exp-list table thead,#view-dashboard table thead{display:none}
+  #exp-list table,#view-dashboard .card table{display:block;width:100%;min-width:0}
+  #exp-tbody tr,#dash-tbody tr{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;row-gap:3px;align-items:center;padding:14px 18px;border-top:1px solid var(--g100);cursor:pointer}
+  #exp-tbody tr:first-child,#dash-tbody tr:first-child{border-top:none}
+  #exp-tbody td,#dash-tbody td{display:block;padding:0;border:none;min-width:0;font-size:13px;color:var(--g600)}
+  #exp-tbody td[colspan],#dash-tbody td[colspan]{grid-column:1/-1}
+  #exp-tbody td:nth-child(2),#dash-tbody td:nth-child(2){grid-column:1;grid-row:1}
+  #exp-tbody td:nth-child(2) .client-name,#dash-tbody td:nth-child(2) .client-name{font-size:15.5px;font-weight:600;color:var(--g800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #exp-tbody td:nth-child(1),#dash-tbody td:nth-child(1){grid-column:1;grid-row:2}
+  #exp-tbody td:nth-child(1) .exp-num,#dash-tbody td:nth-child(1) .exp-num{font-size:12.5px;font-weight:500;color:var(--g400);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #exp-tbody td:nth-child(3),#dash-tbody td:nth-child(3){grid-column:1;grid-row:3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #exp-tbody td:nth-child(3)::before,#dash-tbody td:nth-child(3)::before{content:"c/ "}
+  #exp-tbody td:nth-child(6),#dash-tbody td:nth-child(4){grid-column:2;grid-row:1;justify-self:end}
+  #exp-tbody td:nth-child(8){grid-column:2;grid-row:2/4;justify-self:end;align-self:end}
+  #exp-tbody td:nth-child(4),#exp-tbody td:nth-child(5),#exp-tbody td:nth-child(7){display:none}
+  #exp-tbody .client-sub{display:none}
+
+  /* buscador de expedientes mas compacto */
+  #exp-list .search-bar{display:flex;flex-wrap:wrap;gap:8px}
+  #exp-list .search-bar .search-wrap{flex:1 1 100%}
+  #exp-list .search-bar>input,#exp-list .search-bar>select{flex:1 1 calc(50% - 4px);width:auto !important;min-width:0}
+  #exp-list .search-bar .exp-vista{flex:0 0 auto}
+  #exp-list .search-bar .exp-export-btn,#exp-list .search-bar .exp-inc-btn{flex:1 1 0;padding-inline:10px;font-size:13.5px;min-width:0}
+  #exp-list .search-bar .exp-export-btn svg{display:none}
+
+  /* inicio sin repetir los vencimientos (ya estan en "Atencion esta semana") */
+  .yo-cols>div:first-child{display:none}
+  .yo-cols{margin-top:14px}
+
+  /* menu lateral: todo se desplaza junto y nada queda tapado */
+  .sidebar{overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .sidebar-nav{flex:none;overflow:visible}
+  .side-prefs{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .side-prefs .tema-seg{grid-column:1/-1}
+  .side-prefs .avisos-btn{font-size:12px;padding:9px 6px;min-width:0}
+  .side-prefs .avisos-btn span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* tarjetas del equipo */
+  .member-card{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:13px;row-gap:8px;align-items:start}
+  .member-card>.user-avatar{grid-row:1/3}
+  .member-card .member-info{grid-column:2}
+  .member-card>.badge{grid-column:2;justify-self:start}
+  .member-card .eq-acc,.member-card>select,.member-card>.btn{grid-column:1/-1}
+  .member-card .eq-acc .btn{flex:1}
+
+  /* escritos: abogados en una fila deslizable */
+  .es-autores{display:flex;overflow-x:auto;gap:10px;margin-inline:-16px;padding:2px 16px 6px;scrollbar-width:none}
+  .es-autor{flex:0 0 auto;max-width:250px;padding:11px 13px}
+  .es-pila-t span{line-height:1.35}
+  .es-pila-ico{width:38px;height:44px}
+}
+@media(max-width:760px){
+  #exp-list .search-bar .exp-vista{flex:1 1 100%;display:flex}
+  #exp-list .search-bar .exp-vista button{flex:1}
+  #exp-list .search-bar .exp-export-btn,#exp-list .search-bar .exp-inc-btn{flex:1 1 calc(50% - 4px)}
+  .es-sel-jefe{display:none !important}
+  .es-texto{font-size:15px}
+}
 </style>
 </head>
 <body>
@@ -5737,6 +5807,7 @@ function histCambios(antes, despues){
     sel.innerHTML = '<option value="">Todos los abogados</option>'+autores.map(id=>'<option value="'+id+'">'+h(nombreDe(id))+'</option>').join('');
     sel.value = autores.includes(v) ? v : '';
     sel.style.display = autores.length>1 || esJefe() ? '' : 'none';
+    sel.classList.toggle('es-sel-jefe', esJefe());
     const opts = esJefe() ? [] : [['todos','Todos'],['mios','Míos'],['compartidos','Compartidos']];
     $('es-alcance').style.display = opts.length ? '' : 'none';
     $('es-alcance').innerHTML = opts.map(o=>'<button class="'+(filtro.alcance===o[0]?'on':'')+'" onclick="escAlcance(\''+o[0]+'\')">'+o[1]+'</button>').join('');
@@ -5916,14 +5987,14 @@ function histCambios(antes, despues){
     $('esv-body').innerHTML =
       '<div class="es-meta">'+iconoArchivo(x)+'<div><b>'+h(nombreDe(x.autor_id))+'</b><span>'+h([x.tipo, fecha(x.creado_at), x.archivo_nombre, x.palabras ? x.palabras.toLocaleString('es-AR')+' palabras' : null].filter(Boolean).join(' · '))+'</span>'+
         (e ? '<button class="xp-link" onclick="escCerrar();goToDetail(\''+e.id+'\')">Carpeta: '+h(e.nombre||ref(e))+'</button>' : '')+'</div></div>'+
-      (ed ? '<div class="form-grid es-edit" style="gap:13px">'+
+      (x.nota ? '<p class="es-nota">'+h(x.nota)+'</p>' : '')+
+      '<div class="es-sec" style="margin-top:18px">Texto del escrito</div><div class="es-texto" id="esv-texto">Cargando</div>'+
+      (ed ? '<details class="es-editar"><summary>Editar datos del escrito</summary><div class="form-grid es-edit" style="gap:13px">'+
           '<div class="form-group"><label for="esv-tit">Título</label><input id="esv-tit" value="'+h(x.titulo)+'"></div>'+
           '<div class="form-group"><label for="esv-tipo">Tipo</label><select id="esv-tipo">'+TIPOS.map(t=>'<option'+(t===x.tipo?' selected':'')+'>'+t+'</option>').join('')+'</select></div>'+
           '<div class="form-group"><label for="esv-exp">Carpeta</label><select id="esv-exp"><option value="">Ninguna</option>'+expedientes.map(z=>'<option value="'+z.id+'"'+(z.id===x.expediente_id?' selected':'')+'>'+h((z.nombre||'Sin nombre')+' · '+ref(z))+'</option>').join('')+'</select></div>'+
           '<div class="form-group"><label for="esv-nota">Nota</label><input id="esv-nota" value="'+h(x.nota||'')+'"></div>'+
-        '</div><label class="xp-check" style="margin-top:12px"><input type="checkbox" id="esv-comp"'+(x.visibilidad==='estudio'?' checked':'')+'> Compartir con todo el estudio</label>'
-        : (x.nota ? '<p class="es-nota">'+h(x.nota)+'</p>' : ''))+
-      '<div class="es-sec" style="margin-top:20px">Texto del escrito</div><div class="es-texto" id="esv-texto">Cargando</div>';
+        '</div><label class="xp-check" style="margin-top:12px"><input type="checkbox" id="esv-comp"'+(x.visibilidad==='estudio'?' checked':'')+'> Compartir con todo el estudio</label></details>' : '');
     $('esv-pie').innerHTML = (ed ? '<button class="btn btn-danger" onclick="escBorrar()">Eliminar</button><span style="flex:1"></span>' : '<span style="flex:1"></span>')+
       '<button class="btn btn-outline" onclick="escCopiar()">Copiar texto</button>'+
       (x.storage_key ? '<button class="btn btn-outline" onclick="escBajar()">'+ico(I_DESC,14)+'Original</button>' : '')+
