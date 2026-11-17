@@ -1218,6 +1218,33 @@ table.liq tbody tr:hover{background:none}
   .es-texto{max-height:52vh;padding:14px}
 }
 [data-mode=dark] .es-ico::before{background:linear-gradient(225deg,var(--white) 50%,rgba(0,0,0,.35) 50%)}
+/* pilas por tipo */
+.es-tipos{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 22px}
+.es-chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--g200);background:var(--white);color:var(--g800);font-family:inherit;font-size:13.5px;font-weight:500;padding:8px 13px;border-radius:980px;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.es-chip b{font-size:12px;font-weight:700;color:var(--g400);font-variant-numeric:tabular-nums}
+.es-chip:hover{border-color:var(--g400)}
+.es-chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.es-chip.on b{color:var(--gold-light)}
+.es-cab{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.es-pila{background:var(--white);border:1px solid var(--g100);border-radius:18px;box-shadow:var(--sh);margin-bottom:14px;overflow:hidden;animation:pilaIn .35s var(--ease) both}
+@keyframes pilaIn{from{opacity:0;transform:translateY(8px)}}
+.es-pila-head{display:flex;align-items:center;gap:16px;width:100%;border:none;background:none;font-family:inherit;text-align:left;color:var(--g800);padding:16px 20px;cursor:pointer}
+.es-pila-head:hover{background:var(--hover)}
+.es-pila-ico{position:relative;width:44px;height:50px;flex-shrink:0}
+.es-pila-ico i{position:absolute;inset:0;border-radius:7px;border:1px solid var(--g200);background:var(--white)}
+.es-pila-ico i:nth-child(1){transform:translate(7px,-6px) rotate(7deg);background:var(--g100)}
+.es-pila-ico i:nth-child(2){transform:translate(3px,-3px) rotate(3deg);background:var(--g50)}
+.es-pila-ico i:nth-child(3){display:flex;align-items:center;justify-content:center;font-style:normal;font-size:15px;font-weight:700;color:var(--gold3,#a8843a);background:linear-gradient(160deg,#fffdf6,#f6edd7);border-color:rgba(201,165,90,.5);font-variant-numeric:tabular-nums}
+.es-pila.abierta .es-pila-ico i:nth-child(1){transform:translate(9px,-7px) rotate(10deg)}
+.es-pila-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.es-pila-t b{font-size:16px;font-weight:600}
+.es-pila-t span{font-size:12.5px;color:var(--g400)}
+.es-pila-fl{color:var(--g400);transition:transform .25s var(--ease);flex-shrink:0}
+.es-pila.abierta .es-pila-fl{transform:rotate(90deg)}
+.es-pila-lista{border-top:1px solid var(--g100)}
+.es-pila-lista .es-row:first-child{border-top:none}
+@media(max-width:760px){.es-pila-head{padding:14px 16px}.es-tipos{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding:0 16px 4px;scrollbar-width:none}.es-chip{flex-shrink:0}}
+[data-mode=dark] .es-pila-ico i:nth-child(3){background:linear-gradient(160deg,#3a3420,#2a2516);color:var(--gold-light)}
 </style>
 </head>
 <body>
@@ -5596,7 +5623,6 @@ function histCambios(antes, despues){
   const I_MAS = '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>';
   const I_DESC = '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>';
   const I_SUBIR = '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>';
-  const I_CHISPA = '<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>';
   const I_BUSCAR = '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>';
   const cerrarBtn = fn => '<button class="close-btn" onclick="'+fn+'" aria-label="Cerrar">'+ico(I_X,18)+'</button>';
   const esJefe = () => currentPerfil?.rol==='jefe';
@@ -5612,11 +5638,11 @@ function histCambios(antes, despues){
   const TIPOS = ['Demanda','Contestación de demanda','Contestación de traslado','Expresión de agravios','Contestación de agravios','Recurso','Alegato','Ofrecimiento de prueba','Oficio','Carta documento','Mediación','Acuerdo o convenio','Otro'];
   const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
   const MAMMOTH = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
-  const JSZIP = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
   const MAX_TEXTO = 400000;
 
   let lista = [], cargado = false, cargando = false;
-  const filtro = {q:'', autor:'', tipo:'', alcance:'todos'};
+  const filtro = {q:'', autor:'', tipos:new Set(), alcance:'todos'};
+  const abiertas = new Set();
 
   /* ============ Navegacion ============ */
   document.querySelector('.sidebar-nav .nav-btn[onclick="showView(\'calendario\')"]').insertAdjacentHTML('afterend',
@@ -5629,11 +5655,11 @@ function histCambios(antes, despues){
         '<div class="tk-toolbar es-toolbar">'+
           '<div class="search-wrap"><svg class="search-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">'+I_BUSCAR+'</svg><input class="search-input" id="es-q" placeholder="Buscar por título, carpeta o texto del escrito" autocomplete="off"></div>'+
           '<select id="es-autor" class="es-sel" aria-label="Abogado"></select>'+
-          '<select id="es-tipo" class="es-sel" aria-label="Tipo de escrito"><option value="">Todos los tipos</option>'+TIPOS.map(t=>'<option>'+t+'</option>').join('')+'</select>'+
           '<div class="tk-seg" id="es-alcance"></div>'+
-          '<button class="btn btn-outline" onclick="escExportarAbrir()">'+ico(I_CHISPA,15)+'Exportar para Claude</button>'+
         '</div>'+
-        '<div class="card"><div class="card-header"><div class="card-title">Escritos</div><span class="badge badge-navy" id="es-cuenta">0</span></div><div id="es-lista"></div></div>'+
+        '<div class="es-tipos" id="es-tipos" role="group" aria-label="Tipos de escrito"></div>'+
+        '<div class="es-cab"><span class="es-sec" style="margin:0">Escritos</span><span class="badge badge-navy" id="es-cuenta">0</span></div>'+
+        '<div id="es-lista"></div>'+
       '</div>'+
     '</div>');
   const VISTAS_BASE = ['dashboard','expedientes','tareas','gastos','calendario','rentabilidad','equipo'];
@@ -5668,13 +5694,13 @@ function histCambios(antes, despues){
   const _doLogout6 = doLogout;
   doLogout = async function(){ lista = []; cargado = false; return _doLogout6.apply(this, arguments); };
 
-  function visibles(){
+  function visibles(sinTipo){
     const q = norm(filtro.q);
     return lista.filter(x=>{
+      if(!sinTipo && filtro.tipos.size && !filtro.tipos.has(x.tipo)) return false;
       if(filtro.alcance==='mios' && x.autor_id!==yo()) return false;
       if(filtro.alcance==='compartidos' && (x.autor_id===yo() || x.visibilidad!=='estudio')) return false;
       if(filtro.autor && x.autor_id!==filtro.autor) return false;
-      if(filtro.tipo && x.tipo!==filtro.tipo) return false;
       if(!q) return true;
       const e = x.expediente_id ? expedientes.find(z=>z.id===x.expediente_id) : null;
       return [x.titulo, x.tipo, x.nota, x.archivo_nombre, nombreDe(x.autor_id), e && e.nombre, e && e.nroexp].some(f=>norm(f).includes(q)) || (x._texto && norm(x._texto).includes(q));
@@ -5719,21 +5745,45 @@ function histCambios(antes, despues){
     if(currentView!=='escritos') return;
     renderIntro(); renderFiltros();
     const el = $('es-lista'); if(!cargado) return;
-    const vis = visibles();
+    const vis = visibles(), base = visibles(true);
+    const orden = TIPOS.concat([...new Set(lista.map(x=>x.tipo))].filter(t=>!TIPOS.includes(t)));
+    const cuenta = t => base.filter(x=>x.tipo===t).length;
+    $('es-tipos').innerHTML = !lista.length ? '' : '<button class="es-chip'+(filtro.tipos.size?'':' on')+'" onclick="escTipo(\'\')">Todos <b>'+base.length+'</b></button>'+
+      orden.filter(t=>cuenta(t) || filtro.tipos.has(t)).map(t=>'<button class="es-chip'+(filtro.tipos.has(t)?' on':'')+'" onclick="escTipo(\''+t+'\')">'+h(t)+' <b>'+cuenta(t)+'</b></button>').join('');
     $('es-cuenta').textContent = plural(vis.length,'escrito');
-    el.innerHTML = vis.length ? vis.map(x=>{
+    const fila = x=>{
       const e = x.expediente_id ? expedientes.find(z=>z.id===x.expediente_id) : null;
       const meta = [esJefe() || x.autor_id!==yo() ? nombreDe(x.autor_id) : 'Vos', fecha(x.creado_at), e ? (e.nombre||ref(e)) : null, x.palabras ? x.palabras.toLocaleString('es-AR')+' palabras' : 'sin texto extraído'].filter(Boolean);
       return '<button class="es-row" onclick="escAbrir(\''+x.id+'\')">'+iconoArchivo(x)+
-        '<span class="es-row-t"><b>'+h(x.titulo)+'</b><span>'+h(meta.join(' · '))+'</span></span>'+
-        '<span class="badge badge-gold es-tipo">'+h(x.tipo)+'</span>'+(x.visibilidad==='estudio' ? '<span class="badge badge-navy">Compartido</span>' : '')+'</button>';
-    }).join('') : '<div class="empty-state" style="padding:40px 20px"><div class="empty-title">'+(lista.length ? 'Ningún escrito coincide con los filtros' : 'Todavía no hay escritos')+'</div>'+(lista.length ? '' : '<div style="margin-top:14px"><button class="btn btn-gold" onclick="escNuevo()">'+ico(I_MAS,14)+'Subir el primero</button></div>')+'</div>';
+        '<span class="es-row-t"><b>'+h(x.titulo)+'</b><span>'+h(meta.join(' · '))+'</span></span>'+(x.visibilidad==='estudio' ? '<span class="badge badge-navy">Compartido</span>' : '')+'</button>';
+    };
+    const pilas = orden.map(t=>[t, vis.filter(x=>x.tipo===t)]).filter(p=>p[1].length);
+    const todoAbierto = !!filtro.q || pilas.length===1;
+    el.innerHTML = pilas.length ? pilas.map(([t, xs])=>{
+      const ab = todoAbierto || filtro.tipos.has(t) || abiertas.has(t);
+      const autores = [...new Set(xs.map(x=>x.autor_id))];
+      return '<section class="es-pila'+(ab?' abierta':'')+'"><button class="es-pila-head" onclick="escPila(\''+t+'\')" aria-expanded="'+ab+'">'+
+          '<span class="es-pila-ico" aria-hidden="true"><i></i><i></i><i>'+xs.length+'</i></span>'+
+          '<span class="es-pila-t"><b>'+h(t)+'</b><span>'+plural(xs.length,'escrito')+(esJefe() || autores.length>1 ? ' · '+plural(autores.length,'abogado') : '')+' · último: '+fecha(xs[0].creado_at)+'</span></span>'+
+          '<svg class="es-pila-fl" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>'+
+        (ab ? '<div class="es-pila-lista">'+xs.map(fila).join('')+'</div>' : '')+'</section>';
+    }).join('') : '<div class="card"><div class="empty-state" style="padding:40px 20px"><div class="empty-title">'+(lista.length ? 'Ningún escrito coincide con los filtros' : 'Todavía no hay escritos')+'</div>'+(lista.length ? '' : '<div style="margin-top:14px"><button class="btn btn-gold" onclick="escNuevo()">'+ico(I_MAS,14)+'Subir el primero</button></div>')+'</div></div>';
   }
+  window.escTipo = function(t){
+    if(!t) filtro.tipos.clear();
+    else if(filtro.tipos.has(t)){ filtro.tipos.delete(t); abiertas.delete(t); }
+    else filtro.tipos.add(t);
+    renderEscritos();
+  };
+  window.escPila = function(t){
+    if(filtro.tipos.has(t)){ filtro.tipos.delete(t); abiertas.delete(t); }
+    else if(abiertas.has(t)) abiertas.delete(t); else abiertas.add(t);
+    renderEscritos();
+  };
   window.escVerAutor = function(id){ filtro.autor = filtro.autor===id ? '' : id; renderEscritos(); };
   window.escAlcance = function(a){ filtro.alcance = a; renderEscritos(); };
   $('es-q').addEventListener('input', ev=>{ filtro.q = ev.target.value; renderEscritos(); });
   $('es-autor').addEventListener('change', ev=>{ filtro.autor = ev.target.value; renderEscritos(); });
-  $('es-tipo').addEventListener('change', ev=>{ filtro.tipo = ev.target.value; renderEscritos(); });
 
   /* ============ Lectura del texto de los archivos ============ */
   async function textoDe(file){
@@ -5922,77 +5972,6 @@ function histCambios(antes, despues){
     if(x.storage_key) sb.storage.from('escritos').remove([x.storage_key]).then(()=>{}, ()=>{});
     lista = lista.filter(z=>z.id!==x.id);
     escCerrar(); renderEscritos(); escCarpetaRefrescar(x.expediente_id); showToast('Escrito eliminado');
-  };
-
-  /* ============ Exportar para Claude ============ */
-  document.body.insertAdjacentHTML('beforeend',
-    '<div class="overlay" id="ov-es-exp" onclick="if(event.target.id===\'ov-es-exp\')escExportarCerrar()"><div class="modal" style="max-width:560px">'+
-    '<div class="modal-header"><div class="modal-title">Exportar para Claude</div>'+cerrarBtn('escExportarCerrar()')+'</div>'+
-    '<div class="modal-body">'+
-      '<div class="dt-texto" id="ese-que"></div>'+
-      '<div class="xp-modos es-modos">'+
-        '<button class="xp-modo" onclick="escExportar(\'texto\')"><b>Texto para Claude (.md)</b><span>Un solo archivo con todos los escritos y una instrucción para que imite el estilo. Es lo más cómodo para adjuntar en un chat.</span></button>'+
-        '<button class="xp-modo" onclick="escExportar(\'zip\')"><b>Archivos originales (.zip)</b><span>Los Word y PDF tal como se subieron, en una carpeta por abogado.</span></button>'+
-      '</div>'+
-      '<div class="dt-nota" id="ese-estado"></div>'+
-    '</div>'+
-    '<div class="modal-footer"><button class="btn btn-outline" onclick="escExportarCerrar()">Cerrar</button></div></div></div>');
-  window.escExportarAbrir = function(){
-    if(!cargado){ showToast('Todavía se están cargando los escritos', true); return; }
-    const vis = visibles(), autores = [...new Set(vis.map(x=>x.autor_id))];
-    $('ese-que').textContent = vis.length ? 'Se van a exportar los '+plural(vis.length,'escrito')+' que estás viendo'+(autores.length===1 ? ', de '+nombreDe(autores[0]) : ', de '+plural(autores.length,'abogado'))+'. Usá los filtros para elegir de quién o de qué tipo.' : 'No hay escritos con los filtros actuales.';
-    $('ese-estado').textContent = '';
-    document.querySelectorAll('#ov-es-exp .xp-modo').forEach(b=>b.disabled = !vis.length);
-    $('ov-es-exp').classList.add('open');
-  };
-  window.escExportarCerrar = function(){ $('ov-es-exp').classList.remove('open'); };
-  function bajarBlob(blob, nombre){ const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nombre; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 800); }
-  const slug = s => norm(s).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40) || 'escritos';
-  window.escExportar = async function(modo){
-    const vis = visibles(); if(!vis.length) return;
-    const est = $('ese-estado'), botones = document.querySelectorAll('#ov-es-exp .xp-modo');
-    botones.forEach(b=>b.disabled = true);
-    const fin = msg => { botones.forEach(b=>b.disabled = false); est.textContent = msg||''; };
-    const autores = [...new Set(vis.map(x=>x.autor_id))], quien = autores.length===1 ? nombreDe(autores[0]) : 'varios abogados';
-    const base = 'escritos-'+(autores.length===1 ? slug(quien) : 'estudio-lena')+'-'+hoyISO();
-    if(modo==='texto'){
-      est.textContent = 'Juntando los textos';
-      try{ await traerTexto(vis.map(x=>x.id)); }catch(_){ fin('No se pudieron cargar los textos. Revisá la conexión.'); return; }
-      const sinTexto = vis.filter(x=>!x._texto).length;
-      const partes = ['# Escritos de referencia: Estudio Lena & Asociados', '',
-        'Autor: '+quien+'  ', 'Cantidad: '+vis.length+'  ', 'Generado: '+new Date().toLocaleDateString('es-AR')+' por '+(currentPerfil?.nombre||''), '',
-        '## Instrucción para Claude', '',
-        'Estos son escritos judiciales reales redactados por '+(autores.length===1 ? quien : 'abogados')+' del Estudio Lena & Asociados (Morón, provincia de Buenos Aires). '+
-        'Estudiá su estilo: estructura y encabezados, fórmulas de inicio y de cierre, tratamiento al tribunal, vocabulario, extensión de los párrafos, '+
-        'forma de citar normas, doctrina y jurisprudencia, y cómo formulan el petitorio. Cuando te pida un escrito nuevo, redactalo imitando ese estilo. '+
-        'No copies datos personales de estos casos en escritos nuevos.', ''];
-      vis.forEach((x,i)=>{
-        const e = x.expediente_id ? expedientes.find(z=>z.id===x.expediente_id) : null;
-        partes.push('---', '', '## '+(i+1)+'. '+x.titulo, '', '- Tipo: '+x.tipo, '- Autor: '+nombreDe(x.autor_id), '- Fecha de carga: '+fecha(x.creado_at)+(e ? '\n- Carpeta: '+(e.nombre||ref(e)) : '')+(x.nota ? '\n- Nota: '+x.nota : ''), '',
-          x._texto ? x._texto : '[Sin texto extraíble. Adjuntá el original "'+(x.archivo_nombre||'')+'" por separado.]', '');
-      });
-      bajarBlob(new Blob([partes.join('\n')], {type:'text/markdown;charset=utf-8'}), base+'.md');
-      fin('Listo. Adjuntá ese archivo en Claude y pedile el escrito que necesites.'+(sinTexto ? ' '+plural(sinTexto,'escrito no tiene','escritos no tienen')+' texto; para esos usá los originales.' : ''));
-      return;
-    }
-    const conArchivo = vis.filter(x=>x.storage_key);
-    if(!conArchivo.length){ fin('Estos escritos no tienen archivo original.'); return; }
-    try{ if(typeof JSZip==='undefined') await cargarLib(JSZIP); }catch(_){ fin('No se pudo preparar el .zip. Revisá la conexión.'); return; }
-    const zip = new JSZip(), usados = {}; let hechos = 0, fallas = 0;
-    for(let i=0; i<conArchivo.length; i+=6){
-      await Promise.all(conArchivo.slice(i,i+6).map(async x=>{
-        try{
-          const r = await fetch(await urlDe(x, 600)); if(!r.ok) throw new Error(r.status);
-          const carpeta = slug(nombreDe(x.autor_id)), nom = (x.archivo_nombre||x.titulo).replace(/[\\/:*?"<>|]+/g,'_');
-          let ruta = carpeta+'/'+nom, k = 2; while(usados[ruta]){ ruta = carpeta+'/'+nom.replace(/(\.[^.]+)?$/, ' ('+(k++)+')$1'); }
-          usados[ruta] = 1; zip.file(ruta, await r.blob());
-        }catch(_){ fallas++; }
-        hechos++; est.textContent = 'Descargando '+hechos+' de '+conArchivo.length;
-      }));
-    }
-    est.textContent = 'Armando el .zip';
-    bajarBlob(await zip.generateAsync({type:'blob'}), base+'.zip');
-    fin(fallas ? 'Se descargó el .zip, pero '+plural(fallas,'archivo no se pudo','archivos no se pudieron')+' incluir.' : 'Listo: '+plural(conArchivo.length,'archivo')+' en el .zip.');
   };
 
   /* ============ Escritos dentro de cada carpeta ============ */
