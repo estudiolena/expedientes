@@ -2339,9 +2339,7 @@ function showView(v) {
     if(el) el.style.display = id===v ? '' : 'none';
   });
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  ['dashboard','expedientes','tareas','gastos','calendario','rentabilidad','equipo'].forEach((id,i) => {
-    if(id===v) document.querySelectorAll('.nav-btn')[i]?.classList.add('active');
-  });
+  document.querySelectorAll('.nav-btn').forEach(b => { if((b.getAttribute('onclick')||'')==="showView('"+v+"')") b.classList.add('active'); });
   if(v==='dashboard') renderDashboard();
   if(v==='tareas') renderTareas();
   if(v==='expedientes') { showListView(); renderExp(); }
@@ -5621,8 +5619,8 @@ function histCambios(antes, despues){
   const filtro = {q:'', autor:'', tipo:'', alcance:'todos'};
 
   /* ============ Navegacion ============ */
-  document.querySelector('.sidebar-nav').insertAdjacentHTML('beforeend',
-    '<div class="nav-label">Biblioteca</div><button class="nav-btn" id="nav-escritos" onclick="showView(\'escritos\')">'+ico(I_PLUMA,18)+'Escritos</button>');
+  document.querySelector('.sidebar-nav .nav-btn[onclick="showView(\'calendario\')"]').insertAdjacentHTML('afterend',
+    '<button class="nav-btn" id="nav-escritos" onclick="showView(\'escritos\')">'+ico(I_PLUMA,18)+'Escritos</button>');
   $('view-equipo').insertAdjacentHTML('afterend',
     '<div id="view-escritos" style="display:none">'+
       '<div class="topbar"><div class="topbar-title">Escritos</div><button class="btn btn-gold" onclick="escNuevo()">'+ico(I_MAS,14)+'Subir escrito</button></div>'+
