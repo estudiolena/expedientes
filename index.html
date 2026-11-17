@@ -1087,6 +1087,83 @@ button.dc-item:hover{background:var(--hover)}
 [data-mode=dark] .dc-ring{background:radial-gradient(closest-side,var(--white) 76%,transparent 78%),conic-gradient(var(--c) calc(var(--p)*1%),var(--g200) 0)}
 [data-mode=dark] .exp-inc-btn.on{background:#3a4264;border-color:#3a4264}
 [data-mode=dark] .dr-card{border-color:var(--gold)}
+
+/* ===================== v5: cuentas del equipo ===================== */
+.login-olvide{display:block;margin:14px auto 0;border:none;background:none;color:rgba(255,255,255,.6);font-family:inherit;font-size:13px;cursor:pointer;padding:4px 8px}
+.login-olvide:hover{color:#fff;text-decoration:underline}
+.login-error.info{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.18)}
+.modal .login-error{margin-bottom:12px}
+#user-badge{cursor:pointer;transition:background .2s}
+#user-badge:hover{background:rgba(255,255,255,.1)}
+.user-avatar.con-foto{background-size:cover;background-position:center;color:transparent}
+.notif-n{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--gold);color:#171b2d;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.notif-row{width:100%;border:none;background:none;font-family:inherit;text-align:left;color:var(--g800)}
+.notif-row.nueva{background:var(--g50)}
+.notif-row .xp-row-main span.notif-txt{color:var(--g800);white-space:normal;font-size:13.5px;line-height:1.4}
+.notif-punto{width:9px;height:9px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.men-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px;font-size:12.5px;color:var(--g400)}
+.men-chip{border:none;background:var(--g100);color:var(--g800);font-family:inherit;font-size:12.5px;font-weight:600;padding:4px 10px;border-radius:980px;cursor:pointer}
+.men-chip:hover{background:var(--g200)}
+/* perfil */
+.pf-foto{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.pf-foto-acc{display:flex;gap:8px;flex-wrap:wrap}
+.user-avatar.pf-av{width:72px;height:72px;font-size:24px}
+.pf-sub{font-size:13px;font-weight:600;color:var(--g800);margin:20px 0 9px}
+#ov-perfil .xp-lista,#ov-actividad .xp-lista{max-height:220px}
+/* inicio personal */
+#dash-yo{margin-bottom:16px}
+.yo-card{margin-bottom:0}
+.yo-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.yo-sel,.eq-select{padding:8px 12px;border:1.5px solid var(--g200);border-radius:10px;font-family:inherit;font-size:13.5px;background:var(--white);color:var(--g800);max-width:220px}
+.yo-aviso{display:flex;align-items:center;gap:9px;width:100%;border:none;background:var(--g50);color:var(--g800);font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 12px;border-radius:11px;cursor:pointer;margin-bottom:12px;text-align:left}
+.yo-aviso span{flex:1}
+.yo-aviso svg:first-child{color:var(--gold)}
+.yo-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.yo-tile{display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:none;background:var(--g50);border-radius:14px;padding:14px 15px;font-family:inherit;cursor:pointer;text-align:left;color:var(--g800);transition:background .15s,transform .15s;-webkit-tap-highlight-color:transparent}
+.yo-tile:hover{background:var(--g100)}
+.yo-tile:active{transform:scale(.975)}
+.yo-tile b{font-family:var(--font-d);font-size:28px;font-weight:700;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.yo-tile span{font-size:12.5px;color:var(--g600);line-height:1.3}
+.yo-tile.alerta b{color:var(--red)}
+.yo-cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:18px}
+.yo-sec{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--g400);font-weight:700;margin-bottom:6px}
+.yo-item{display:flex;align-items:center;gap:12px;width:100%;border:none;border-top:1px solid var(--g100);background:none;font-family:inherit;text-align:left;color:var(--g800);padding:9px 4px;cursor:pointer}
+.yo-item:hover{background:var(--hover)}
+.yo-dia{flex-shrink:0;min-width:52px;font-size:12.5px;font-weight:600;color:var(--g600);font-variant-numeric:tabular-nums}
+.yo-dia.hoy{color:var(--red)}
+.yo-item-t{min-width:0;display:flex;flex-direction:column;gap:1px}
+.yo-item-t b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.yo-item-t span{font-size:12.5px;color:var(--g400);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.yo-num{display:flex;justify-content:space-between;align-items:baseline;gap:12px;width:100%;border:none;border-top:1px solid var(--g100);background:none;font-family:inherit;font-size:14px;color:var(--g600);padding:10px 4px;text-align:left}
+button.yo-num{cursor:pointer}
+button.yo-num:hover{background:var(--hover)}
+.yo-num b{font-weight:600;color:var(--g800);font-variant-numeric:tabular-nums;white-space:nowrap}
+/* equipo */
+.eq-sec{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--g400);font-weight:700;margin:26px 0 10px}
+.eq-vos{font-size:11px;font-weight:600;color:var(--g400);background:var(--g100);padding:1px 7px;border-radius:980px;margin-left:4px;vertical-align:1px}
+.eq-carga{display:flex;flex-wrap:wrap;gap:5px;font-size:12.5px;color:var(--g600);margin-top:4px}
+.eq-carga b{color:var(--g800);font-weight:600}
+.eq-carga span{color:var(--g400)}
+.eq-aus{font-size:12.5px;font-weight:600;color:var(--gold);margin-top:3px}
+.eq-acc{display:flex;gap:6px;flex-wrap:wrap}
+.eq-inactiva{opacity:.85}
+.liq-nav{display:flex;gap:6px}
+.liq-wrap{overflow-x:auto;margin-top:14px}
+table.liq{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+table.liq th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--g400);font-weight:700;padding:8px 10px;border-bottom:1px solid var(--g200)}
+table.liq td{padding:10px;border-bottom:1px solid var(--g100);color:var(--g800);font-variant-numeric:tabular-nums}
+table.liq tr.liq-total td{border-bottom:none;font-weight:600}
+table.liq tbody tr:hover{background:none}
+@media(max-width:760px){
+  .yo-tiles{grid-template-columns:1fr 1fr}
+  .yo-cols{grid-template-columns:1fr;gap:18px}
+  .yo-head{flex-direction:column}
+  .yo-sel{max-width:none;width:100%}
+  .eq-acc{width:100%}
+}
+[data-mode=dark] .login-error.info{background:rgba(255,255,255,.1)}
+.notif-n:empty{display:none}
+@media(max-width:760px){.yo-sel{margin-bottom:12px}}
 </style>
 </head>
 <body>
@@ -1120,6 +1197,7 @@ button.dc-item:hover{background:var(--hover)}
     <div class="form-group" style="margin-bottom:14px"><label for="login-email">Email</label><input type="email" id="login-email" placeholder="nombre@estudio.com" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false"></div>
     <div class="form-group" style="margin-bottom:18px"><label for="login-pass">Contraseña</label><input type="password" id="login-pass" placeholder="Tu contraseña" autocomplete="current-password"></div>
     <button class="btn btn-gold btn-full" onclick="doLogin()" id="btn-login">Ingresar</button>
+    <button type="button" class="login-olvide" onclick="claveOlvide()">Olvidé mi contraseña</button>
     <div class="login-foot">Acceso exclusivo para el equipo del estudio</div>
   </div>
 </div>
@@ -1179,7 +1257,7 @@ button.dc-item:hover{background:var(--hover)}
       </button>
     </nav>
     <div class="sidebar-footer">
-      <div class="user-badge">
+      <div class="user-badge" id="user-badge" role="button" tabindex="0" title="Mi perfil" onclick="perfilAbrir()">
         <div class="user-avatar" id="sidebar-avatar">BB</div>
         <div>
           <div class="user-name" id="sidebar-name">—</div>
@@ -1598,7 +1676,7 @@ button.dc-item:hover{background:var(--hover)}
         <div class="form-group"><label>Nombre completo *</label><input id="nu-nombre" placeholder="Juan Pérez"></div>
         <div class="form-group"><label>Email *</label><input type="email" id="nu-email" placeholder="juan@lena.com.ar"></div>
         <div class="form-group"><label>Contraseña *</label><input type="password" id="nu-pass" placeholder="Mínimo 6 caracteres"></div>
-        <div class="form-group"><label>Rol</label><select id="nu-rol"><option value="asociado">Asociado</option><option value="jefe">Director Jurídico</option></select></div>
+        <div class="form-group"><label>Rol</label><select id="nu-rol"><option value="asociado">Asociado</option><option value="secretaria">Secretaria</option><option value="jefe">Director Jurídico</option></select></div>
       </div>
     </div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeCrearUserModal()">Cancelar</button><button class="btn btn-gold" onclick="crearUsuario()" id="btn-crear-user">Crear cuenta</button></div>
@@ -1889,7 +1967,6 @@ async function loadExpedientes() {
   const esSecretaria = currentPerfil?.rol === 'secretaria';
   const esAsociado = currentPerfil?.rol === 'asociado' || currentPerfil?.rol === 'empleado';
   let q = sb.from('expedientes').select('*, gastos(*), eventos(*), archivos(id,nombre,tipo,tamanio,fecha,expediente_id)').is('eliminado_at',null).order('creado_at',{ascending:false});
-  if(esAsociado) q = q.or(`asignado_a.eq.${currentUser.id},creado_por.eq.${currentUser.id}`);
   const {data, error} = await q;
   if(error || !data){ console.error('Error al cargar expedientes:', error); window._errCarga = true; return; }
   data.forEach(e=>{ e.asignado = perfiles.find(p=>p.id===e.asignado_a) || null; });
@@ -1944,7 +2021,6 @@ const TK_SVG = {
 async function loadTareas(){
   const esJefe = currentPerfil?.rol === 'jefe';
   let q = sb.from('tareas').select('*, tarea_comentarios(*)').order('creado_at',{ascending:false});
-  if(!esJefe) q = q.or(`asignado_a.eq.${currentUser.id},creado_por.eq.${currentUser.id},visibilidad.eq.estudio`);
   const {data,error} = await q;
   if(error){ console.error('Error al cargar tareas:', error); tareas=[]; return; }
   tareas = (data||[]).map(t=>({...t, comentarios:(t.tarea_comentarios||[]).sort((a,b)=>(a.creado_at||'').localeCompare(b.creado_at||''))}));
@@ -4623,6 +4699,9 @@ function histCambios(antes, despues){
       case 'mes': return e=>String(e.creado_at||'').slice(0,7)===x.valor;
       case 'incompletas': return e=>e.estado!=='Concluido' && !docEstado(e).completa;
       case 'congastos': return e=>(e.gastos||[]).length>0;
+      case 'de': return e=>e.estado!=='Concluido' && window.esMia(e, x.valor);
+      case 'cerradasde': return e=>e.estado==='Concluido' && window.esMia(e, x.valor);
+      case 'dormidas': return e=>e.estado!=='Concluido' && window.esMia(e, x.valor) && window.diasQuieta(e)>=30;
       default: return ()=>true;
     }
   }
@@ -4744,6 +4823,7 @@ function histCambios(antes, despues){
     if(sel){ const c = $('dash-drill').firstElementChild; if(c && c.scrollIntoView) c.scrollIntoView({behavior: sinAnim?'auto':'smooth', block:'nearest'}); }
   }
   $('dash-charts').addEventListener('click', ev=>{ const b = ev.target.closest('.ch-tap'); if(!b) return; try{ drill(JSON.parse(b.dataset.x)); }catch(_){ } });
+  window.dashDrill = drill;
   window.drillCerrar = function(){ sel = null; marcar(); renderDrill(); };
   window.drillAbrir = function(){
     if(!sel) return;
@@ -4875,7 +4955,7 @@ function histCambios(antes, despues){
   async function offlineEntrar(user){
     let snap = null; try{ snap = await idb.get('snap'); }catch(_){ }
     if(!snap || !snap.perfil || (user && snap.user && snap.user.id!==user.id)) return false;
-    offlineModo = true;
+    offlineModo = true; window._soloLectura = true;
     currentUser = user || snap.user; currentPerfil = snap.perfil;
     perfiles = snap.perfiles||[]; expedientes = snap.expedientes||[]; eventos = snap.eventos||[]; turnos = snap.turnos||[]; usuariosTurnos = snap.usuariosTurnos||[]; tareas = snap.tareas||[];
     expedientes.forEach(e=>{ e.asignado = perfiles.find(p=>p.id===e.asignado_a)||null; });
@@ -4894,7 +4974,7 @@ function histCambios(antes, despues){
   }
   const _initApp3 = initApp;
   initApp = async function(user){
-    offlineModo = false;
+    offlineModo = false; window._soloLectura = false;
     await _initApp3(user);
     if(window._errCarga || !currentPerfil){ await offlineEntrar(user); return; }
     store.set('lena-sesion','1'); guardarSnap();
@@ -4905,7 +4985,7 @@ function histCambios(antes, despues){
     sb.auth.getSession().then(r=>{ const s = r.data && r.data.session; if(s && s.user) initApp(s.user); else if(window.netBanner) netBanner('Volvió la conexión. Cerrá sesión e ingresá de nuevo para actualizar.', false); }).catch(()=>{});
   });
   const _doLogout3 = doLogout;
-  doLogout = async function(){ store.set('lena-sesion','0'); offlineModo = false; clearTimeout(snapTimer); idb.del('snap').catch(()=>{}); if(window.netBanner) netBanner(''); return _doLogout3.apply(this, arguments); };
+  doLogout = async function(){ store.set('lena-sesion','0'); offlineModo = false; window._soloLectura = false; clearTimeout(snapTimer); idb.del('snap').catch(()=>{}); if(window.netBanner) netBanner(''); return _doLogout3.apply(this, arguments); };
 
   /* --- Instalacion y service worker --- */
   if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(()=>{});
@@ -4954,7 +5034,7 @@ function histCambios(antes, despues){
     if(!monto){ showToast('Ingresá el total de la indemnización', true); return; }
     const ya = e.estado==='Concluido', btn = $('cierre-btn'), txt = btn.textContent;
     btn.disabled = true; btn.innerHTML = '<div class="spinner spinner-w"></div>';
-    const {error} = await sb.from('expedientes').update({estado:'Concluido', indemnizacion:monto, actualizado_at:new Date().toISOString()}).eq('id', cierreId);
+    const {error} = await sb.from('expedientes').update({estado:'Concluido', indemnizacion:monto, cerrado_at: ya ? (e.cerrado_at||e.actualizado_at||new Date().toISOString()) : new Date().toISOString(), actualizado_at:new Date().toISOString()}).eq('id', cierreId);
     btn.disabled = false; btn.textContent = txt;
     if(error){ showToast('No se pudo guardar: '+error.message, true); return; }
     await logHist(cierreId, 'cierre', (ya ? 'Indemnización actualizada: ' : 'Caso cerrado. Indemnización: ')+fmtP(monto)+' · Estudio: '+fmtP(monto/2));
@@ -4963,7 +5043,7 @@ function histCambios(antes, despues){
   };
   window.cierreReabrir = async function(id){
     if(!confirm('¿Reabrir el caso? Vuelve a En trámite. La indemnización cargada se conserva.')) return;
-    const {error} = await sb.from('expedientes').update({estado:'En trámite', actualizado_at:new Date().toISOString()}).eq('id', id);
+    const {error} = await sb.from('expedientes').update({estado:'En trámite', cerrado_at:null, actualizado_at:new Date().toISOString()}).eq('id', id);
     if(error){ showToast('No se pudo reabrir el caso', true); return; }
     await logHist(id, 'cierre', 'Caso reabierto');
     await trasCierre(id); showToast('Caso reabierto');
@@ -4977,6 +5057,479 @@ function histCambios(antes, despues){
       '<div class="ci-acc">'+(ya ? '<button class="btn btn-gold" onclick="cierreAbrir(\''+e.id+'\')">'+(ind?'Modificar monto':'Cargar indemnización')+'</button><button class="btn btn-outline" onclick="cierreReabrir(\''+e.id+'\')">Reabrir caso</button>'
         : '<button class="btn btn-gold ci-btn" onclick="cierreAbrir(\''+e.id+'\')">'+ico(I_CIERRE,16)+'Caso cerrado</button>')+'</div></div>'+
       (ya && ind ? '<div class="ci-reparto">'+reparto(ind)+'</div>' : '')+'</div>');
+  };
+})();
+
+/* ===================== CUENTAS DEL EQUIPO (v5) ===================== */
+(function(){
+  const $ = id => document.getElementById(id);
+  const ico = (p,s) => '<svg width="'+(s||15)+'" height="'+(s||15)+'" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">'+p+'</svg>';
+  const I_X = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+  const I_CHEV = '<polyline points="9 18 15 12 9 6"/>';
+  const I_IZQ = '<polyline points="15 18 9 12 15 6"/>';
+  const I_ARROBA = '<circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/>';
+  const cerrarBtn = fn => '<button class="close-btn" onclick="'+fn+'" aria-label="Cerrar">'+ico(I_X,18)+'</button>';
+  const store = { get(k){ try{ return localStorage.getItem(k); }catch(_){ return null; } }, set(k,v){ try{ localStorage.setItem(k,v); }catch(_){ } } };
+  const esJefe = () => currentPerfil?.rol==='jefe';
+  const yo = () => currentUser ? currentUser.id : null;
+  const perfil = id => perfiles.find(p=>p.id===id) || null;
+  const norm = s => (s==null?'':String(s)).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  const hoyISO = (d=0) => { const x = new Date(); x.setDate(x.getDate()+d); return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'); };
+  const fechaAR = f => { if(!f) return ''; const p = String(f).slice(0,10).split('-'); return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0] : f; };
+  const fmtP = n => '$'+Math.round(n||0).toLocaleString('es-AR');
+  const plural = (n, s, p) => n+' '+(n===1 ? s : (p||s+'s'));
+  const ROL = r => r==='jefe' ? 'Director Jurídico' : r==='secretaria' ? 'Secretaria' : 'Asociado';
+  const ref = e => e.nroexp || '#'+String(e.id).slice(-6);
+  const ausente = p => !!(p && p.ausente_desde && hoyISO()>=p.ausente_desde && (!p.ausente_hasta || hoyISO()<=p.ausente_hasta));
+  const cubro = id => { const p = perfil(id); return !!p && p.deriva_a===yo() && ausente(p); };
+  window.esMia = (e, id) => !id || e.asignado_a===id || (!e.asignado_a && e.creado_por===id) || (id===yo() && !!e.asignado_a && cubro(e.asignado_a));
+  window.diasQuieta = e => Math.floor((Date.now()-new Date(e.actualizado_at||e.creado_at||Date.now()).getTime())/864e5);
+  const cierreDe = e => String(e.cerrado_at||e.actualizado_at||'');
+  const indem = e => parseFloat(e.indemnizacion||0)||0;
+  const fotoOk = p => p && typeof p.foto==='string' && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(p.foto) ? p.foto : '';
+  const avatarHTML = (p, extra) => { const f = fotoOk(p); return '<div class="user-avatar '+tkAvClass(p)+(f?' con-foto':'')+(extra?' '+extra:'')+'"'+(f?' style="background-image:url('+f+')"':'')+'>'+(f?'':h(tkIni(p)))+'</div>'; };
+  function pintarYo(){
+    const p = currentPerfil, av = $('sidebar-avatar'); if(!p || !av) return;
+    const f = fotoOk(p);
+    av.style.backgroundImage = f ? 'url('+f+')' : ''; av.classList.toggle('con-foto', !!f); av.textContent = f ? '' : tkIni(p);
+    $('sidebar-name').textContent = p.nombre || currentUser.email || '';
+  }
+  function dispositivo(u){
+    u = u || navigator.userAgent || '';
+    const so = /iPhone/.test(u)?'iPhone':/iPad/.test(u)?'iPad':/Android/.test(u)?'Android':/Mac OS X|Macintosh/.test(u)?'Mac':/Windows/.test(u)?'Windows':/Linux/.test(u)?'Linux':'Otro equipo';
+    const nav = /Edg\//.test(u)?'Edge':/CriOS|Chrome\//.test(u)?'Chrome':/Firefox|FxiOS/.test(u)?'Firefox':/Safari\//.test(u)?'Safari':'navegador';
+    return so+' · '+nav;
+  }
+  function modal(id, titulo, cuerpo, pie, ancho, cerrar){
+    document.body.insertAdjacentHTML('beforeend','<div class="overlay" id="'+id+'" onclick="if(event.target.id===\''+id+'\')'+cerrar+'"><div class="modal" style="max-width:'+ancho+'px"><div class="modal-header"><div class="modal-title" id="'+id+'-t">'+titulo+'</div>'+cerrarBtn(cerrar)+'</div><div class="modal-body">'+cuerpo+'</div><div class="modal-footer">'+pie+'</div></div></div>');
+  }
+  const abrir = id => $(id).classList.add('open'), cerrar = id => $(id).classList.remove('open');
+  const error = (id, msg) => { const el = $(id); el.textContent = msg||''; el.style.display = msg ? 'block' : 'none'; };
+
+  /* ============ Preferencias guardadas en la cuenta ============ */
+  let aplicando = false, prefTimer = null;
+  const prefs = () => (currentPerfil && currentPerfil.preferencias) || {};
+  function prefSet(k, v){
+    if(aplicando || !currentPerfil || window._soloLectura) return;
+    const p = Object.assign({}, prefs()); if(p[k]===v) return;
+    p[k] = v; currentPerfil.preferencias = p;
+    clearTimeout(prefTimer);
+    prefTimer = setTimeout(()=>{ sb.from('perfiles').update({preferencias:currentPerfil.preferencias}).eq('id', currentUser.id).then(()=>{}, ()=>{}); }, 900);
+  }
+  const _setTema = window.setTema; window.setTema = function(v){ _setTema(v); prefSet('tema', v); };
+  const _expSetVista = window.expSetVista; window.expSetVista = function(v){ _expSetVista(v); prefSet('vista', v); };
+  const _chRango = window.chRango; window.chRango = function(n){ _chRango(n); prefSet('meses', n); };
+  function prefAplicar(){
+    aplicando = true;
+    try{
+      const p = prefs();
+      if(p.tema && window.getTema && p.tema!==getTema()) _setTema(p.tema);
+      if(p.vista && p.vista!==(store.get('lena-exp-vista')||'lista')) _expSetVista(p.vista);
+      if(p.meses && String(p.meses)!==(store.get('lena-ch-meses')||'6')) _chRango(p.meses);
+    }catch(err){ console.error(err); }
+    aplicando = false;
+  }
+
+  /* ============ Cierre de sesion por inactividad ============ */
+  const limite = () => { const c = prefs().cierre; return c===0 ? 0 : (parseInt(c,10)||240); };
+  let ultMarca = 0;
+  function marcar(forzar){ const t = Date.now(); if(!forzar && t-ultMarca<15000) return; ultMarca = t; store.set('lena-activo', String(t)); }
+  ['pointerdown','keydown','touchstart'].forEach(ev=>document.addEventListener(ev, ()=>marcar(false), {passive:true, capture:true}));
+  function vencida(){ const l = limite(); if(!l) return false; const u = parseInt(store.get('lena-activo')||'0', 10); return !!u && Date.now()-u > l*60000; }
+  async function salirCon(msg){ await doLogout(); const el = $('login-error'); el.classList.remove('info'); el.textContent = msg; el.style.display = 'block'; }
+  setInterval(()=>{ if(currentUser && !window._soloLectura && navigator.onLine && vencida()) salirCon('Se cerró la sesión por inactividad. Ingresá de nuevo.'); }, 60000);
+  const _doLogin4 = doLogin;
+  doLogin = function(){ marcar(true); $('login-error').classList.remove('info'); return _doLogin4.apply(this, arguments); };
+
+  /* ============ Arranque de la cuenta ============ */
+  function registrarAcceso(){
+    const k = 'lena-acceso-'+currentUser.id, u = parseInt(store.get(k)||'0', 10);
+    if(Date.now()-u < 6*3600e3) return;
+    store.set(k, String(Date.now()));
+    sb.from('accesos').insert({usuario_id:currentUser.id, dispositivo:dispositivo()}).then(()=>{}, ()=>{});
+  }
+  let recuperando = /type=recovery/.test(location.hash||'');
+  const _initApp4 = initApp;
+  initApp = async function(user){
+    await _initApp4(user);
+    if(!currentUser || !currentPerfil) return;
+    pintarYo();
+    if(window._soloLectura) return;
+    if(currentPerfil.activo===false){ await salirCon('Tu cuenta todavía no está habilitada. Pedile a un director del estudio que la active.'); return; }
+    if(!recuperando && vencida()){ await salirCon('Se cerró la sesión por inactividad. Ingresá de nuevo.'); return; }
+    marcar(true);
+    prefAplicar(); registrarAcceso(); notifCargar();
+    if(recuperando){ recuperando = false; claveNuevaAbrir(); }
+  };
+
+  /* ============ Contrasena ============ */
+  modal('ov-clave', 'Elegí una contraseña nueva',
+    '<div class="login-error" id="clave-error"></div><div class="form-group" style="margin-bottom:13px"><label for="clave-1">Contraseña nueva</label><input type="password" id="clave-1" autocomplete="new-password" placeholder="Mínimo 8 caracteres"></div>'+
+    '<div class="form-group"><label for="clave-2">Repetila</label><input type="password" id="clave-2" autocomplete="new-password"></div>',
+    '<button class="btn btn-outline" onclick="claveCerrar()">Cancelar</button><button class="btn btn-gold" id="clave-btn" onclick="claveGuardar(\'clave\')">Guardar contraseña</button>', 420, 'claveCerrar()');
+  function claveNuevaAbrir(){ $('clave-1').value = ''; $('clave-2').value = ''; error('clave-error',''); abrir('ov-clave'); }
+  window.claveCerrar = function(){ cerrar('ov-clave'); };
+  window.claveGuardar = async function(pref){
+    const a = $(pref+'-1').value, b = $(pref+'-2').value, er = pref+'-error';
+    if(a.length<8){ error(er, 'La contraseña tiene que tener al menos 8 caracteres.'); return; }
+    if(a!==b){ error(er, 'Las dos contraseñas no coinciden.'); return; }
+    error(er, '');
+    const btn = $(pref+'-btn'), txt = btn.textContent; btn.disabled = true;
+    const {error:e} = await sb.auth.updateUser({password:a});
+    btn.disabled = false; btn.textContent = txt;
+    if(e){ error(er, 'No se pudo cambiar la contraseña: '+e.message); return; }
+    $(pref+'-1').value = ''; $(pref+'-2').value = '';
+    if(pref==='clave') cerrar('ov-clave');
+    try{ history.replaceState(null, '', location.pathname+location.search); }catch(_){ }
+    showToast('Contraseña actualizada');
+  };
+  window.claveOlvide = async function(){
+    const email = $('login-email').value.trim(), el = $('login-error');
+    el.classList.remove('info');
+    if(!email){ el.textContent = 'Escribí tu email arriba y volvé a tocar "Olvidé mi contraseña".'; el.style.display = 'block'; return; }
+    const {error:e} = await sb.auth.resetPasswordForEmail(email, {redirectTo: location.origin+location.pathname});
+    if(e){ el.textContent = 'No se pudo enviar el correo. Probá de nuevo en unos minutos.'; }
+    else { el.classList.add('info'); el.textContent = 'Si ese email tiene una cuenta, te enviamos un enlace para elegir una contraseña nueva.'; }
+    el.style.display = 'block';
+  };
+  sb.auth.onAuthStateChange(ev=>{ if(ev==='PASSWORD_RECOVERY'){ recuperando = false; setTimeout(claveNuevaAbrir, 700); } });
+
+  /* ============ Mi perfil ============ */
+  modal('ov-perfil', 'Mi perfil',
+    '<div class="login-error" id="pf-error"></div>'+
+    '<div class="form-section"><div class="form-section-title">Mis datos</div>'+
+      '<div class="pf-foto"><div id="pf-avatar"></div><div class="pf-foto-acc"><label class="btn btn-outline btn-sm" style="cursor:pointer">Cambiar foto<input type="file" accept="image/*" id="pf-file" style="display:none"></label><button class="btn btn-outline btn-sm" id="pf-quitar" onclick="perfilQuitarFoto()">Quitar</button></div></div>'+
+      '<div class="form-grid" style="gap:13px">'+
+        '<div class="form-group"><label for="pf-nombre">Nombre completo</label><input id="pf-nombre" autocomplete="name"></div>'+
+        '<div class="form-group"><label for="pf-tel">Teléfono</label><input id="pf-tel" inputmode="tel" autocomplete="tel"></div>'+
+        '<div class="form-group"><label for="pf-mat">Matrícula</label><input id="pf-mat" placeholder="T° 00 F° 000 C.A.M."></div>'+
+        '<div class="form-group"><label for="pf-dom">Domicilio procesal</label><input id="pf-dom" placeholder="Calle y número, localidad"></div>'+
+      '</div><div class="dt-nota">La matrícula y el domicilio procesal se usan para completar escritos y documentos.</div></div>'+
+    '<div class="form-section"><div class="form-section-title">Ausencia</div>'+
+      '<div class="dt-texto">Si vas a estar de vacaciones o de licencia, cargá las fechas. Mientras tanto, la persona que elijas ve tus carpetas y tus vencimientos.</div>'+
+      '<div class="form-grid" style="gap:13px">'+
+        '<div class="form-group"><label for="pf-desde">Desde</label><input type="date" id="pf-desde"></div>'+
+        '<div class="form-group"><label for="pf-hasta">Hasta</label><input type="date" id="pf-hasta"></div>'+
+        '<div class="form-group"><label for="pf-deriva">Me cubre</label><select id="pf-deriva"></select></div>'+
+      '</div><button class="xp-link" style="margin-top:8px" onclick="perfilVolvi()">Ya volví: borrar la ausencia</button></div>'+
+    '<div class="form-section"><div class="form-section-title">Seguridad</div>'+
+      '<div class="form-grid" style="gap:13px">'+
+        '<div class="form-group"><label for="pf-cierre">Cerrar la sesión si no uso la app</label><select id="pf-cierre"><option value="30">Después de 30 minutos</option><option value="120">Después de 2 horas</option><option value="240">Después de 4 horas</option><option value="480">Después de 8 horas</option><option value="0">Nunca</option></select></div>'+
+      '</div>'+
+      '<div class="pf-sub">Cambiar la contraseña</div><div class="login-error" id="pfc-error"></div>'+
+      '<div class="form-grid" style="gap:13px"><div class="form-group"><label for="pfc-1">Contraseña nueva</label><input type="password" id="pfc-1" autocomplete="new-password" placeholder="Mínimo 8 caracteres"></div>'+
+        '<div class="form-group"><label for="pfc-2">Repetila</label><input type="password" id="pfc-2" autocomplete="new-password"></div></div>'+
+      '<button class="btn btn-outline btn-sm" id="pfc-btn" style="margin-top:10px" onclick="claveGuardar(\'pfc\')">Cambiar contraseña</button>'+
+      '<div class="pf-sub">Dónde está abierta mi cuenta</div><div class="xp-lista" id="pf-sesiones"></div>'+
+      '<button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="perfilCerrarOtras()">Cerrar las demás sesiones</button></div>',
+    '<button class="btn btn-outline" onclick="perfilCerrar()">Cancelar</button><button class="btn btn-gold" id="pf-btn" onclick="perfilGuardar()">Guardar</button>', 640, 'perfilCerrar()');
+  let pfFoto = '';
+  function pfPintarFoto(){ $('pf-avatar').innerHTML = avatarHTML(Object.assign({}, currentPerfil, {foto:pfFoto}), 'pf-av'); $('pf-quitar').style.display = pfFoto ? '' : 'none'; }
+  $('pf-file').addEventListener('change', ev=>{
+    const f = ev.target.files && ev.target.files[0]; ev.target.value = ''; if(!f) return;
+    const img = new Image(), url = URL.createObjectURL(f);
+    img.onload = ()=>{
+      const L = 144, c = document.createElement('canvas'); c.width = L; c.height = L;
+      const lado = Math.min(img.width, img.height), sx = (img.width-lado)/2, sy = (img.height-lado)/2;
+      c.getContext('2d').drawImage(img, sx, sy, lado, lado, 0, 0, L, L);
+      pfFoto = c.toDataURL('image/jpeg', .82); URL.revokeObjectURL(url); pfPintarFoto();
+    };
+    img.onerror = ()=>{ URL.revokeObjectURL(url); showToast('No se pudo leer la imagen', true); };
+    img.src = url;
+  });
+  window.perfilQuitarFoto = function(){ pfFoto = ''; pfPintarFoto(); };
+  window.perfilVolvi = function(){ $('pf-desde').value = ''; $('pf-hasta').value = ''; $('pf-deriva').value = ''; };
+  async function sesionActual(){
+    try{ const r = await sb.auth.getSession(); const t = r.data.session.access_token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'); return JSON.parse(atob(t)).session_id || null; }catch(_){ return null; }
+  }
+  async function pfSesiones(){
+    const el = $('pf-sesiones'); el.innerHTML = '<div class="cmdk-empty">Cargando</div>';
+    const [{data, error:e}, actual] = await Promise.all([sb.rpc('mis_sesiones'), sesionActual()]);
+    if(e || !data){ el.innerHTML = '<div class="cmdk-empty">No se pudieron cargar las sesiones.</div>'; return; }
+    el.innerHTML = data.length ? data.map(s=>'<div class="xp-row pap-row"><span class="xp-row-main"><b>'+h(dispositivo(s.dispositivo||' '))+'</b><span>Última actividad: '+h(tkFmtTs(s.actualizado||s.creado))+'</span></span>'+(s.id===actual?'<span class="badge badge-green">Este dispositivo</span>':'')+'</div>').join('') : '<div class="cmdk-empty">No hay sesiones abiertas.</div>';
+  }
+  window.perfilAbrir = function(){
+    if(!currentPerfil || window._soloLectura) return;
+    const p = currentPerfil; pfFoto = fotoOk(p);
+    $('pf-nombre').value = p.nombre||''; $('pf-tel').value = p.telefono||''; $('pf-mat').value = p.matricula||''; $('pf-dom').value = p.domicilio_procesal||'';
+    $('pf-desde').value = p.ausente_desde||''; $('pf-hasta').value = p.ausente_hasta||'';
+    $('pf-deriva').innerHTML = '<option value="">Nadie</option>'+perfiles.filter(x=>x.id!==p.id).map(x=>'<option value="'+x.id+'"'+(x.id===p.deriva_a?' selected':'')+'>'+h(x.nombre)+'</option>').join('');
+    $('pf-cierre').value = String(limite());
+    $('pfc-1').value = ''; $('pfc-2').value = ''; error('pf-error',''); error('pfc-error','');
+    pfPintarFoto(); abrir('ov-perfil'); pfSesiones();
+    if(window.innerWidth<=760 && document.querySelector('.sidebar.open') && window.toggleSidebar) toggleSidebar();
+  };
+  window.perfilCerrar = function(){ cerrar('ov-perfil'); };
+  $('user-badge') && $('user-badge').addEventListener('keydown', ev=>{ if(ev.key==='Enter' || ev.key===' '){ ev.preventDefault(); perfilAbrir(); } });
+  window.perfilCerrarOtras = async function(){
+    const {error:e} = await sb.auth.signOut({scope:'others'});
+    if(e){ showToast('No se pudieron cerrar las otras sesiones', true); return; }
+    showToast('Se cerraron las demás sesiones'); pfSesiones();
+  };
+  window.perfilGuardar = async function(){
+    const nombre = $('pf-nombre').value.trim(), desde = $('pf-desde').value||null, hasta = $('pf-hasta').value||null;
+    if(!nombre){ error('pf-error', 'El nombre no puede quedar vacío.'); return; }
+    if(desde && hasta && hasta<desde){ error('pf-error', 'La fecha de regreso no puede ser anterior a la de salida.'); return; }
+    if(!desde && hasta){ error('pf-error', 'Cargá desde qué día vas a estar ausente.'); return; }
+    error('pf-error', '');
+    const pr = Object.assign({}, prefs(), {cierre: parseInt($('pf-cierre').value, 10)});
+    const datos = {nombre, telefono:$('pf-tel').value.trim()||null, matricula:$('pf-mat').value.trim()||null, domicilio_procesal:$('pf-dom').value.trim()||null,
+      foto:pfFoto||null, ausente_desde:desde, ausente_hasta:hasta, deriva_a: desde ? ($('pf-deriva').value||null) : null, preferencias:pr};
+    const btn = $('pf-btn'); btn.disabled = true;
+    const {error:e} = await sb.from('perfiles').update(datos).eq('id', currentUser.id);
+    btn.disabled = false;
+    if(e){ error('pf-error', 'No se pudo guardar: '+e.message); return; }
+    Object.assign(currentPerfil, datos);
+    await loadPerfiles();
+    expedientes.forEach(x=>{ x.asignado = perfiles.find(q=>q.id===x.asignado_a)||null; });
+    pintarYo(); marcar(true); perfilCerrar(); showToast('Perfil guardado');
+    if(currentView==='dashboard') renderDashboard(); else if(currentView==='equipo') renderEquipo();
+  };
+
+  /* ============ Menciones ============ */
+  let notifs = [];
+  document.querySelector('.side-prefs').insertAdjacentHTML('afterbegin','<button class="avisos-btn" id="notif-btn" onclick="notifAbrir()">'+ico(I_ARROBA,14)+'<span>Menciones</span><b class="notif-n" id="notif-n"></b></button>');
+  modal('ov-notif', 'Menciones', '<div class="xp-lista" id="notif-lista"></div>', '<button class="btn btn-outline" onclick="notifLeerTodas()">Marcar todas como leídas</button><button class="btn btn-gold" onclick="notifCerrar()">Cerrar</button>', 560, 'notifCerrar()');
+  const sinLeer = () => notifs.filter(n=>!n.leida).length;
+  function notifPintar(){
+    const n = sinLeer(), b = $('notif-n'); b.textContent = n ? String(n) : ''; b.style.display = n ? '' : 'none';
+    $('notif-lista').innerHTML = notifs.length ? notifs.map(x=>'<button class="xp-row notif-row'+(x.leida?'':' nueva')+'" onclick="notifIr(\''+x.id+'\')"><span class="xp-row-main"><b>'+h(x.de_nombre||'Alguien del equipo')+'</b><span class="notif-txt">'+h(x.texto||'te mencionó')+'</span><span>'+h(tkFmtTs(x.creado_at))+'</span></span>'+(x.leida?'':'<span class="notif-punto"></span>')+'</button>').join('') : '<div class="cmdk-empty">Nadie te mencionó todavía.</div>';
+    if(currentView==='dashboard') renderYo();
+  }
+  async function notifCargar(){
+    if(!currentUser || window._soloLectura) return;
+    const {data, error:e} = await sb.from('notificaciones').select('*').eq('para', currentUser.id).order('creado_at',{ascending:false}).limit(40);
+    if(e) return;
+    notifs = data||[]; notifPintar();
+  }
+  setInterval(()=>{ if(currentUser && navigator.onLine && !document.hidden) notifCargar(); }, 5*60*1000);
+  window.notifAbrir = function(){ notifPintar(); abrir('ov-notif'); notifCargar(); };
+  window.notifCerrar = function(){ cerrar('ov-notif'); };
+  window.notifLeerTodas = async function(){
+    if(!sinLeer()) return;
+    notifs.forEach(n=>n.leida = true); notifPintar();
+    await sb.from('notificaciones').update({leida:true}).eq('para', currentUser.id).eq('leida', false);
+  };
+  window.notifIr = function(id){
+    const n = notifs.find(x=>x.id===id); if(!n) return;
+    if(!n.leida){ n.leida = true; sb.from('notificaciones').update({leida:true}).eq('id', id).then(()=>{}, ()=>{}); }
+    notifPintar(); notifCerrar();
+    if(n.expediente_id){ if(expedientes.some(e=>e.id===n.expediente_id)) goToDetail(n.expediente_id); else showToast('Esa carpeta no está entre las que podés ver', true); }
+    else if(n.tarea_id && tareas.some(t=>t.id===n.tarea_id)){ showView('tareas'); openTareaDet(n.tarea_id); }
+  };
+  const mencionados = txt => { const t = norm(txt); if(!t.includes('@')) return []; return perfiles.filter(p=>p.id!==yo() && p.nombre && (t.includes('@'+norm(tkFirst(p))) || t.includes('@'+norm(p.nombre)))); };
+  function recorte(txt){ const l = String(txt).split('\n').find(x=>x.includes('@')) || String(txt); return l.trim().slice(0,150); }
+  async function avisarMenciones(antes, despues, base, donde){
+    const ya = new Set(mencionados(antes).map(p=>p.id)), nuevos = mencionados(despues).filter(p=>!ya.has(p.id));
+    if(!nuevos.length) return;
+    const filas = nuevos.map(p=>Object.assign({para:p.id, de:yo(), de_nombre:currentPerfil?.nombre||null, tipo:'mencion', texto:'te mencionó en '+donde+': '+recorte(despues)}, base));
+    const {error:e} = await sb.from('notificaciones').insert(filas);
+    if(!e) showToast('Se avisó a '+nuevos.map(tkFirst).join(', '));
+  }
+  const _guardarNotas4 = guardarNotas;
+  guardarNotas = async function(id){
+    const e = expedientes.find(x=>x.id===id), antes = e ? (e.notas||'') : '', ta = $('notas-txt-'+id), nuevo = ta ? ta.value : '';
+    await _guardarNotas4(id);
+    if(e && e.notas===nuevo && nuevo!==antes) avisarMenciones(antes, nuevo, {expediente_id:id}, 'las notas de '+(e.nombre||'una carpeta'));
+  };
+  const _tkEnviarMsg4 = tkEnviarMsg;
+  tkEnviarMsg = async function(){
+    const inp = $('tk-chat-msg'), txt = (inp && inp.value || '').trim(), idT = tkDetId, t = tareas.find(x=>x.id===idT), antes = t && t.comentarios ? t.comentarios.length : 0;
+    await _tkEnviarMsg4();
+    if(txt && t && (t.comentarios||[]).length>antes) avisarMenciones('', txt, {tarea_id:idT}, 'la tarea '+(t.titulo||''));
+  };
+  window.mencionar = function(expId, pid){
+    const ta = $('notas-txt-'+expId), p = perfil(pid); if(!ta || !p) return;
+    const txt = '@'+tkFirst(p)+' ', i = ta.selectionStart==null ? ta.value.length : ta.selectionStart, previo = ta.value.slice(0, i);
+    ta.value = previo+(previo && !/\s$/.test(previo) ? ' ' : '')+txt+ta.value.slice(i);
+    ta.focus();
+  };
+  const _showDetailView4 = showDetailView;
+  showDetailView = function(e){
+    _showDetailView4(e);
+    const ta = $('notas-txt-'+e.id), otros = perfiles.filter(p=>p.id!==yo());
+    if(ta && otros.length) ta.insertAdjacentHTML('afterend','<div class="men-row"><span>Avisar a</span>'+otros.map(p=>'<button type="button" class="men-chip" onclick="mencionar(\''+e.id+'\',\''+p.id+'\')">@'+h(tkFirst(p))+'</button>').join('')+'</div>');
+  };
+
+  /* ============ Inicio personal y mis numeros ============ */
+  document.querySelector('#view-dashboard .stats-grid').insertAdjacentHTML('beforebegin','<div id="dash-yo"></div>');
+  let verComo = '';
+  const MS = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  const diaCorto = f => { const p = f.split('-'); return parseInt(p[2],10)+' '+MS[parseInt(p[1],10)-1]; };
+  window.yoVerComo = function(v){ verComo = v; renderYo(); };
+  window.yoDrill = function(tipo){
+    const id = esJefe() ? verComo : yo(), p = perfil(id), de = p ? ' de '+tkFirst(p) : '';
+    const x = tipo==='activas' ? (id ? {tipo:'de', valor:id, titulo:'Carpetas activas'+de} : {tipo:'activas', titulo:'Carpetas en curso'})
+      : tipo==='dormidas' ? {tipo:'dormidas', valor:id||'', titulo:'Carpetas sin movimiento hace 30 días o más'+de}
+      : {tipo:'cerradasde', valor:id||'', titulo:'Carpetas cerradas'+de};
+    if(window.dashDrill) dashDrill(x);
+  };
+  function renderYo(){
+    const el = $('dash-yo'); if(!el) return;
+    if(!currentUser || !currentPerfil){ el.innerHTML = ''; return; }
+    const jefe = esJefe(), id = jefe ? verComo : yo(), p = perfil(id);
+    if(jefe && verComo && !p){ verComo = ''; return renderYo(); }
+    const mias = expedientes.filter(e=>esMia(e, id)), activas = mias.filter(e=>e.estado!=='Concluido'), dormidas = activas.filter(e=>diasQuieta(e)>=30);
+    const hoy = hoyISO(), en7 = hoyISO(7), ids = new Set(mias.map(e=>e.id));
+    const tks = tareas.filter(t=>t.estado!=='hecha' && (!id || t.asignado_a===id || (id===yo() && t.asignado_a && cubro(t.asignado_a))));
+    const atrasadas = tks.filter(t=>t.vence && t.vence<hoy);
+    let prox = [];
+    try{ prox = todosEvs().filter(ev=>ev.fecha && ev.fecha>=hoy && ev.fecha<=en7 && (!ev.expediente_id || ids.has(ev.expediente_id))).map(ev=>({f:ev.fecha, t:ev.titulo, hora:ev.hora, exp:ev.expediente_id})); }catch(_){ }
+    tks.forEach(t=>{ if(t.vence && t.vence>=hoy && t.vence<=en7) prox.push({f:t.vence, t:t.titulo, tk:t.id, exp:t.expediente_id}); });
+    prox.sort((a,b)=>a.f.localeCompare(b.f)||String(a.hora||'').localeCompare(String(b.hora||'')));
+    const anio = String(new Date().getFullYear()), mes = hoy.slice(0,7);
+    const cerradas = mias.filter(e=>e.estado==='Concluido'), delAnio = cerradas.filter(e=>cierreDe(e).slice(0,4)===anio);
+    const dur = cerradas.map(e=>(new Date(cierreDe(e))-new Date(e.creado_at))/864e5).filter(d=>d>0 && isFinite(d));
+    const prom = dur.length ? Math.round(dur.reduce((s,d)=>s+d,0)/dur.length) : null;
+    const generado = delAnio.reduce((s,e)=>s+indem(e)/2, 0);
+    const pct = p ? (parseFloat(p.porcentaje||0)||0) : 0;
+    const comision = pct ? cerradas.filter(e=>e.asignado_a===id && cierreDe(e).slice(0,7)===mes).reduce((s,e)=>s+indem(e)/2*pct/100, 0) : 0;
+    const cubiertos = id===yo() ? perfiles.filter(x=>x.deriva_a===yo() && ausente(x)) : [];
+    const titulo = !id ? 'Todo el estudio' : (id===yo() ? 'Mi trabajo' : 'Trabajo de '+h(tkFirst(p)));
+    let sub = prox.length ? plural(prox.length,'vencimiento')+' en los próximos 7 días' : 'Sin vencimientos en los próximos 7 días';
+    if(p && ausente(p)) sub = 'Ausente'+(p.ausente_hasta?' hasta el '+fechaAR(p.ausente_hasta):'')+(perfil(p.deriva_a)?' · cubre '+tkFirst(perfil(p.deriva_a)):'');
+    else if(cubiertos.length) sub += ' · estás cubriendo a '+cubiertos.map(tkFirst).join(', ');
+    const tile = (n, t, fn, alerta) => '<button class="yo-tile'+(alerta && n ? ' alerta' : '')+'" onclick="'+fn+'"><b>'+n+'</b><span>'+t+'</span></button>';
+    const fila = (k, v, fn) => '<'+(fn?'button onclick="'+fn+'"':'div')+' class="yo-num"><span>'+k+'</span><b>'+v+'</b></'+(fn?'button':'div')+'>';
+    const nl = sinLeer();
+    el.innerHTML = '<div class="full-card yo-card"><div class="yo-head"><div><div class="ch-title">'+titulo+'</div><div class="ch-sub">'+h(sub)+'</div></div>'+
+      (jefe ? '<select class="yo-sel" aria-label="Ver el trabajo de" onchange="yoVerComo(this.value)"><option value="">Todo el estudio</option>'+perfiles.map(x=>'<option value="'+x.id+'"'+(x.id===verComo?' selected':'')+'>'+h(x.nombre)+(x.id===yo()?' (yo)':'')+'</option>').join('')+'</select>' : '')+'</div>'+
+      (nl ? '<button class="yo-aviso" onclick="notifAbrir()">'+ico(I_ARROBA,15)+'<span>Tenés '+plural(nl,'mención sin leer','menciones sin leer')+'</span>'+ico(I_CHEV,14)+'</button>' : '')+
+      '<div class="yo-tiles">'+tile(activas.length,'Carpetas activas','yoDrill(\'activas\')')+tile(prox.length,'Vencen en 7 días','showView(\'calendario\')')+tile(atrasadas.length,'Tareas atrasadas','showView(\'tareas\')',true)+tile(dormidas.length,'Sin movimiento hace 30 días','yoDrill(\'dormidas\')',true)+'</div>'+
+      '<div class="yo-cols"><div><div class="yo-sec">Próximos 7 días</div>'+(prox.length ? prox.slice(0,5).map(x=>{ const e = x.exp ? expedientes.find(q=>q.id===x.exp) : null;
+          return '<button class="yo-item" onclick="'+(x.tk ? 'showView(\'tareas\');openTareaDet(\''+x.tk+'\')' : (e ? 'goToDetail(\''+e.id+'\')' : 'showView(\'calendario\')'))+'"><span class="yo-dia'+(x.f===hoy?' hoy':'')+'">'+(x.f===hoy?'Hoy':diaCorto(x.f))+'</span><span class="yo-item-t"><b>'+(x.tk?'Tarea: ':'')+h(x.t||'Sin título')+'</b>'+(e?'<span>'+h(e.nombre||ref(e))+'</span>':'')+'</span></button>'; }).join('')+(prox.length>5?'<div class="dt-nota">y '+(prox.length-5)+' más en el calendario</div>':'') : '<div class="ch-vacio">Nada por vencer esta semana.</div>')+'</div>'+
+      '<div><div class="yo-sec">'+(!id?'Números del estudio':(id===yo()?'Mis números':'Sus números'))+'</div>'+
+        fila('Casos cerrados en '+anio, delAnio.length, 'yoDrill(\'cerradas\')')+fila('Tiempo promedio por caso', prom==null ? 'Sin datos' : (prom>=60 ? Math.round(prom/30)+' meses' : prom+' días'))+
+        fila('Generado para el estudio en '+anio, fmtP(generado))+(pct ? fila('Comisión de este mes ('+pct+'%)', fmtP(comision)) : '')+'</div></div></div>';
+  }
+  const _renderDashboard4 = renderDashboard;
+  renderDashboard = function(){ _renderDashboard4(); try{ renderYo(); }catch(err){ console.error(err); } };
+
+  /* ============ Equipo: altas, bajas, actividad y liquidacion ============ */
+  modal('ov-miembro', 'Gestionar cuenta',
+    '<div class="login-error" id="mb-error"></div><div class="form-grid" style="gap:13px">'+
+      '<div class="form-group"><label for="mb-rol">Rol</label><select id="mb-rol"><option value="asociado">Asociado</option><option value="secretaria">Secretaria</option><option value="jefe">Director Jurídico</option></select></div>'+
+      '<div class="form-group"><label for="mb-pct">Comisión por caso cerrado (%)</label><input id="mb-pct" inputmode="decimal" placeholder="Sin comisión"></div></div>'+
+    '<div class="dt-nota">La comisión se calcula sobre la parte del estudio (la mitad de la indemnización).</div>'+
+    '<div class="form-section mb-baja" style="margin:22px 0 0"><div class="form-section-title">Dar de baja</div><div class="dt-texto" id="mb-baja-txt"></div>'+
+      '<div class="form-group"><label for="mb-reasignar">Pasar sus carpetas y tareas a</label><select id="mb-reasignar"></select></div>'+
+      '<button class="btn btn-danger" style="margin-top:12px" onclick="miembroDesactivar()">Desactivar la cuenta</button></div>',
+    '<button class="btn btn-outline" onclick="miembroCerrar()">Cancelar</button><button class="btn btn-gold" id="mb-btn" onclick="miembroGuardar()">Guardar</button>', 520, 'miembroCerrar()');
+  modal('ov-actividad', 'Actividad', '<div class="pf-sub" style="margin-top:0">Últimos ingresos</div><div class="xp-lista" id="act-accesos"></div><div class="pf-sub">Últimos cambios en carpetas</div><div class="xp-lista" id="act-cambios"></div>',
+    '<button class="btn btn-gold" onclick="actividadCerrar()">Cerrar</button>', 600, 'actividadCerrar()');
+  let mbId = null, liqMes = hoyISO().slice(0,7);
+  const activasDe = id => expedientes.filter(e=>e.asignado_a===id && e.estado!=='Concluido');
+  window.miembroAbrir = function(id){
+    const p = perfil(id); if(!p || !esJefe()) return;
+    mbId = id; $('ov-miembro-t').textContent = p.nombre||'Gestionar cuenta';
+    $('mb-rol').value = p.rol==='jefe'||p.rol==='secretaria' ? p.rol : 'asociado';
+    $('mb-pct').value = p.porcentaje==null ? '' : String(p.porcentaje).replace('.', ',');
+    const n = activasDe(id).length, t = tareas.filter(x=>x.asignado_a===id && x.estado!=='hecha').length;
+    $('mb-baja-txt').textContent = 'Tiene '+plural(n,'carpeta activa','carpetas activas')+' y '+plural(t,'tarea pendiente','tareas pendientes')+'. Al desactivarla no puede volver a entrar; sus datos y su historial se conservan.';
+    $('mb-reasignar').innerHTML = '<option value="">Dejarlas sin asignar</option>'+perfiles.filter(x=>x.id!==id).map(x=>'<option value="'+x.id+'">'+h(x.nombre)+'</option>').join('');
+    error('mb-error',''); abrir('ov-miembro');
+  };
+  window.miembroCerrar = function(){ cerrar('ov-miembro'); };
+  window.miembroGuardar = async function(){
+    const txt = $('mb-pct').value.trim().replace('%','').replace(',','.'), pct = txt==='' ? null : parseFloat(txt);
+    if(pct!==null && (isNaN(pct) || pct<0 || pct>100)){ error('mb-error', 'La comisión tiene que ser un número entre 0 y 100.'); return; }
+    const {error:e} = await sb.from('perfiles').update({rol:$('mb-rol').value, porcentaje:pct}).eq('id', mbId);
+    if(e){ error('mb-error', 'No se pudo guardar: '+e.message); return; }
+    await loadPerfiles(); miembroCerrar(); renderEquipo(); showToast('Cuenta actualizada');
+  };
+  window.miembroDesactivar = async function(){
+    const p = perfil(mbId); if(!p) return;
+    const a = $('mb-reasignar').value||null, dest = perfil(a);
+    if(!confirm('¿Desactivar la cuenta de '+p.nombre+'? '+(dest ? 'Sus carpetas activas y tareas pendientes pasan a '+dest.nombre+'.' : 'Sus carpetas activas quedan sin asignar.'))) return;
+    const r1 = await sb.from('expedientes').update({asignado_a:a}).eq('asignado_a', mbId).neq('estado','Concluido');
+    if(r1.error){ error('mb-error', 'No se pudieron pasar las carpetas: '+r1.error.message); return; }
+    if(a){ const r2 = await sb.from('tareas').update({asignado_a:a}).eq('asignado_a', mbId).neq('estado','hecha'); if(r2.error) console.warn(r2.error); }
+    await sb.from('perfiles').update({deriva_a:null}).eq('deriva_a', mbId);
+    const r3 = await sb.from('perfiles').update({activo:false, deriva_a:null, ausente_desde:null, ausente_hasta:null}).eq('id', mbId);
+    if(r3.error){ error('mb-error', 'No se pudo desactivar: '+r3.error.message); return; }
+    await loadPerfiles(); await Promise.all([loadExpedientes(), loadTareas()]);
+    miembroCerrar(); renderEquipo(); showToast('Cuenta de '+p.nombre+' desactivada');
+  };
+  window.miembroHabilitar = async function(id){
+    const rol = ($('hab-rol-'+id)||{}).value || 'asociado';
+    const {error:e} = await sb.from('perfiles').update({activo:true, rol}).eq('id', id);
+    if(e){ showToast('No se pudo habilitar la cuenta', true); return; }
+    await loadPerfiles(); renderEquipo(); showToast('Cuenta habilitada');
+  };
+  window.actividadAbrir = async function(id){
+    const p = perfil(id); if(!p) return;
+    $('ov-actividad-t').textContent = 'Actividad de '+(p.nombre||'');
+    $('act-accesos').innerHTML = $('act-cambios').innerHTML = '<div class="cmdk-empty">Cargando</div>';
+    abrir('ov-actividad');
+    const [a, c] = await Promise.all([
+      sb.from('accesos').select('*').eq('usuario_id', id).order('creado_at',{ascending:false}).limit(12),
+      sb.from('expediente_historial').select('*').eq('usuario_id', id).order('creado_at',{ascending:false}).limit(50)]);
+    $('act-accesos').innerHTML = a.error ? '<div class="cmdk-empty">No se pudieron cargar.</div>' : ((a.data||[]).length ? a.data.map(x=>'<div class="xp-row pap-row"><span class="xp-row-main"><b>'+h(tkFmtTs(x.creado_at))+'</b><span>'+h(x.dispositivo||'')+'</span></span></div>').join('') : '<div class="cmdk-empty">Todavía no hay ingresos registrados.</div>');
+    $('act-cambios').innerHTML = c.error ? '<div class="cmdk-empty">No se pudieron cargar.</div>' : ((c.data||[]).length ? c.data.map(x=>{ const e = expedientes.find(q=>q.id===x.expediente_id);
+      return '<button class="xp-row" onclick="actividadCerrar();goToDetail(\''+x.expediente_id+'\')"><span class="xp-row-main"><b>'+h(e ? (e.nombre||ref(e)) : 'Carpeta')+'</b><span>'+h(x.detalle||x.tipo||'Cambio')+'</span><span>'+h(tkFmtTs(x.creado_at))+'</span></span></button>'; }).join('') : '<div class="cmdk-empty">Todavía no hay cambios registrados.</div>');
+  };
+  window.actividadCerrar = function(){ cerrar('ov-actividad'); };
+  window.liqMover = function(d){ const p = liqMes.split('-'), x = new Date(parseInt(p[0],10), parseInt(p[1],10)-1+d, 1); liqMes = x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0'); renderLiq(); };
+  function renderLiq(){
+    const el = $('eq-liq'); if(!el) return;
+    const LARGO = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'], pm = liqMes.split('-');
+    const delMes = expedientes.filter(e=>e.estado==='Concluido' && indem(e)>0 && cierreDe(e).slice(0,7)===liqMes);
+    const filas = perfiles.map(p=>{ const cs = delMes.filter(e=>e.asignado_a===p.id), ind = cs.reduce((s,e)=>s+indem(e),0), pct = parseFloat(p.porcentaje||0)||0; return {n:p.nombre, c:cs.length, ind, pct, pago:ind/2*pct/100}; }).filter(f=>f.c);
+    const sueltas = delMes.filter(e=>!e.asignado_a || !perfil(e.asignado_a));
+    if(sueltas.length) filas.push({n:'Sin abogado asignado', c:sueltas.length, ind:sueltas.reduce((s,e)=>s+indem(e),0), pct:0, pago:0});
+    const T = filas.reduce((s,f)=>({ind:s.ind+f.ind, pago:s.pago+f.pago, c:s.c+f.c}), {ind:0, pago:0, c:0});
+    el.innerHTML = '<div class="eq-sec">Liquidación por abogado</div><div class="full-card"><div class="ch-head" style="align-items:center"><div><div class="ch-title">'+LARGO[parseInt(pm[1],10)-1].replace(/^./,c=>c.toUpperCase())+' de '+pm[0]+'</div><div class="ch-sub" style="margin-bottom:0">Casos cerrados en el mes con indemnización cargada</div></div>'+
+      '<div class="liq-nav"><button class="close-btn" onclick="liqMover(-1)" aria-label="Mes anterior">'+ico(I_IZQ,17)+'</button><button class="close-btn" onclick="liqMover(1)" aria-label="Mes siguiente">'+ico(I_CHEV,17)+'</button></div></div>'+
+      (filas.length ? '<div class="liq-wrap"><table class="liq"><thead><tr><th>Abogado</th><th>Casos</th><th>Indemnización</th><th>Parte del estudio</th><th>Comisión</th><th>A pagar</th></tr></thead><tbody>'+
+        filas.map(f=>'<tr><td>'+h(f.n)+'</td><td>'+f.c+'</td><td>'+fmtP(f.ind)+'</td><td>'+fmtP(f.ind/2)+'</td><td>'+(f.pct?f.pct+'%':'Sin comisión')+'</td><td><b>'+fmtP(f.pago)+'</b></td></tr>').join('')+
+        '<tr class="liq-total"><td>Total</td><td>'+T.c+'</td><td>'+fmtP(T.ind)+'</td><td>'+fmtP(T.ind/2)+'</td><td></td><td><b>'+fmtP(T.pago)+'</b></td></tr></tbody></table></div><div class="dt-nota">Queda para el estudio después de comisiones: '+fmtP(T.ind/2-T.pago)+'. El porcentaje de cada abogado se carga en "Gestionar".</div>'
+        : '<div class="ch-vacio">No hay casos cerrados con indemnización en este mes.</div>')+'</div>';
+  }
+  async function cargarInactivos(){
+    const el = $('eq-inactivos'); if(!el) return;
+    const {data, error:e} = await sb.from('perfiles').select('id,nombre,email,rol,creado_at').eq('activo', false).order('creado_at',{ascending:false});
+    const cont = $('eq-inactivos'); if(!cont) return;
+    if(e || !data || !data.length){ cont.innerHTML = ''; return; }
+    cont.innerHTML = '<div class="eq-sec">Cuentas sin habilitar o dadas de baja</div>'+data.map(p=>'<div class="member-card eq-inactiva">'+avatarHTML(p)+'<div class="member-info"><div class="member-name">'+h(p.nombre||'Sin nombre')+'</div><div class="member-email">'+h(p.email||'')+'</div></div>'+
+      '<select id="hab-rol-'+p.id+'" class="eq-select" aria-label="Rol"><option value="asociado">Asociado</option><option value="secretaria"'+(p.rol==='secretaria'?' selected':'')+'>Secretaria</option><option value="jefe"'+(p.rol==='jefe'?' selected':'')+'>Director Jurídico</option></select>'+
+      '<button class="btn btn-outline btn-sm" onclick="miembroHabilitar(\''+p.id+'\')">Habilitar</button></div>').join('');
+  }
+  renderEquipo = function(){
+    const el = $('equipo-list'); if(!el) return;
+    if(!perfiles.length){ el.innerHTML = '<div class="empty-state"><div class="empty-title">Sin miembros aún</div></div>'; return; }
+    const jefe = esJefe();
+    el.innerHTML = '<div class="eq-sec" style="margin-top:0">Equipo activo</div>'+perfiles.map(p=>{
+      const act = activasDe(p.id).length, conc = expedientes.filter(e=>e.asignado_a===p.id && e.estado==='Concluido').length, tk = tareas.filter(t=>t.asignado_a===p.id && t.estado!=='hecha').length;
+      const cubre = perfil(p.deriva_a), aus = ausente(p);
+      return '<div class="member-card">'+avatarHTML(p)+'<div class="member-info"><div class="member-name">'+h(p.nombre)+(p.id===yo()?' <span class="eq-vos">vos</span>':'')+'</div>'+
+        '<div class="member-email">'+h([p.email, p.telefono, p.matricula].filter(Boolean).join(' · '))+'</div>'+
+        '<div class="eq-carga"><b>'+act+'</b> activas<span>·</span><b>'+conc+'</b> concluidas<span>·</span><b>'+tk+'</b> tareas pendientes</div>'+
+        (aus ? '<div class="eq-aus">Ausente'+(p.ausente_hasta?' hasta el '+fechaAR(p.ausente_hasta):'')+(cubre?' · cubre '+h(tkFirst(cubre)):'')+'</div>' : '')+'</div>'+
+        '<span class="badge '+(p.rol==='jefe'?'badge-gold':p.rol==='secretaria'?'badge-purple':'badge-navy')+'">'+ROL(p.rol)+'</span>'+
+        (jefe ? '<div class="eq-acc">'+((p.rol==='asociado'||p.rol==='empleado') ? '<button class="btn btn-outline btn-sm" onclick="verPerfilAsoc(\''+p.id+'\')">Carpetas</button>' : '')+
+          '<button class="btn btn-outline btn-sm" onclick="actividadAbrir(\''+p.id+'\')">Actividad</button>'+
+          (p.id!==yo() ? '<button class="btn btn-outline btn-sm" onclick="miembroAbrir(\''+p.id+'\')">Gestionar</button>' : '<button class="btn btn-outline btn-sm" onclick="perfilAbrir()">Mi perfil</button>')+'</div>' : '')+'</div>';
+    }).join('')+(jefe ? '<div id="eq-inactivos"></div><div id="eq-liq"></div>' : '');
+    if(jefe){ cargarInactivos(); renderLiq(); }
+  };
+  crearUsuario = async function(){
+    const nombre = g('nu-nombre'), email = g('nu-email'), pass = $('nu-pass').value, rol = g('nu-rol');
+    if(!nombre || !email || !pass){ error('create-error', 'Completá todos los campos.'); return; }
+    if(pass.length<8){ error('create-error', 'La contraseña debe tener al menos 8 caracteres.'); return; }
+    error('create-error', '');
+    const btn = $('btn-crear-user'); btn.innerHTML = '<div class="spinner spinner-w"></div>'; btn.disabled = true;
+    const fin = msg => { btn.innerHTML = 'Crear cuenta'; btn.disabled = false; if(msg) error('create-error', msg); };
+    let data, e;
+    try{
+      const alta = supabase.createClient(SUPA_URL, SUPA_KEY, {auth:{persistSession:false, autoRefreshToken:false, detectSessionInUrl:false, storageKey:'lena-alta'}});
+      ({data, error:e} = await alta.auth.signUp({email, password:pass, options:{data:{nombre}}}));
+    }catch(err){ e = err; }
+    if(e){ fin('No se pudo crear la cuenta: '+e.message); return; }
+    if(!data || !data.user || (data.user.identities && data.user.identities.length===0)){ fin('Ese email ya tiene una cuenta. Si está dada de baja, habilitala desde la lista de abajo.'); return; }
+    const r = await sb.from('perfiles').upsert({id:data.user.id, nombre, email, rol, activo:true});
+    if(r.error){ fin('La cuenta se creó pero no se pudo habilitar: '+r.error.message); return; }
+    fin(''); await loadPerfiles(); closeCrearUserModal(); renderEquipo();
+    showToast('Cuenta creada. Puede cambiar su contraseña desde "Mi perfil".');
   };
 })();
 </script>
