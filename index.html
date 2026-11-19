@@ -5802,7 +5802,7 @@ function histCambios(antes, despues){
     const t = d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
     return t.charAt(0).toUpperCase()+t.slice(1);
   }
-  const TIPOS = ['Demanda','Contestación de demanda','Contestación de traslado','Expresión de agravios','Contestación de agravios','Recurso','Alegato','Ofrecimiento de prueba','Oficio','Carta documento','Mediación','Acuerdo o convenio','Otro'];
+  const TIPOS = ['Demanda','Contestación de demanda','Contestación de traslado','Expresión de agravios','Contestación de agravios','Recurso','Alegato','Ofrecimiento de prueba','Oficio','Reclamo extrajudicial','Carta documento','Mediación','Acuerdo o convenio','Otro'];
   const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
   const MAMMOTH = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
   const JSZIP = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
@@ -6001,7 +6001,7 @@ function histCambios(antes, despues){
     '<div class="overlay" id="ov-es-carp" onclick="if(event.target.id===\'ov-es-carp\')escrCarpetaCerrar()"><div class="modal modal-sm">'+
     '<div class="modal-header"><div class="modal-title" id="esc-carp-t">Nueva carpeta</div>'+cerrarBtn('escrCarpetaCerrar()')+'</div>'+
     '<div class="modal-body"><div class="login-error" id="esc-carp-error"></div>'+
-      '<div class="form-group"><label for="esc-carp-nombre">Nombre</label><input id="esc-carp-nombre" placeholder="Ej.: Demandas de moto, Juzgado Civil 5, Modelos"></div>'+
+      '<div class="form-group"><label for="esc-carp-nombre">Nombre</label><input id="esc-carp-nombre" placeholder="Ej.: Reclamos extrajudiciales, Juzgado Civil 5, Modelos"></div>'+
       '<div class="form-group" style="margin-top:13px"><label for="esc-carp-desc">Descripción (opcional)</label><input id="esc-carp-desc" placeholder="Para qué es esta carpeta"></div>'+
       '<div class="dt-nota">Las carpetas las ve todo el equipo. Cada escrito adentro mantiene quién puede verlo.</div>'+
     '</div>'+
