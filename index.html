@@ -1315,6 +1315,89 @@ table.liq tbody tr:hover{background:none}
   .es-sel-jefe{display:none !important}
   .es-texto{font-size:15px}
 }
+
+/* ===================== v8: carpetas de escritos, editor, eliminar ===================== */
+.es-top-acc{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.es-carp-tit{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.es-carp-tit .xp-link{display:inline-flex;align-items:center;gap:5px}
+.es-carp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:24px}
+.es-carp{display:flex;align-items:flex-start;gap:12px;border:1px solid var(--g100);background:var(--white);border-radius:16px;padding:15px;font-family:inherit;text-align:left;cursor:pointer;color:var(--g800);box-shadow:var(--sh);transition:transform .2s,box-shadow .2s}
+.es-carp:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(17,20,35,.1)}
+.es-carp-ico{width:40px;height:40px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(201,165,90,.16);color:#a8843a}
+.es-carp-ico.grande{width:54px;height:54px;border-radius:15px}
+.es-carp-t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.es-carp-t b{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.es-carp-t span{font-size:12.5px;color:var(--g400)}
+.es-carp-vacia{display:flex;align-items:center;gap:14px;width:100%;border:1.5px dashed var(--g200);background:none;border-radius:16px;padding:16px 18px;font-family:inherit;text-align:left;cursor:pointer;color:#a8843a;margin-bottom:24px}
+.es-carp-vacia:hover{border-color:var(--gold);background:rgba(201,165,90,.05)}
+.es-carp-vacia>span{display:flex;flex-direction:column;gap:2px}
+.es-carp-vacia b{color:var(--g800);font-size:14.5px}
+.es-carp-vacia span span{font-size:13px;color:var(--g400)}
+.es-carp-abierta{margin-bottom:20px}
+.es-volver{display:inline-flex;align-items:center;gap:5px;padding:0;margin-bottom:12px}
+.es-carp-cab{display:flex;gap:15px;align-items:flex-start}
+.es-carp-cab-t{min-width:0}
+.es-carp-cab-t h2{font-size:24px;font-weight:700;letter-spacing:-.02em;color:var(--g800);line-height:1.15}
+.es-carp-cab-t p{font-size:14px;color:var(--g600);margin-top:4px}
+.es-carp-cab-t span{display:block;font-size:12.5px;color:var(--g400);margin-top:6px;line-height:1.45}
+.es-carp-acc{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.es-dia{margin-bottom:18px}
+.es-dia-t{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:600;color:var(--g800);margin:0 2px 8px}
+.es-dia-t svg{color:var(--gold)}
+.es-dia-t span{margin-left:auto;font-size:12.5px;font-weight:500;color:var(--g400)}
+.es-dia-lista .es-row:first-child{border-top:none}
+.es-hora{flex-shrink:0;min-width:46px;font-size:14px;font-weight:700;color:var(--g800);font-variant-numeric:tabular-nums}
+.es-cuando{display:flex!important;align-items:center;gap:6px;font-size:13px;color:var(--g600)!important;margin-top:3px}
+.es-cuando svg{color:var(--gold);flex-shrink:0}
+.es-meta .xp-link{display:inline-flex;align-items:center;gap:5px}
+/* editor */
+.ed-ov{padding:0!important;align-items:stretch!important;justify-content:stretch!important;background:rgba(10,12,22,.55)}
+.ed-wrap{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--g50);z-index:1}
+.ed-top{display:flex;align-items:center;gap:12px;padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));background:var(--white);border-bottom:1px solid var(--g100)}
+.ed-tit{flex:1;min-width:0;display:flex;flex-direction:column}
+.ed-tit b{font-size:15px;font-weight:600;color:var(--g800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ed-tit span{font-size:12.5px;color:var(--g400)}
+.ed-barra{display:flex;align-items:center;gap:2px;padding:6px 12px;background:var(--white);border-bottom:1px solid var(--g100);overflow-x:auto;scrollbar-width:none}
+.ed-barra button{flex-shrink:0;min-width:36px;height:36px;padding:0 9px;border:none;background:none;border-radius:8px;font-family:inherit;font-size:14px;color:var(--g800);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.ed-barra button:hover{background:var(--g100)}
+.ed-barra button.on{background:rgba(201,165,90,.2);color:#7a5c1a}
+.ed-sep{width:1px;height:22px;background:var(--g200);margin:0 6px;flex-shrink:0}
+.ed-aviso{display:none;font-size:13px;color:#7a5c1a;background:rgba(201,165,90,.14);padding:9px 16px;border-bottom:1px solid rgba(201,165,90,.25)}
+.ed-scroll{flex:1;overflow:auto;padding:28px 16px 80px;-webkit-overflow-scrolling:touch}
+.ed-hoja{max-width:794px;min-height:1000px;margin:0 auto;background:#fff;color:#1a1a1a;box-shadow:0 2px 10px rgba(0,0,0,.08),0 12px 40px rgba(17,20,35,.08);padding:90px 75px 90px 110px;font-family:"Times New Roman",Times,serif;font-size:16px;line-height:1.5;outline:none;text-align:justify;border-radius:3px;caret-color:#a8843a}
+.ed-hoja p{margin:0 0 10px}
+.ed-hoja h1,.ed-hoja h2,.ed-hoja h3{font-family:inherit;font-weight:700;margin:14px 0 10px;text-align:left;letter-spacing:0;color:#111}
+.ed-hoja h1{font-size:21px}.ed-hoja h2{font-size:18.5px}.ed-hoja h3{font-size:17px}
+.ed-hoja ul,.ed-hoja ol{margin:0 0 10px 28px}
+.ed-hoja blockquote{margin:0 0 10px 40px}
+.ed-hoja table{border-collapse:collapse;margin:0 0 10px}
+.ed-hoja td,.ed-hoja th{border:1px solid #ccc;padding:4px 8px}
+body.ed-abierto{overflow:hidden}
+/* crear carpeta con archivos */
+.nc-archivos .es-drop{padding:18px}
+.nc-arch{display:flex;align-items:center;gap:10px;margin-top:8px;padding:8px 10px;border:1px solid var(--g100);border-radius:10px;font-size:13.5px}
+.nc-arch span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--g800)}
+.nc-arch em{font-style:normal;font-size:12px;color:var(--g400)}
+/* eliminar carpeta */
+.ex-borrar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border:1px solid rgba(200,40,27,.18)}
+.ex-borrar .btn{white-space:nowrap}
+#ov-borrar .search-wrap{margin-bottom:10px}
+.con-borrador{box-shadow:0 0 0 2px rgba(201,165,90,.55)!important}
+@media(max-width:760px){
+  .es-top-acc .btn{padding:8px 12px;font-size:13px}
+  .es-carp-grid{display:flex;overflow-x:auto;gap:10px;margin-inline:-16px;padding:2px 16px 8px;scrollbar-width:none}
+  .es-carp{flex:0 0 72%;max-width:260px}
+  .es-carp-cab-t h2{font-size:20px}
+  .es-carp-acc .btn{flex:1 1 auto}
+  .es-hora{min-width:40px;font-size:13px}
+  .ed-top{padding:8px 10px;gap:8px}
+  .ed-bajar span{display:none}
+  .ed-scroll{padding:0 0 60px;background:#fff}
+  .ed-hoja{box-shadow:none;border-radius:0;padding:22px 18px 40px;min-height:100%;font-size:16.5px}
+  .ex-borrar .btn{width:100%;justify-content:center}
+}
+[data-mode=dark] .ed-hoja{background:#fff;color:#1a1a1a}
+[data-mode=dark] .es-carp-ico{color:var(--gold-light)}
 </style>
 </head>
 <body>
@@ -3016,6 +3099,7 @@ async function guardarExp() {
   btn.innerHTML='Guardar carpeta';btn.disabled=false;
   if(error){showToast('Error: '+error.message,true);return;}
   if(_nueva?.id) logHist(_nueva.id,'alta',null);
+  if(_nueva?.id && window._trasCrearCarpeta) await window._trasCrearCarpeta(_nueva.id);
   await loadExpedientes();
   closeExpModal();
   showToast('Carpeta guardada');
@@ -5688,12 +5772,14 @@ function histCambios(antes, despues){
   const $ = id => document.getElementById(id);
   const ico = (p,s) => '<svg width="'+(s||15)+'" height="'+(s||15)+'" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">'+p+'</svg>';
   const I_X = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
-  const I_DOC = '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/>';
   const I_PLUMA = '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>';
   const I_MAS = '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>';
   const I_DESC = '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>';
   const I_SUBIR = '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>';
   const I_BUSCAR = '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>';
+  const I_CARPETA = '<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>';
+  const I_IZQ = '<polyline points="15 18 9 12 15 6"/>';
+  const I_RELOJ = '<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/>';
   const cerrarBtn = fn => '<button class="close-btn" onclick="'+fn+'" aria-label="Cerrar">'+ico(I_X,18)+'</button>';
   const esJefe = () => currentPerfil?.rol==='jefe';
   const yo = () => currentUser ? currentUser.id : null;
@@ -5701,34 +5787,51 @@ function histCambios(antes, despues){
   const nombreDe = id => (perfil(id)||{}).nombre || 'Sin autor';
   const norm = s => (s==null?'':String(s)).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
   const plural = (n, s, p) => n+' '+(n===1 ? s : (p||s+'s'));
-  const hoyISO = () => { const x = new Date(); return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'); };
-  const fecha = iso => { if(!iso) return ''; const d = new Date(iso); return d.toLocaleDateString('es-AR',{day:'numeric',month:'short',year:'numeric'}); };
   const ext = n => { const m = String(n||'').match(/\.([a-z0-9]+)$/i); return m ? m[1].toLowerCase() : ''; };
   const ref = e => e.nroexp || '#'+String(e.id).slice(-6);
+  const dosDig = n => String(n).padStart(2,'0');
+  const hora = iso => { const d = new Date(iso); return dosDig(d.getHours())+':'+dosDig(d.getMinutes()); };
+  const fecha = iso => iso ? new Date(iso).toLocaleDateString('es-AR',{day:'numeric',month:'short',year:'numeric'}) : '';
+  const fechaHora = iso => iso ? fecha(iso)+', '+hora(iso)+' h' : '';
+  const fechaLarga = iso => { if(!iso) return ''; const d = new Date(iso); return d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' a las '+hora(iso)+' h'; };
+  const diaClave = iso => { const d = new Date(iso); return d.getFullYear()+'-'+dosDig(d.getMonth()+1)+'-'+dosDig(d.getDate()); };
+  function diaTitulo(clave){
+    const hoy = diaClave(new Date().toISOString()), ay = new Date(); ay.setDate(ay.getDate()-1);
+    if(clave===hoy) return 'Hoy'; if(clave===diaClave(ay.toISOString())) return 'Ayer';
+    const p = clave.split('-'), d = new Date(+p[0], +p[1]-1, +p[2]);
+    const t = d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    return t.charAt(0).toUpperCase()+t.slice(1);
+  }
   const TIPOS = ['Demanda','Contestación de demanda','Contestación de traslado','Expresión de agravios','Contestación de agravios','Recurso','Alegato','Ofrecimiento de prueba','Oficio','Carta documento','Mediación','Acuerdo o convenio','Otro'];
   const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
   const MAMMOTH = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
+  const JSZIP = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+  const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
   const MAX_TEXTO = 400000;
+  const COLS = 'id,autor_id,titulo,tipo,expediente_id,carpeta_id,visibilidad,nota,storage_key,archivo_nombre,archivo_tipo,tamanio,palabras,creado_at,editado_at,editado_por,storage_key_original,archivo_nombre_original';
 
-  let lista = [], cargado = false, cargando = false;
-  const filtro = {q:'', autor:'', tipos:new Set(), alcance:'todos'};
+  let lista = [], carpetas = [], cargado = false, cargando = false;
+  const filtro = {q:'', autor:'', tipos:new Set(), alcance:'todos', carpeta:''};
   const abiertas = new Set();
+  const carpeta = id => carpetas.find(c=>c.id===id) || null;
+  const puedeCarpeta = c => c && (c.creado_por===yo() || esJefe());
 
   /* ============ Navegacion ============ */
   document.querySelector('.sidebar-nav .nav-btn[onclick="showView(\'calendario\')"]').insertAdjacentHTML('afterend',
     '<button class="nav-btn" id="nav-escritos" onclick="showView(\'escritos\')">'+ico(I_PLUMA,18)+'Escritos</button>');
   $('view-equipo').insertAdjacentHTML('afterend',
     '<div id="view-escritos" style="display:none">'+
-      '<div class="topbar"><div class="topbar-title">Escritos</div><button class="btn btn-gold" onclick="escNuevo()">'+ico(I_MAS,14)+'Subir escrito</button></div>'+
+      '<div class="topbar"><div class="topbar-title">Escritos</div><div class="es-top-acc"><button class="btn btn-outline" onclick="escrCarpetaNueva()">'+ico(I_CARPETA,14)+'Nueva carpeta</button><button class="btn btn-gold" onclick="escrNuevo()">'+ico(I_MAS,14)+'Subir escrito</button></div></div>'+
       '<div class="content">'+
         '<div id="es-intro"></div>'+
+        '<div id="es-carpetas"></div>'+
         '<div class="tk-toolbar es-toolbar">'+
           '<div class="search-wrap"><svg class="search-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">'+I_BUSCAR+'</svg><input class="search-input" id="es-q" placeholder="Buscar por título, carpeta o texto del escrito" autocomplete="off"></div>'+
           '<select id="es-autor" class="es-sel" aria-label="Abogado"></select>'+
           '<div class="tk-seg" id="es-alcance"></div>'+
         '</div>'+
         '<div class="es-tipos" id="es-tipos" role="group" aria-label="Tipos de escrito"></div>'+
-        '<div class="es-cab"><span class="es-sec" style="margin:0">Escritos</span><span class="badge badge-navy" id="es-cuenta">0</span></div>'+
+        '<div class="es-cab"><span class="es-sec" style="margin:0" id="es-cab-t">Escritos</span><span class="badge badge-navy" id="es-cuenta">0</span></div>'+
         '<div id="es-lista"></div>'+
       '</div>'+
     '</div>');
@@ -5755,25 +5858,29 @@ function histCambios(antes, despues){
     if(window._soloLectura || !navigator.onLine){ $('es-lista').innerHTML = '<div class="cmdk-empty">Los escritos se ven con conexión a internet.</div>'; return; }
     cargando = true;
     if(!cargado) $('es-lista').innerHTML = '<div class="cmdk-empty">Cargando escritos</div>';
-    const {data, error} = await sb.from('escritos').select('id,autor_id,titulo,tipo,expediente_id,visibilidad,nota,storage_key,archivo_nombre,archivo_tipo,tamanio,palabras,creado_at').order('creado_at',{ascending:false});
+    const [r1, r2] = await Promise.all([
+      sb.from('escritos').select(COLS).order('creado_at',{ascending:false}),
+      sb.from('escritos_carpetas').select('*').order('nombre')]);
     cargando = false;
-    if(error){ $('es-lista').innerHTML = '<div class="cmdk-empty">No se pudieron cargar los escritos. Revisá tu conexión.</div>'; return; }
-    lista = data||[]; cargado = true;
+    if(r1.error){ $('es-lista').innerHTML = '<div class="cmdk-empty">No se pudieron cargar los escritos. Revisá tu conexión.</div>'; return; }
+    lista = r1.data||[]; carpetas = r2.error ? [] : (r2.data||[]); cargado = true;
+    if(filtro.carpeta && !carpeta(filtro.carpeta)) filtro.carpeta = '';
     renderEscritos();
   }
   const _doLogout6 = doLogout;
-  doLogout = async function(){ lista = []; cargado = false; return _doLogout6.apply(this, arguments); };
+  doLogout = async function(){ lista = []; carpetas = []; cargado = false; filtro.carpeta = ''; return _doLogout6.apply(this, arguments); };
 
   function visibles(sinTipo){
     const q = norm(filtro.q);
     return lista.filter(x=>{
+      if(filtro.carpeta && x.carpeta_id!==filtro.carpeta) return false;
       if(!sinTipo && filtro.tipos.size && !filtro.tipos.has(x.tipo)) return false;
       if(filtro.alcance==='mios' && x.autor_id!==yo()) return false;
       if(filtro.alcance==='compartidos' && (x.autor_id===yo() || x.visibilidad!=='estudio')) return false;
       if(filtro.autor && x.autor_id!==filtro.autor) return false;
       if(!q) return true;
-      const e = x.expediente_id ? expedientes.find(z=>z.id===x.expediente_id) : null;
-      return [x.titulo, x.tipo, x.nota, x.archivo_nombre, nombreDe(x.autor_id), e && e.nombre, e && e.nroexp].some(f=>norm(f).includes(q)) || (x._texto && norm(x._texto).includes(q));
+      const e = x.expediente_id ? expedientes.find(z=>z.id===x.expediente_id) : null, c = carpeta(x.carpeta_id);
+      return [x.titulo, x.tipo, x.nota, x.archivo_nombre, nombreDe(x.autor_id), e && e.nombre, e && e.nroexp, c && c.nombre].some(f=>norm(f).includes(q)) || (x._texto && norm(x._texto).includes(q));
     });
   }
 
@@ -5784,7 +5891,7 @@ function histCambios(antes, despues){
   }
   function renderIntro(){
     const el = $('es-intro');
-    if(!cargado){ el.innerHTML = ''; return; }
+    if(!cargado || filtro.carpeta){ el.innerHTML = ''; return; }
     if(!esJefe()){
       const mios = lista.filter(x=>x.autor_id===yo()).length;
       el.innerHTML = '<div class="full-card es-nota-card"><div class="es-nota-ico">'+ico(I_PLUMA,20)+'</div><div><b>Tu biblioteca de escritos</b><p>Subí los escritos que redactás. Los directores del estudio pueden verlos; el resto del equipo solo ve los que marques como compartidos. Tenés '+plural(mios,'escrito cargado','escritos cargados')+'.</p></div></div>';
@@ -5796,10 +5903,32 @@ function histCambios(antes, despues){
     const sinCargar = perfiles.filter(p=>p.rol!=='secretaria' && !por[p.id]);
     el.innerHTML = '<div class="es-sec">Escritos por abogado</div><div class="es-autores">'+
       ids.map(k=>{ const p = perfil(k) || {nombre:'Sin autor', rol:'asociado'}, d = por[k];
-        return '<button class="es-autor'+(filtro.autor===k?' on':'')+'" onclick="escVerAutor(\''+k+'\')">'+
-          '<div class="user-avatar '+tkAvClass(p)+'">'+h(tkIni(p))+'</div><div class="es-autor-t"><b>'+h(p.nombre)+'</b><span>'+plural(d.n,'escrito')+' · '+(d.p ? Math.round(d.p/1000*10)/10+' mil palabras' : 'sin texto')+'</span><span>Último: '+fecha(d.ult)+'</span></div></button>'; }).join('')+
+        return '<button class="es-autor'+(filtro.autor===k?' on':'')+'" onclick="escrVerAutor(\''+k+'\')">'+
+          '<div class="user-avatar '+tkAvClass(p)+'">'+h(tkIni(p))+'</div><div class="es-autor-t"><b>'+h(p.nombre)+'</b><span>'+plural(d.n,'escrito')+' · '+(d.p ? Math.round(d.p/1000*10)/10+' mil palabras' : 'sin texto')+'</span><span>Último: '+fechaHora(d.ult)+'</span></div></button>'; }).join('')+
       (ids.length ? '' : '<div class="ch-vacio" style="grid-column:1/-1">Todavía nadie subió escritos.</div>')+'</div>'+
       (sinCargar.length ? '<div class="dt-nota" style="margin:-4px 0 18px">Sin escritos cargados: '+h(sinCargar.map(p=>p.nombre).join(', '))+'.</div>' : '');
+  }
+  function renderCarpetas(){
+    const el = $('es-carpetas');
+    if(!cargado){ el.innerHTML = ''; return; }
+    const c = carpeta(filtro.carpeta);
+    if(c){
+      const xs = lista.filter(x=>x.carpeta_id===c.id), ult = xs.reduce((m,x)=>!m || x.creado_at>m ? x.creado_at : m, null);
+      el.innerHTML = '<div class="full-card es-carp-abierta">'+
+        '<button class="xp-link es-volver" onclick="escrCarpetaAbrir(\'\')">'+ico(I_IZQ,14)+'Todas las carpetas</button>'+
+        '<div class="es-carp-cab"><span class="es-carp-ico grande">'+ico(I_CARPETA,26)+'</span><div class="es-carp-cab-t"><h2>'+h(c.nombre)+'</h2>'+
+          (c.descripcion ? '<p>'+h(c.descripcion)+'</p>' : '')+
+          '<span>'+plural(xs.length,'escrito')+(ult ? ' · último subido el '+fechaLarga(ult) : '')+' · creada por '+h(nombreDe(c.creado_por))+' el '+fechaHora(c.creado_at)+'</span></div></div>'+
+        '<div class="es-carp-acc"><button class="btn btn-gold btn-sm" onclick="escrNuevo()">'+ico(I_MAS,13)+'Subir a esta carpeta</button>'+
+          (puedeCarpeta(c) ? '<button class="btn btn-outline btn-sm" onclick="escrCarpetaEditar(\''+c.id+'\')">Renombrar</button><button class="btn btn-danger btn-sm" onclick="escrCarpetaBorrar(\''+c.id+'\')">Eliminar carpeta</button>' : '')+'</div></div>';
+      return;
+    }
+    el.innerHTML = '<div class="es-carp-tit"><span class="es-sec" style="margin:0">Carpetas</span>'+(carpetas.length ? '<button class="xp-link" onclick="escrCarpetaNueva()">'+ico(I_MAS,13)+'Nueva carpeta</button>' : '')+'</div>'+
+      (carpetas.length ? '<div class="es-carp-grid">'+carpetas.map(c=>{
+        const xs = lista.filter(x=>x.carpeta_id===c.id), ult = xs.reduce((m,x)=>!m || x.creado_at>m ? x.creado_at : m, null);
+        return '<button class="es-carp" onclick="escrCarpetaAbrir(\''+c.id+'\')"><span class="es-carp-ico">'+ico(I_CARPETA,20)+'</span><span class="es-carp-t"><b>'+h(c.nombre)+'</b><span>'+plural(xs.length,'escrito')+'</span><span>'+(ult ? 'Último: '+fechaHora(ult) : 'Vacía')+'</span></span></button>';
+      }).join('')+'</div>'
+      : '<button class="es-carp-vacia" onclick="escrCarpetaNueva()">'+ico(I_CARPETA,20)+'<span><b>Creá carpetas para ordenar los escritos</b><span>Por tema, por juzgado o por cliente. Adentro se ve el día y la hora en que se subió cada uno.</span></span></button>');
   }
   function renderFiltros(){
     const autores = [...new Set(lista.map(x=>x.autor_id).filter(Boolean))];
@@ -5807,54 +5936,118 @@ function histCambios(antes, despues){
     sel.innerHTML = '<option value="">Todos los abogados</option>'+autores.map(id=>'<option value="'+id+'">'+h(nombreDe(id))+'</option>').join('');
     sel.value = autores.includes(v) ? v : '';
     sel.style.display = autores.length>1 || esJefe() ? '' : 'none';
-    sel.classList.toggle('es-sel-jefe', esJefe());
+    sel.classList.toggle('es-sel-jefe', esJefe() && !filtro.carpeta);
     const opts = esJefe() ? [] : [['todos','Todos'],['mios','Míos'],['compartidos','Compartidos']];
     $('es-alcance').style.display = opts.length ? '' : 'none';
-    $('es-alcance').innerHTML = opts.map(o=>'<button class="'+(filtro.alcance===o[0]?'on':'')+'" onclick="escAlcance(\''+o[0]+'\')">'+o[1]+'</button>').join('');
+    $('es-alcance').innerHTML = opts.map(o=>'<button class="'+(filtro.alcance===o[0]?'on':'')+'" onclick="escrAlcance(\''+o[0]+'\')">'+o[1]+'</button>').join('');
+  }
+  function fila(x, conHora){
+    const e = x.expediente_id ? expedientes.find(z=>z.id===x.expediente_id) : null, c = !filtro.carpeta && carpeta(x.carpeta_id);
+    const meta = [esJefe() || x.autor_id!==yo() ? nombreDe(x.autor_id) : 'Vos', conHora ? x.tipo : fechaHora(x.creado_at), c ? 'Carpeta: '+c.nombre : null, e ? (e.nombre||ref(e)) : null,
+      x.palabras ? x.palabras.toLocaleString('es-AR')+' palabras' : 'sin texto extraído', x.editado_at ? 'editado '+fechaHora(x.editado_at) : null].filter(Boolean);
+    return '<button class="es-row" onclick="escrAbrir(\''+x.id+'\')">'+(conHora ? '<span class="es-hora">'+hora(x.creado_at)+'</span>' : '')+iconoArchivo(x)+
+      '<span class="es-row-t"><b>'+h(x.titulo)+'</b><span>'+h(meta.join(' · '))+'</span></span>'+(x.visibilidad==='estudio' ? '<span class="badge badge-navy">Compartido</span>' : '')+'</button>';
   }
   function renderEscritos(){
     if(currentView!=='escritos') return;
-    renderIntro(); renderFiltros();
+    renderIntro(); renderCarpetas(); renderFiltros();
     const el = $('es-lista'); if(!cargado) return;
     const vis = visibles(), base = visibles(true);
     const orden = TIPOS.concat([...new Set(lista.map(x=>x.tipo))].filter(t=>!TIPOS.includes(t)));
     const cuenta = t => base.filter(x=>x.tipo===t).length;
-    $('es-tipos').innerHTML = !lista.length ? '' : '<button class="es-chip'+(filtro.tipos.size?'':' on')+'" onclick="escTipo(\'\')">Todos <b>'+base.length+'</b></button>'+
-      orden.filter(t=>cuenta(t) || filtro.tipos.has(t)).map(t=>'<button class="es-chip'+(filtro.tipos.has(t)?' on':'')+'" onclick="escTipo(\''+t+'\')">'+h(t)+' <b>'+cuenta(t)+'</b></button>').join('');
+    $('es-tipos').innerHTML = !base.length && !filtro.tipos.size ? '' : '<button class="es-chip'+(filtro.tipos.size?'':' on')+'" onclick="escrTipo(\'\')">Todos <b>'+base.length+'</b></button>'+
+      orden.filter(t=>cuenta(t) || filtro.tipos.has(t)).map(t=>'<button class="es-chip'+(filtro.tipos.has(t)?' on':'')+'" onclick="escrTipo(\''+t+'\')">'+h(t)+' <b>'+cuenta(t)+'</b></button>').join('');
     $('es-cuenta').textContent = plural(vis.length,'escrito');
-    const fila = x=>{
-      const e = x.expediente_id ? expedientes.find(z=>z.id===x.expediente_id) : null;
-      const meta = [esJefe() || x.autor_id!==yo() ? nombreDe(x.autor_id) : 'Vos', fecha(x.creado_at), e ? (e.nombre||ref(e)) : null, x.palabras ? x.palabras.toLocaleString('es-AR')+' palabras' : 'sin texto extraído'].filter(Boolean);
-      return '<button class="es-row" onclick="escAbrir(\''+x.id+'\')">'+iconoArchivo(x)+
-        '<span class="es-row-t"><b>'+h(x.titulo)+'</b><span>'+h(meta.join(' · '))+'</span></span>'+(x.visibilidad==='estudio' ? '<span class="badge badge-navy">Compartido</span>' : '')+'</button>';
-    };
+    $('es-cab-t').textContent = filtro.carpeta ? 'Escritos de la carpeta, por día y hora' : 'Todos los escritos';
+    const vacio = '<div class="card"><div class="empty-state" style="padding:40px 20px"><div class="empty-title">'+(base.length ? 'Ningún escrito coincide con los filtros' : (filtro.carpeta ? 'Esta carpeta está vacía' : 'Todavía no hay escritos'))+'</div>'+(base.length ? '' : '<div style="margin-top:14px"><button class="btn btn-gold" onclick="escrNuevo()">'+ico(I_MAS,14)+(filtro.carpeta ? 'Subir a esta carpeta' : 'Subir el primero')+'</button></div>')+'</div></div>';
+    if(filtro.carpeta){
+      const dias = {}; vis.forEach(x=>{ const k = diaClave(x.creado_at); (dias[k] = dias[k] || []).push(x); });
+      const claves = Object.keys(dias).sort().reverse();
+      el.innerHTML = claves.length ? claves.map(k=>'<div class="es-dia"><div class="es-dia-t">'+ico(I_RELOJ,14)+diaTitulo(k)+'<span>'+plural(dias[k].length,'escrito')+'</span></div><div class="card es-dia-lista">'+
+        dias[k].sort((a,b)=>b.creado_at.localeCompare(a.creado_at)).map(x=>fila(x,true)).join('')+'</div></div>').join('') : vacio;
+      return;
+    }
     const pilas = orden.map(t=>[t, vis.filter(x=>x.tipo===t)]).filter(p=>p[1].length);
     const todoAbierto = !!filtro.q || pilas.length===1;
     el.innerHTML = pilas.length ? pilas.map(([t, xs])=>{
       const ab = todoAbierto || filtro.tipos.has(t) || abiertas.has(t);
       const autores = [...new Set(xs.map(x=>x.autor_id))];
-      return '<section class="es-pila'+(ab?' abierta':'')+'"><button class="es-pila-head" onclick="escPila(\''+t+'\')" aria-expanded="'+ab+'">'+
+      return '<section class="es-pila'+(ab?' abierta':'')+'"><button class="es-pila-head" onclick="escrPila(\''+t+'\')" aria-expanded="'+ab+'">'+
           '<span class="es-pila-ico" aria-hidden="true"><i></i><i></i><i>'+xs.length+'</i></span>'+
-          '<span class="es-pila-t"><b>'+h(t)+'</b><span>'+plural(xs.length,'escrito')+(esJefe() || autores.length>1 ? ' · '+plural(autores.length,'abogado') : '')+' · último: '+fecha(xs[0].creado_at)+'</span></span>'+
+          '<span class="es-pila-t"><b>'+h(t)+'</b><span>'+plural(xs.length,'escrito')+(esJefe() || autores.length>1 ? ' · '+plural(autores.length,'abogado') : '')+' · último: '+fechaHora(xs[0].creado_at)+'</span></span>'+
           '<svg class="es-pila-fl" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>'+
-        (ab ? '<div class="es-pila-lista">'+xs.map(fila).join('')+'</div>' : '')+'</section>';
-    }).join('') : '<div class="card"><div class="empty-state" style="padding:40px 20px"><div class="empty-title">'+(lista.length ? 'Ningún escrito coincide con los filtros' : 'Todavía no hay escritos')+'</div>'+(lista.length ? '' : '<div style="margin-top:14px"><button class="btn btn-gold" onclick="escNuevo()">'+ico(I_MAS,14)+'Subir el primero</button></div>')+'</div></div>';
+        (ab ? '<div class="es-pila-lista">'+xs.map(x=>fila(x,false)).join('')+'</div>' : '')+'</section>';
+    }).join('') : vacio;
   }
-  window.escTipo = function(t){
+  window.escrTipo = function(t){
     if(!t) filtro.tipos.clear();
     else if(filtro.tipos.has(t)){ filtro.tipos.delete(t); abiertas.delete(t); }
     else filtro.tipos.add(t);
     renderEscritos();
   };
-  window.escPila = function(t){
+  window.escrPila = function(t){
     if(filtro.tipos.has(t)){ filtro.tipos.delete(t); abiertas.delete(t); }
     else if(abiertas.has(t)) abiertas.delete(t); else abiertas.add(t);
     renderEscritos();
   };
-  window.escVerAutor = function(id){ filtro.autor = filtro.autor===id ? '' : id; renderEscritos(); };
-  window.escAlcance = function(a){ filtro.alcance = a; renderEscritos(); };
+  window.escrVerAutor = function(id){ filtro.autor = filtro.autor===id ? '' : id; renderEscritos(); };
+  window.escrAlcance = function(a){ filtro.alcance = a; renderEscritos(); };
+  window.escrCarpetaAbrir = function(id){ filtro.carpeta = id; filtro.tipos.clear(); renderEscritos(); window.scrollTo(0,0); };
   $('es-q').addEventListener('input', ev=>{ filtro.q = ev.target.value; renderEscritos(); });
   $('es-autor').addEventListener('change', ev=>{ filtro.autor = ev.target.value; renderEscritos(); });
+
+  /* ============ Carpetas de escritos ============ */
+  document.body.insertAdjacentHTML('beforeend',
+    '<div class="overlay" id="ov-es-carp" onclick="if(event.target.id===\'ov-es-carp\')escrCarpetaCerrar()"><div class="modal modal-sm">'+
+    '<div class="modal-header"><div class="modal-title" id="esc-carp-t">Nueva carpeta</div>'+cerrarBtn('escrCarpetaCerrar()')+'</div>'+
+    '<div class="modal-body"><div class="login-error" id="esc-carp-error"></div>'+
+      '<div class="form-group"><label for="esc-carp-nombre">Nombre</label><input id="esc-carp-nombre" placeholder="Ej.: Demandas de moto, Juzgado Civil 5, Modelos"></div>'+
+      '<div class="form-group" style="margin-top:13px"><label for="esc-carp-desc">Descripción (opcional)</label><input id="esc-carp-desc" placeholder="Para qué es esta carpeta"></div>'+
+      '<div class="dt-nota">Las carpetas las ve todo el equipo. Cada escrito adentro mantiene quién puede verlo.</div>'+
+    '</div>'+
+    '<div class="modal-footer"><button class="btn btn-outline" onclick="escrCarpetaCerrar()">Cancelar</button><button class="btn btn-gold" id="esc-carp-btn" onclick="escrCarpetaGuardar()">Crear carpeta</button></div></div></div>');
+  let carpEdit = null;
+  function carpAbrirModal(c){
+    carpEdit = c ? c.id : null;
+    $('esc-carp-t').textContent = c ? 'Renombrar carpeta' : 'Nueva carpeta';
+    $('esc-carp-btn').textContent = c ? 'Guardar' : 'Crear carpeta';
+    $('esc-carp-nombre').value = c ? c.nombre : ''; $('esc-carp-desc').value = c ? (c.descripcion||'') : '';
+    $('esc-carp-error').style.display = 'none';
+    $('ov-es-carp').classList.add('open'); setTimeout(()=>$('esc-carp-nombre').focus(), 250);
+  }
+  window.escrCarpetaNueva = function(){
+    if(window._soloLectura || !navigator.onLine){ showToast('Para crear carpetas necesitás conexión', true); return; }
+    if(currentView!=='escritos') showView('escritos');
+    carpAbrirModal(null);
+  };
+  window.escrCarpetaEditar = function(id){ const c = carpeta(id); if(puedeCarpeta(c)) carpAbrirModal(c); };
+  window.escrCarpetaCerrar = function(){ $('ov-es-carp').classList.remove('open'); };
+  $('esc-carp-nombre').addEventListener('keydown', ev=>{ if(ev.key==='Enter') escrCarpetaGuardar(); });
+  window.escrCarpetaGuardar = async function(){
+    const nombre = $('esc-carp-nombre').value.trim(), descripcion = $('esc-carp-desc').value.trim()||null, er = $('esc-carp-error');
+    if(!nombre){ er.textContent = 'Poné un nombre para la carpeta.'; er.style.display = 'block'; return; }
+    if(carpetas.some(c=>c.id!==carpEdit && norm(c.nombre)===norm(nombre))){ er.textContent = 'Ya hay una carpeta con ese nombre.'; er.style.display = 'block'; return; }
+    const btn = $('esc-carp-btn'); btn.disabled = true;
+    const r = carpEdit ? await sb.from('escritos_carpetas').update({nombre, descripcion}).eq('id', carpEdit).select().single()
+      : await sb.from('escritos_carpetas').insert({nombre, descripcion, creado_por:yo()}).select().single();
+    btn.disabled = false;
+    if(r.error){ er.textContent = 'No se pudo guardar: '+r.error.message; er.style.display = 'block'; return; }
+    if(carpEdit) Object.assign(carpeta(carpEdit), r.data); else carpetas.push(r.data);
+    carpetas.sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
+    escrCarpetaCerrar();
+    if(!carpEdit){ filtro.carpeta = r.data.id; filtro.tipos.clear(); }
+    renderEscritos(); showToast(carpEdit ? 'Carpeta actualizada' : 'Carpeta creada');
+  };
+  window.escrCarpetaBorrar = async function(id){
+    const c = carpeta(id); if(!puedeCarpeta(c)) return;
+    const n = lista.filter(x=>x.carpeta_id===id).length;
+    if(!confirm('¿Eliminar la carpeta "'+c.nombre+'"?'+(n ? ' Sus '+plural(n,'escrito')+' no se borran: quedan sin carpeta.' : ''))) return;
+    const {error} = await sb.from('escritos_carpetas').delete().eq('id', id);
+    if(error){ showToast('No se pudo eliminar la carpeta: '+error.message, true); return; }
+    carpetas = carpetas.filter(z=>z.id!==id); lista.forEach(x=>{ if(x.carpeta_id===id) x.carpeta_id = null; });
+    filtro.carpeta = ''; renderEscritos(); showToast('Carpeta eliminada');
+  };
+  const opcionesCarpeta = sel => '<option value="">Sin carpeta</option>'+carpetas.map(c=>'<option value="'+c.id+'"'+(c.id===sel?' selected':'')+'>'+h(c.nombre)+'</option>').join('');
 
   /* ============ Lectura del texto de los archivos ============ */
   async function textoDe(file){
@@ -5882,31 +6075,33 @@ function histCambios(antes, despues){
     return '';
   }
   const contarPalabras = t => t ? (t.match(/\S+/g)||[]).length : 0;
+  const nombreSeguro = n => String(n).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9._-]+/g,'_').slice(-90);
 
   /* ============ Subir escritos ============ */
   document.body.insertAdjacentHTML('beforeend',
-    '<div class="overlay" id="ov-es-nuevo" onclick="if(event.target.id===\'ov-es-nuevo\')escNuevoCerrar()"><div class="modal" style="max-width:620px">'+
-    '<div class="modal-header"><div class="modal-title">Subir escritos</div>'+cerrarBtn('escNuevoCerrar()')+'</div>'+
+    '<div class="overlay" id="ov-es-nuevo" onclick="if(event.target.id===\'ov-es-nuevo\')escrNuevoCerrar()"><div class="modal" style="max-width:620px">'+
+    '<div class="modal-header"><div class="modal-title">Subir escritos</div>'+cerrarBtn('escrNuevoCerrar()')+'</div>'+
     '<div class="modal-body"><div class="login-error" id="esn-error"></div>'+
       '<label class="es-drop" id="esn-drop">'+ico(I_SUBIR,26)+'<b>Elegí o arrastrá los archivos</b><span>Word (.docx), PDF o texto. Podés subir varios a la vez.</span><input type="file" id="esn-file" multiple accept=".pdf,.docx,.doc,.txt,.md,.rtf" style="display:none"></label>'+
       '<div id="esn-archivos"></div>'+
       '<div class="form-grid" style="gap:13px;margin-top:16px">'+
+        '<div class="form-group"><label for="esn-carp">Carpeta de escritos</label><select id="esn-carp"></select></div>'+
         '<div class="form-group"><label for="esn-tipo">Tipo de escrito</label><select id="esn-tipo">'+TIPOS.map(t=>'<option>'+t+'</option>').join('')+'</select></div>'+
-        '<div class="form-group"><label for="esn-exp">Carpeta (opcional)</label><select id="esn-exp"></select></div>'+
+        '<div class="form-group"><label for="esn-exp">Expediente vinculado (opcional)</label><select id="esn-exp"></select></div>'+
+        '<div class="form-group"><label for="esn-nota">Nota (opcional)</label><input id="esn-nota" placeholder="Ej.: la Cámara admitió el agravio"></div>'+
       '</div>'+
-      '<div class="form-group" style="margin-top:13px"><label for="esn-nota">Nota (opcional)</label><input id="esn-nota" placeholder="Ej.: salió bien, la Cámara admitió el agravio"></div>'+
       '<label class="xp-check" style="margin-top:14px"><input type="checkbox" id="esn-comp"> Compartir con todo el estudio</label>'+
-      '<div class="dt-nota">Si no lo compartís, solo lo ven vos y los directores.</div>'+
+      '<div class="dt-nota">Si no lo compartís, solo lo ven vos y los directores. Se guarda el día y la hora exacta de la subida.</div>'+
     '</div>'+
-    '<div class="modal-footer"><button class="btn btn-outline" onclick="escNuevoCerrar()">Cancelar</button><button class="btn btn-gold" id="esn-btn" onclick="escSubir()">Subir</button></div>'+
+    '<div class="modal-footer"><button class="btn btn-outline" onclick="escrNuevoCerrar()">Cancelar</button><button class="btn btn-gold" id="esn-btn" onclick="escrSubir()">Subir</button></div>'+
     '</div></div>');
-  let nuevos = [];
+  let nuevos = [], subiendo = false;
   function pintarNuevos(){
     $('esn-archivos').innerHTML = nuevos.map((f,i)=>'<div class="es-nuevo">'+iconoArchivo({archivo_nombre:f.file.name})+
-      '<input value="'+h(f.titulo)+'" aria-label="Título" oninput="escTituloNuevo('+i+',this.value)">'+
-      '<span class="es-estado" id="esn-st-'+i+'">'+h(f.estado||'')+'</span><button class="close-btn" onclick="escQuitarNuevo('+i+')" aria-label="Quitar">'+ico(I_X,15)+'</button></div>').join('');
+      '<input value="'+h(f.titulo)+'" aria-label="Título" oninput="escrTituloNuevo('+i+',this.value)">'+
+      '<span class="es-estado" id="esn-st-'+i+'">'+h(f.estado||'')+'</span><button class="close-btn" onclick="escrQuitarNuevo('+i+')" aria-label="Quitar">'+ico(I_X,15)+'</button></div>').join('');
     const n = nuevos.length; $('esn-btn').textContent = n ? 'Subir '+plural(n,'escrito') : 'Subir';
-    $('esn-btn').disabled = !n;
+    $('esn-btn').disabled = !n || subiendo;
   }
   function agregar(files){
     [...files].forEach(file=>{
@@ -5920,148 +6115,696 @@ function histCambios(antes, despues){
   drop.addEventListener('dragover', ev=>{ ev.preventDefault(); drop.classList.add('over'); });
   drop.addEventListener('dragleave', ()=>drop.classList.remove('over'));
   drop.addEventListener('drop', ev=>{ ev.preventDefault(); drop.classList.remove('over'); if(ev.dataTransfer && ev.dataTransfer.files) agregar(ev.dataTransfer.files); });
-  window.escTituloNuevo = function(i, v){ if(nuevos[i]) nuevos[i].titulo = v; };
-  window.escQuitarNuevo = function(i){ nuevos.splice(i,1); pintarNuevos(); };
-  window.escNuevo = function(expId){
+  window.escrTituloNuevo = function(i, v){ if(nuevos[i]) nuevos[i].titulo = v; };
+  window.escrQuitarNuevo = function(i){ if(subiendo) return; nuevos.splice(i,1); pintarNuevos(); };
+  window.escrNuevo = async function(expId){
     if(window._soloLectura || !navigator.onLine){ showToast('Para subir escritos necesitás conexión', true); return; }
-    nuevos = []; pintarNuevos();
-    $('esn-exp').innerHTML = '<option value="">Ninguna</option>'+expedientes.map(e=>'<option value="'+e.id+'">'+h((e.nombre||'Sin nombre')+' · '+ref(e))+'</option>').join('');
+    if(!cargado) await escCargar();
+    if(!subiendo){ nuevos = []; pintarNuevos(); }
+    $('esn-carp').innerHTML = opcionesCarpeta(currentView==='escritos' ? filtro.carpeta : '');
+    $('esn-exp').innerHTML = '<option value="">Ninguno</option>'+expedientes.map(e=>'<option value="'+e.id+'">'+h((e.nombre||'Sin nombre')+' · '+ref(e))+'</option>').join('');
     $('esn-exp').value = expId||''; $('esn-tipo').value = 'Demanda'; $('esn-nota').value = ''; $('esn-comp').checked = false;
     $('esn-error').style.display = 'none';
     $('ov-es-nuevo').classList.add('open');
   };
-  window.escNuevoCerrar = function(){ $('ov-es-nuevo').classList.remove('open'); };
-  window.escSubir = async function(){
-    if(!nuevos.length) return;
+  window.escrNuevoCerrar = function(){
+    if(subiendo && !confirm('Todavía se están subiendo escritos. Si cerrás, la subida sigue en segundo plano. ¿Cerrar esta ventana?')) return;
+    $('ov-es-nuevo').classList.remove('open');
+  };
+  window.escrSubir = async function(){
+    if(!nuevos.length || subiendo) return;
     if(nuevos.some(f=>!String(f.titulo||'').trim())){ const er = $('esn-error'); er.textContent = 'Todos los escritos necesitan un título.'; er.style.display = 'block'; return; }
-    const btn = $('esn-btn'); btn.disabled = true;
-    const comun = {tipo:$('esn-tipo').value, expediente_id:$('esn-exp').value||null, nota:$('esn-nota').value.trim()||null, visibilidad:$('esn-comp').checked ? 'estudio' : 'privado'};
+    subiendo = true; const btn = $('esn-btn'); btn.disabled = true;
+    const comun = {tipo:$('esn-tipo').value, carpeta_id:$('esn-carp').value||null, expediente_id:$('esn-exp').value||null, nota:$('esn-nota').value.trim()||null, visibilidad:$('esn-comp').checked ? 'estudio' : 'privado'};
     let ok = 0, sinTexto = 0;
     for(let i=0; i<nuevos.length; i++){
-      const f = nuevos[i], st = $('esn-st-'+i), poner = t => { f.estado = t; if(st) st.textContent = t; };
+      const f = nuevos[i], poner = t => { f.estado = t; const st = $('esn-st-'+i); if(st) st.textContent = t; };
       if(f.listo) continue;
       poner('Leyendo');
       const texto = await textoDe(f.file);
       if(!texto) sinTexto++;
       poner('Subiendo');
-      const nombre = f.file.name.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9._-]+/g,'_').slice(-90);
-      const key = yo()+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'-'+nombre;
+      const key = yo()+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'-'+nombreSeguro(f.file.name);
       const up = await sb.storage.from('escritos').upload(key, f.file, {contentType:f.file.type||'application/octet-stream', upsert:false});
       if(up.error){ poner('Error al subir'); continue; }
       const fila = Object.assign({autor_id:yo(), titulo:f.titulo.trim(), storage_key:key, archivo_nombre:f.file.name, archivo_tipo:f.file.type||null, tamanio:f.file.size, texto:texto||null, palabras:contarPalabras(texto)}, comun);
-      const ins = await sb.from('escritos').insert(fila).select('id,autor_id,titulo,tipo,expediente_id,visibilidad,nota,storage_key,archivo_nombre,archivo_tipo,tamanio,palabras,creado_at').single();
+      const ins = await sb.from('escritos').insert(fila).select(COLS).single();
       if(ins.error){ await sb.storage.from('escritos').remove([key]); poner('Error al guardar'); continue; }
       f.listo = true; poner('Listo'); ok++;
-      lista.unshift(ins.data);
+      ins.data._texto = texto||''; lista.unshift(ins.data);
     }
-    btn.disabled = false;
+    subiendo = false;
     const fallas = nuevos.filter(f=>!f.listo);
     if(fallas.length){
       nuevos = fallas; pintarNuevos();
       const er = $('esn-error'); er.textContent = 'No se pudieron subir '+plural(fallas.length,'archivo')+'. Revisá la conexión e intentá de nuevo.'; er.style.display = 'block';
-    } else escNuevoCerrar();
-    if(ok){ cargado = true; if(filtro.autor && filtro.autor!==yo()) filtro.autor = ''; if(filtro.alcance==='compartidos') filtro.alcance = 'todos'; renderEscritos(); escCarpetaRefrescar(comun.expediente_id); showToast(plural(ok,'escrito subido','escritos subidos')+(sinTexto ? ' ('+sinTexto+' sin texto legible)' : '')); }
+    } else { nuevos = []; pintarNuevos(); $('ov-es-nuevo').classList.remove('open'); }
+    if(ok){
+      cargado = true;
+      if(filtro.autor && filtro.autor!==yo()) filtro.autor = '';
+      if(filtro.alcance==='compartidos') filtro.alcance = 'todos';
+      if(filtro.carpeta && comun.carpeta_id!==filtro.carpeta) filtro.carpeta = comun.carpeta_id||'';
+      renderEscritos(); escCarpetaRefrescar(comun.expediente_id);
+      showToast(plural(ok,'escrito subido','escritos subidos')+' a las '+hora(new Date().toISOString())+(sinTexto ? ' ('+sinTexto+' sin texto legible)' : ''));
+    }
   };
 
-  /* ============ Ver, editar y borrar ============ */
+  /* ============ Ver, editar datos y borrar ============ */
   document.body.insertAdjacentHTML('beforeend',
-    '<div class="overlay" id="ov-es-ver" onclick="if(event.target.id===\'ov-es-ver\')escCerrar()"><div class="modal" style="max-width:760px">'+
-    '<div class="modal-header"><div class="modal-title" id="esv-t">Escrito</div>'+cerrarBtn('escCerrar()')+'</div>'+
+    '<div class="overlay" id="ov-es-ver" onclick="if(event.target.id===\'ov-es-ver\')escrCerrar()"><div class="modal" style="max-width:760px">'+
+    '<div class="modal-header"><div class="modal-title" id="esv-t">Escrito</div>'+cerrarBtn('escrCerrar()')+'</div>'+
     '<div class="modal-body" id="esv-body"></div>'+
     '<div class="modal-footer" id="esv-pie"></div></div></div>');
   let abierto = null;
   const puedeEditar = x => x && (x.autor_id===yo() || esJefe());
-  async function traerTexto(ids){
-    const faltan = ids.filter(id=>{ const x = lista.find(z=>z.id===id); return x && x._texto===undefined; });
+  const editable = x => { const e = ext(x.archivo_nombre); return ['docx','txt','md'].includes(e) || (!!x.palabras && e!=='doc'); };
+  async function traerTexto(ids, forzar){
+    const faltan = ids.filter(id=>{ const x = lista.find(z=>z.id===id); return x && (forzar || x._texto===undefined); });
     for(let i=0; i<faltan.length; i+=40){
       const {data, error} = await sb.from('escritos').select('id,texto').in('id', faltan.slice(i,i+40));
       if(error) throw error;
       (data||[]).forEach(r=>{ const x = lista.find(z=>z.id===r.id); if(x) x._texto = r.texto||''; });
     }
   }
-  window.escAbrir = async function(id){
+  window.escrAbrir = async function(id){
     const x = lista.find(z=>z.id===id); if(!x) return;
     abierto = id; const ed = puedeEditar(x);
     $('esv-t').textContent = x.titulo;
-    const e = x.expediente_id ? expedientes.find(z=>z.id===x.expediente_id) : null;
+    const e = x.expediente_id ? expedientes.find(z=>z.id===x.expediente_id) : null, c = carpeta(x.carpeta_id);
     $('esv-body').innerHTML =
-      '<div class="es-meta">'+iconoArchivo(x)+'<div><b>'+h(nombreDe(x.autor_id))+'</b><span>'+h([x.tipo, fecha(x.creado_at), x.archivo_nombre, x.palabras ? x.palabras.toLocaleString('es-AR')+' palabras' : null].filter(Boolean).join(' · '))+'</span>'+
-        (e ? '<button class="xp-link" onclick="escCerrar();goToDetail(\''+e.id+'\')">Carpeta: '+h(e.nombre||ref(e))+'</button>' : '')+'</div></div>'+
+      '<div class="es-meta">'+iconoArchivo(x)+'<div><b>'+h(nombreDe(x.autor_id))+'</b><span>'+h([x.tipo, x.archivo_nombre, x.palabras ? x.palabras.toLocaleString('es-AR')+' palabras' : null].filter(Boolean).join(' · '))+'</span>'+
+        '<span class="es-cuando">'+ico(I_RELOJ,13)+'Subido el '+h(fechaLarga(x.creado_at))+'</span>'+
+        (x.editado_at ? '<span class="es-cuando">'+ico(I_PLUMA,13)+'Editado el '+h(fechaLarga(x.editado_at))+(x.editado_por ? ' por '+h(nombreDe(x.editado_por)) : '')+'</span>' : '')+
+        (c ? '<button class="xp-link" onclick="escrCerrar();showView(\'escritos\');escrCarpetaAbrir(\''+c.id+'\')">'+ico(I_CARPETA,13)+'Carpeta: '+h(c.nombre)+'</button>' : '')+
+        (e ? '<button class="xp-link" onclick="escrCerrar();goToDetail(\''+e.id+'\')">Expediente: '+h(e.nombre||ref(e))+'</button>' : '')+
+        (x.storage_key_original ? '<button class="xp-link" onclick="escrBajar(true)">'+ico(I_DESC,13)+'Descargar el original sin editar ('+h(x.archivo_nombre_original||'')+')</button>' : '')+'</div></div>'+
       (x.nota ? '<p class="es-nota">'+h(x.nota)+'</p>' : '')+
       '<div class="es-sec" style="margin-top:18px">Texto del escrito</div><div class="es-texto" id="esv-texto">Cargando</div>'+
-      (ed ? '<details class="es-editar"><summary>Editar datos del escrito</summary><div class="form-grid es-edit" style="gap:13px">'+
+      (ed ? '<details class="es-editar"><summary>Cambiar título, tipo, carpeta o permisos</summary><div class="form-grid es-edit" style="gap:13px">'+
           '<div class="form-group"><label for="esv-tit">Título</label><input id="esv-tit" value="'+h(x.titulo)+'"></div>'+
           '<div class="form-group"><label for="esv-tipo">Tipo</label><select id="esv-tipo">'+TIPOS.map(t=>'<option'+(t===x.tipo?' selected':'')+'>'+t+'</option>').join('')+'</select></div>'+
-          '<div class="form-group"><label for="esv-exp">Carpeta</label><select id="esv-exp"><option value="">Ninguna</option>'+expedientes.map(z=>'<option value="'+z.id+'"'+(z.id===x.expediente_id?' selected':'')+'>'+h((z.nombre||'Sin nombre')+' · '+ref(z))+'</option>').join('')+'</select></div>'+
-          '<div class="form-group"><label for="esv-nota">Nota</label><input id="esv-nota" value="'+h(x.nota||'')+'"></div>'+
-        '</div><label class="xp-check" style="margin-top:12px"><input type="checkbox" id="esv-comp"'+(x.visibilidad==='estudio'?' checked':'')+'> Compartir con todo el estudio</label></details>' : '');
-    $('esv-pie').innerHTML = (ed ? '<button class="btn btn-danger" onclick="escBorrar()">Eliminar</button><span style="flex:1"></span>' : '<span style="flex:1"></span>')+
-      '<button class="btn btn-outline" onclick="escCopiar()">Copiar texto</button>'+
-      (x.storage_key ? '<button class="btn btn-outline" onclick="escBajar()">'+ico(I_DESC,14)+'Original</button>' : '')+
-      (ed ? '<button class="btn btn-gold" id="esv-btn" onclick="escGuardar()">Guardar</button>' : '');
+          '<div class="form-group"><label for="esv-carp">Carpeta de escritos</label><select id="esv-carp">'+opcionesCarpeta(x.carpeta_id)+'</select></div>'+
+          '<div class="form-group"><label for="esv-exp">Expediente vinculado</label><select id="esv-exp"><option value="">Ninguno</option>'+expedientes.map(z=>'<option value="'+z.id+'"'+(z.id===x.expediente_id?' selected':'')+'>'+h((z.nombre||'Sin nombre')+' · '+ref(z))+'</option>').join('')+'</select></div>'+
+          '<div class="form-group" style="grid-column:1/-1"><label for="esv-nota">Nota</label><input id="esv-nota" value="'+h(x.nota||'')+'"></div>'+
+        '</div><label class="xp-check" style="margin-top:12px"><input type="checkbox" id="esv-comp"'+(x.visibilidad==='estudio'?' checked':'')+'> Compartir con todo el estudio</label>'+
+        '<div style="margin-top:12px;text-align:right"><button class="btn btn-gold btn-sm" id="esv-btn" onclick="escrGuardar()">Guardar cambios</button></div></details>' : '');
+    $('esv-pie').innerHTML = (ed ? '<button class="btn btn-danger" onclick="escrBorrar()">Eliminar</button><span style="flex:1"></span>' : '<span style="flex:1"></span>')+
+      '<button class="btn btn-outline" onclick="escrCopiar()">Copiar texto</button>'+
+      (x.storage_key ? '<button class="btn btn-outline" onclick="escrBajar()">'+ico(I_DESC,14)+'Descargar</button>' : '')+
+      (ed && editable(x) ? '<button class="btn btn-gold" onclick="edAbrir(\''+x.id+'\')">'+ico(I_PLUMA,14)+'Editar documento</button>' : '');
     $('ov-es-ver').classList.add('open');
     try{ await traerTexto([id]); }catch(_){ if(abierto===id) $('esv-texto').textContent = 'No se pudo cargar el texto.'; return; }
     if(abierto!==id) return;
     const t = x._texto || '';
-    $('esv-texto').textContent = t ? (t.length>30000 ? t.slice(0,30000)+'\n\n[El texto sigue; descargá el original o usá Copiar texto para tenerlo completo.]' : t) : 'No se pudo extraer texto de este archivo (por ejemplo, un PDF escaneado o un .doc antiguo). Descargá el original para leerlo.';
+    $('esv-texto').textContent = t ? (t.length>30000 ? t.slice(0,30000)+'\n\n[El texto sigue; descargalo o usá Copiar texto para tenerlo completo.]' : t) : 'No se pudo extraer texto de este archivo (por ejemplo, un PDF escaneado o un .doc antiguo). Descargalo para leerlo.';
   };
-  window.escCerrar = function(){ abierto = null; $('ov-es-ver').classList.remove('open'); };
-  window.escCopiar = async function(){
+  window.escrCerrar = function(){ abierto = null; $('ov-es-ver').classList.remove('open'); };
+  window.escrCopiar = async function(){
     const x = lista.find(z=>z.id===abierto); if(!x) return;
     try{ await traerTexto([x.id]); }catch(_){ showToast('No se pudo cargar el texto', true); return; }
     if(!x._texto){ showToast('Este escrito no tiene texto para copiar', true); return; }
     try{ await navigator.clipboard.writeText(x._texto); showToast('Texto copiado'); }
-    catch(_){ showToast('El navegador no dejó copiar; descargá el original', true); }
+    catch(_){ showToast('El navegador no dejó copiar; descargá el archivo', true); }
   };
-  async function urlDe(x, segundos){
-    const {data, error} = await sb.storage.from('escritos').createSignedUrl(x.storage_key, segundos||120, {download: x.archivo_nombre||true});
+  async function urlDe(key, nombre, segundos, descarga){
+    const {data, error} = await sb.storage.from('escritos').createSignedUrl(key, segundos||120, descarga ? {download: nombre||true} : undefined);
     if(error || !data) throw error || new Error('sin url');
     return data.signedUrl;
   }
-  window.escBajar = async function(){
-    const x = lista.find(z=>z.id===abierto); if(!x || !x.storage_key) return;
-    try{ const a = document.createElement('a'); a.href = await urlDe(x); a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove(); }
+  window.escrBajar = async function(original){
+    const x = lista.find(z=>z.id===abierto); if(!x) return;
+    const key = original ? x.storage_key_original : x.storage_key, nom = original ? x.archivo_nombre_original : x.archivo_nombre;
+    if(!key) return;
+    try{ const a = document.createElement('a'); a.href = await urlDe(key, nom, 120, true); a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove(); }
     catch(_){ showToast('No se pudo descargar el archivo', true); }
   };
-  window.escGuardar = async function(){
+  window.escrGuardar = async function(){
     const x = lista.find(z=>z.id===abierto); if(!puedeEditar(x)) return;
     const titulo = $('esv-tit').value.trim();
     if(!titulo){ showToast('El título no puede quedar vacío', true); return; }
-    const cambios = {titulo, tipo:$('esv-tipo').value, expediente_id:$('esv-exp').value||null, nota:$('esv-nota').value.trim()||null, visibilidad:$('esv-comp').checked ? 'estudio' : 'privado'};
+    const cambios = {titulo, tipo:$('esv-tipo').value, carpeta_id:$('esv-carp').value||null, expediente_id:$('esv-exp').value||null, nota:$('esv-nota').value.trim()||null, visibilidad:$('esv-comp').checked ? 'estudio' : 'privado'};
     const btn = $('esv-btn'); btn.disabled = true;
     const {error} = await sb.from('escritos').update(cambios).eq('id', x.id);
     btn.disabled = false;
     if(error){ showToast('No se pudo guardar: '+error.message, true); return; }
     const antes = x.expediente_id; Object.assign(x, cambios);
-    escCerrar(); renderEscritos(); escCarpetaRefrescar(antes); escCarpetaRefrescar(cambios.expediente_id); showToast('Escrito actualizado');
+    escrCerrar(); renderEscritos(); escCarpetaRefrescar(antes); escCarpetaRefrescar(cambios.expediente_id); showToast('Escrito actualizado');
   };
-  window.escBorrar = async function(){
+  window.escrBorrar = async function(){
     const x = lista.find(z=>z.id===abierto); if(!puedeEditar(x)) return;
     if(!confirm('¿Eliminar "'+x.titulo+'"? Se borra el archivo y su texto. No se puede deshacer.')) return;
     const {error} = await sb.from('escritos').delete().eq('id', x.id);
     if(error){ showToast('No se pudo eliminar: '+error.message, true); return; }
-    if(x.storage_key) sb.storage.from('escritos').remove([x.storage_key]).then(()=>{}, ()=>{});
+    const keys = [x.storage_key, x.storage_key_original].filter(Boolean);
+    if(keys.length) sb.storage.from('escritos').remove(keys).then(()=>{}, ()=>{});
     lista = lista.filter(z=>z.id!==x.id);
-    escCerrar(); renderEscritos(); escCarpetaRefrescar(x.expediente_id); showToast('Escrito eliminado');
+    escrCerrar(); renderEscritos(); escCarpetaRefrescar(x.expediente_id); showToast('Escrito eliminado');
   };
 
-  /* ============ Escritos dentro de cada carpeta ============ */
+  /* ============ Editor de documentos ============ */
+  const BOTONES = [
+    ['undo','Deshacer','<path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/>'],
+    ['redo','Rehacer','<path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 15-6.7L21 13"/>'],
+    '|',
+    ['h:P','Texto normal',null,'Normal'],
+    ['h:H2','Título',null,'Título'],
+    '|',
+    ['bold','Negrita',null,'<b>N</b>'],
+    ['italic','Cursiva',null,'<i>C</i>'],
+    ['underline','Subrayado',null,'<u>S</u>'],
+    '|',
+    ['justifyLeft','Alinear a la izquierda','<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/>'],
+    ['justifyCenter','Centrar','<line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="5" y1="18" x2="19" y2="18"/>'],
+    ['justifyRight','Alinear a la derecha','<line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="6" y1="18" x2="21" y2="18"/>'],
+    ['justifyFull','Justificar','<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>'],
+    '|',
+    ['insertUnorderedList','Lista con viñetas','<line x1="9" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="9" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/>'],
+    ['insertOrderedList','Lista numerada','<line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/>'],
+    ['outdent','Quitar sangría','<polyline points="7 8 3 12 7 16"/><line x1="21" y1="12" x2="11" y2="12"/><line x1="21" y1="6" x2="11" y2="6"/><line x1="21" y1="18" x2="11" y2="18"/>'],
+    ['indent','Agregar sangría','<polyline points="3 8 7 12 3 16"/><line x1="21" y1="12" x2="11" y2="12"/><line x1="21" y1="6" x2="11" y2="6"/><line x1="21" y1="18" x2="11" y2="18"/>']
+  ];
+  document.body.insertAdjacentHTML('beforeend',
+    '<div class="overlay ed-ov" id="ov-editor"><div class="ed-wrap" role="dialog" aria-label="Editor de documento">'+
+      '<div class="ed-top"><button class="close-btn" onclick="edCerrar()" aria-label="Cerrar el editor">'+ico(I_X,18)+'</button>'+
+        '<div class="ed-tit"><b id="ed-t">Documento</b><span id="ed-estado">Cargando</span></div>'+
+        '<button class="btn btn-outline btn-sm ed-bajar" onclick="edDescargar()">'+ico(I_DESC,14)+'<span>Descargar</span></button>'+
+        '<button class="btn btn-gold btn-sm" id="ed-guardar" onclick="edGuardar()">Guardar</button></div>'+
+      '<div class="ed-barra" id="ed-barra">'+BOTONES.map(b=>b==='|' ? '<span class="ed-sep"></span>' :
+        '<button type="button" data-cmd="'+b[0]+'" title="'+b[1]+'" aria-label="'+b[1]+'">'+(b[3] || ico(b[2],17))+'</button>').join('')+'</div>'+
+      '<div class="ed-aviso" id="ed-aviso"></div>'+
+      '<div class="ed-scroll" id="ed-scroll"><div class="ed-hoja" id="ed-hoja" contenteditable="true" spellcheck="true" lang="es"></div></div>'+
+    '</div></div>');
+  let ed = {id:null, sucio:false, timer:null, guardando:false};
+  const hoja = $('ed-hoja');
+  const borradorKey = id => 'lena-ed-'+id;
+  const leerBorrador = id => { try{ return JSON.parse(localStorage.getItem(borradorKey(id))||'null'); }catch(_){ return null; } };
+  const guardarBorrador = () => { if(!ed.id) return; try{ localStorage.setItem(borradorKey(ed.id), JSON.stringify({html:hoja.innerHTML, ts:new Date().toISOString()})); }catch(_){ } };
+  const borrarBorrador = id => { try{ localStorage.removeItem(borradorKey(id)); }catch(_){ } };
+  function estado(t){ $('ed-estado').textContent = t; }
+  function marcarSucio(){
+    if(!ed.id) return;
+    ed.sucio = true; estado('Cambios sin guardar');
+    clearTimeout(ed.timer); ed.timer = setTimeout(guardarBorrador, 1200);
+  }
+  hoja.addEventListener('input', marcarSucio);
+  hoja.addEventListener('paste', ev=>{
+    const t = ev.clipboardData && ev.clipboardData.getData('text/plain'); if(t==null) return;
+    ev.preventDefault();
+    document.execCommand('insertHTML', false, textoAHtml(t));
+  });
+  $('ed-barra').addEventListener('mousedown', ev=>{ if(ev.target.closest('button')) ev.preventDefault(); });
+  $('ed-barra').addEventListener('click', ev=>{
+    const b = ev.target.closest('button[data-cmd]'); if(!b) return;
+    hoja.focus();
+    const c = b.dataset.cmd;
+    if(c.startsWith('h:')) document.execCommand('formatBlock', false, c.slice(2));
+    else document.execCommand(c, false, null);
+    marcarSucio(); pintarBarra();
+  });
+  function pintarBarra(){
+    ['bold','italic','underline','justifyLeft','justifyCenter','justifyRight','justifyFull','insertUnorderedList','insertOrderedList'].forEach(c=>{
+      const b = document.querySelector('#ed-barra [data-cmd="'+c+'"]'); if(!b) return;
+      let on = false; try{ on = document.queryCommandState(c); }catch(_){ }
+      b.classList.toggle('on', on);
+    });
+  }
+  document.addEventListener('selectionchange', ()=>{ if(ed.id && document.activeElement===hoja) pintarBarra(); });
+  window.addEventListener('beforeunload', ev=>{ if(ed.id && ed.sucio){ guardarBorrador(); ev.preventDefault(); ev.returnValue = ''; } });
+  document.addEventListener('visibilitychange', ()=>{ if(document.hidden && ed.id && ed.sucio) guardarBorrador(); });
+
+  const escTxt = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  function textoAHtml(t){
+    const bloques = String(t||'').replace(/\r\n?/g,'\n').split(/\n{2,}/);
+    return bloques.map(b=>'<p>'+(escTxt(b).split('\n').join('<br>')||'<br>')+'</p>').join('');
+  }
+  function limpiar(html){
+    const tpl = document.createElement('template'); tpl.innerHTML = html;
+    tpl.content.querySelectorAll('script,style,iframe,object,embed,img,meta,link,svg,canvas,video,audio,form,input,button,textarea,select').forEach(n=>n.remove());
+    tpl.content.querySelectorAll('a').forEach(a=>{ a.replaceWith(...a.childNodes); });
+    tpl.content.querySelectorAll('*').forEach(el=>{ [...el.attributes].forEach(at=>{ if(at.name!=='colspan' && at.name!=='rowspan') el.removeAttribute(at.name); }); });
+    return tpl.innerHTML;
+  }
+  async function contenidoDe(x){
+    const e = ext(x.archivo_nombre);
+    if(e==='docx'){
+      const r = await fetch(await urlDe(x.storage_key, x.archivo_nombre, 300, false));
+      if(!r.ok) throw new Error('descarga '+r.status);
+      const buf = await r.arrayBuffer();
+      if(typeof mammoth==='undefined') await cargarLib(MAMMOTH);
+      const res = await mammoth.convertToHtml({arrayBuffer:buf}, {styleMap:['u => u']});
+      const html = limpiar(res.value||'');
+      return {html: html || '<p><br></p>', perdido: /<(img|table)\b/i.test(res.value||'')};
+    }
+    await traerTexto([x.id]);
+    return {html: textoAHtml(x._texto||''), perdido: e!=='txt' && e!=='md'};
+  }
+  window.edAbrir = async function(id){
+    const x = lista.find(z=>z.id===id); if(!x || !puedeEditar(x)) return;
+    if(window._soloLectura || !navigator.onLine){ showToast('Para editar necesitás conexión', true); return; }
+    escrCerrar();
+    ed = {id, sucio:false, timer:null, guardando:false};
+    $('ed-t').textContent = x.titulo; estado('Cargando el documento'); hoja.innerHTML = ''; hoja.contentEditable = 'false';
+    $('ed-aviso').style.display = 'none';
+    $('ov-editor').classList.add('open'); document.body.classList.add('ed-abierto');
+    let c;
+    try{ c = await contenidoDe(x); }
+    catch(err){ console.error(err); estado('No se pudo abrir'); hoja.innerHTML = '<p>No se pudo abrir el documento. Revisá la conexión e intentá de nuevo.</p>'; return; }
+    if(ed.id!==id) return;
+    const b = leerBorrador(id);
+    if(b && b.html && b.ts > (x.editado_at||x.creado_at) && confirm('Encontramos cambios sin guardar de este documento ('+fechaHora(b.ts)+'). ¿Querés recuperarlos?')){
+      hoja.innerHTML = b.html; ed.sucio = true; estado('Borrador recuperado, sin guardar');
+    } else { hoja.innerHTML = c.html; estado(x.editado_at ? 'Última edición: '+fechaHora(x.editado_at) : 'Sin cambios'); if(b) borrarBorrador(id); }
+    const aviso = [];
+    if(ext(x.archivo_nombre)!=='docx') aviso.push('Al guardar se crea una versión en Word (.docx). El archivo original queda guardado y se puede descargar.');
+    else if(!x.storage_key_original) aviso.push('Al guardar se conserva una copia del original sin editar.');
+    if(c.perdido) aviso.push('Este documento tiene imágenes, tablas o formato especial: el editor conserva el texto, la negrita, la cursiva, el subrayado, la alineación y las listas.');
+    if(aviso.length){ $('ed-aviso').textContent = aviso.join(' '); $('ed-aviso').style.display = ''; }
+    try{ document.execCommand('defaultParagraphSeparator', false, 'p'); document.execCommand('styleWithCSS', false, false); }catch(_){ }
+    hoja.contentEditable = 'true'; $('ed-scroll').scrollTop = 0;
+    if(window.innerWidth>760) hoja.focus();
+  };
+  window.edCerrar = function(){
+    if(!ed.id){ $('ov-editor').classList.remove('open'); document.body.classList.remove('ed-abierto'); return; }
+    if(ed.guardando) return;
+    if(ed.sucio && !confirm('Hay cambios sin guardar. ¿Cerrar igual? Quedan guardados como borrador en este dispositivo y se recuperan al volver a abrirlo.')) return;
+    if(ed.sucio) guardarBorrador();
+    clearTimeout(ed.timer);
+    const id = ed.id; ed = {id:null, sucio:false};
+    $('ov-editor').classList.remove('open'); document.body.classList.remove('ed-abierto');
+    escrAbrir(id);
+  };
+
+  /* --- Word (.docx) a partir del editor --- */
+  const xmlEsc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'');
+  const BLOQUES = /^(P|DIV|H1|H2|H3|H4|H5|H6|BLOCKQUOTE|PRE|UL|OL|LI|TABLE|THEAD|TBODY|TR|SECTION|ARTICLE)$/;
+  function alinea(el, def){
+    const a = (el.style && el.style.textAlign) || (el.getAttribute && el.getAttribute('align')) || '';
+    return a==='center' ? 'center' : a==='right' ? 'right' : (a==='justify' ? 'both' : (a==='left' ? 'left' : def));
+  }
+  function runsDe(nodo, f, out){
+    nodo.childNodes.forEach(n=>{
+      if(n.nodeType===3){ if(n.nodeValue) out.push({t:n.nodeValue.replace(/\s+/g,' '), b:f.b, i:f.i, u:f.u, sz:f.sz}); return; }
+      if(n.nodeType!==1) return;
+      const tg = n.tagName;
+      if(tg==='BR'){ out.push({br:true}); return; }
+      const st = n.style || {};
+      const g = {b: f.b || tg==='B' || tg==='STRONG' || st.fontWeight==='bold' || +st.fontWeight>=600,
+                 i: f.i || tg==='I' || tg==='EM' || st.fontStyle==='italic',
+                 u: f.u || tg==='U' || /underline/.test(st.textDecoration||''), sz:f.sz};
+      if(BLOQUES.test(tg) && out.length) out.push({br:true});
+      runsDe(n, g, out);
+    });
+    return out;
+  }
+  function parrafos(raiz){
+    const ps = [];
+    function bloque(el, sangria, def){
+      const tg = el.tagName;
+      if(tg==='UL' || tg==='OL'){
+        let k = 0;
+        el.childNodes.forEach(li=>{ if(li.nodeType===1 && li.tagName==='LI'){ k++; const runs = runsDe(li, {}, []); runs.unshift({t:(tg==='OL' ? k+'. ' : '• ')}); ps.push({runs, jc:alinea(li,'left'), ind:sangria+720, colgante:360}); } });
+        return;
+      }
+      if(tg==='TABLE' || tg==='THEAD' || tg==='TBODY'){
+        el.querySelectorAll('tr').forEach(tr=>{ const runs = []; [...tr.children].forEach((td,i)=>{ if(i) runs.push({tab:true}); runsDe(td, {}, runs); }); ps.push({runs, jc:'left', ind:sangria}); });
+        return;
+      }
+      if(tg==='BLOCKQUOTE' || ((tg==='DIV' || tg==='SECTION' || tg==='ARTICLE') && [...el.children].some(c=>BLOQUES.test(c.tagName)))){
+        recorrer(el, tg==='BLOCKQUOTE' ? sangria+720 : sangria); return;
+      }
+      const titulo = /^H[1-6]$/.test(tg);
+      const ml = parseFloat((el.style && (el.style.marginLeft || el.style.paddingLeft)) || 0) || 0;
+      ps.push({runs: runsDe(el, {b:titulo, sz: tg==='H1' ? 32 : (tg==='H2' ? 28 : (titulo ? 26 : 0))}, []), jc: alinea(el, titulo ? 'left' : def), ind: sangria + Math.round(ml*15)});
+    }
+    function recorrer(cont, sangria){
+      let suelto = null;
+      cont.childNodes.forEach(n=>{
+        if(n.nodeType===1 && BLOQUES.test(n.tagName)){ suelto = null; bloque(n, sangria, 'both'); return; }
+        if(n.nodeType===3 && !n.nodeValue.trim() && !suelto) return;
+        if(n.nodeType===1 && n.tagName==='BR'){ if(!suelto) ps.push({runs:[], jc:'both', ind:sangria}); suelto = null; return; }
+        if(!suelto){ suelto = {runs:[], jc:'both', ind:sangria}; ps.push(suelto); }
+        const tmp = document.createElement('span'); tmp.appendChild(n.cloneNode(true)); runsDe(tmp, {}, suelto.runs);
+      });
+    }
+    recorrer(raiz, 0);
+    return ps;
+  }
+  function parrafoXml(p){
+    let ppr = '<w:pPr><w:spacing w:after="160" w:line="360" w:lineRule="auto"/>';
+    if(p.ind || p.colgante) ppr += '<w:ind w:left="'+(p.ind||0)+'"'+(p.colgante ? ' w:hanging="'+p.colgante+'"' : '')+'/>';
+    ppr += '<w:jc w:val="'+(p.jc||'both')+'"/></w:pPr>';
+    let rs = '', inicio = true;
+    (p.runs||[]).forEach(r=>{
+      if(r.br){ rs += '<w:r><w:br/></w:r>'; inicio = true; return; }
+      if(r.tab){ rs += '<w:r><w:tab/></w:r>'; return; }
+      let t = r.t||''; if(inicio) t = t.replace(/^ +/,''); if(!t) return;
+      inicio = false;
+      const rpr = (r.b?'<w:b/>':'')+(r.i?'<w:i/>':'')+(r.sz?'<w:sz w:val="'+r.sz+'"/><w:szCs w:val="'+r.sz+'"/>':'')+(r.u?'<w:u w:val="single"/>':'');
+      rs += '<w:r>'+(rpr ? '<w:rPr>'+rpr+'</w:rPr>' : '')+'<w:t xml:space="preserve">'+xmlEsc(t)+'</w:t></w:r>';
+    });
+    return '<w:p>'+ppr+rs+'</w:p>';
+  }
+  const W = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', PR = 'http://schemas.openxmlformats.org/package/2006/relationships';
+  async function aDocx(raiz){
+    if(typeof JSZip==='undefined') await cargarLib(JSZIP);
+    const cuerpo = parrafos(raiz).map(parrafoXml).join('') || '<w:p/>';
+    const zip = new JSZip(), poner = (n, d) => zip.file(n, d, {createFolders:false});
+    poner('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>');
+    poner('_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="'+PR+'"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');
+    poner('word/_rels/document.xml.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="'+PR+'"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>');
+    poner('word/styles.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="'+W+'"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:eastAsia="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="es-AR"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="160" w:line="360" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style></w:styles>');
+    poner('word/document.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="'+W+'"><w:body>'+cuerpo+'<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1418" w:right="1134" w:bottom="1418" w:left="1701" w:header="709" w:footer="709" w:gutter="0"/></w:sectPr></w:body></w:document>');
+    return zip.generateAsync({type:'blob', mimeType:DOCX_MIME});
+  }
+  window._lenaDocx = aDocx;
+  const baseNombre = x => String(x.archivo_nombre||x.titulo||'escrito').replace(/\.[^.]+$/,'');
+  window.edDescargar = async function(){
+    if(!ed.id) return;
+    const x = lista.find(z=>z.id===ed.id); if(!x) return;
+    try{ const blob = await aDocx(hoja); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = baseNombre(x)+'.docx'; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 800); }
+    catch(err){ console.error(err); showToast('No se pudo generar el Word', true); }
+  };
+  window.edGuardar = async function(){
+    const x = lista.find(z=>z.id===ed.id); if(!x || ed.guardando) return;
+    if(!navigator.onLine){ guardarBorrador(); showToast('Sin conexión: el cambio quedó como borrador en este dispositivo', true); return; }
+    ed.guardando = true; const btn = $('ed-guardar'); btn.disabled = true; estado('Guardando');
+    let blob;
+    try{ blob = await aDocx(hoja); }catch(err){ console.error(err); ed.guardando = false; btn.disabled = false; estado('No se pudo guardar'); showToast('No se pudo generar el Word', true); return; }
+    const nombre = baseNombre(x)+'.docx';
+    const key = yo()+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'-'+nombreSeguro(nombre);
+    const up = await sb.storage.from('escritos').upload(key, blob, {contentType:DOCX_MIME, upsert:false});
+    if(up.error){ ed.guardando = false; btn.disabled = false; estado('No se pudo guardar'); guardarBorrador(); showToast('No se pudo subir el documento: '+up.error.message, true); return; }
+    const texto = (hoja.innerText||'').replace(/\n{3,}/g,'\n\n').trim().slice(0, MAX_TEXTO);
+    const cambios = {storage_key:key, archivo_nombre:nombre, archivo_tipo:DOCX_MIME, tamanio:blob.size, texto, palabras:contarPalabras(texto), editado_at:new Date().toISOString(), editado_por:yo()};
+    let viejo = null;
+    if(!x.storage_key_original){ cambios.storage_key_original = x.storage_key; cambios.archivo_nombre_original = x.archivo_nombre; }
+    else viejo = x.storage_key;
+    const {error} = await sb.from('escritos').update(cambios).eq('id', x.id);
+    ed.guardando = false; btn.disabled = false;
+    if(error){ sb.storage.from('escritos').remove([key]).then(()=>{}, ()=>{}); estado('No se pudo guardar'); guardarBorrador(); showToast('No se pudo guardar: '+error.message, true); return; }
+    if(viejo && viejo!==key) sb.storage.from('escritos').remove([viejo]).then(()=>{}, ()=>{});
+    Object.assign(x, cambios); x._texto = texto;
+    ed.sucio = false; clearTimeout(ed.timer); borrarBorrador(x.id);
+    estado('Guardado a las '+hora(cambios.editado_at)); renderEscritos();
+    showToast('Documento guardado');
+  };
+
+  /* ============ Escritos dentro de cada expediente ============ */
   async function pintarCarpeta(expId){
     const el = $('es-carp-'+expId); if(!el) return;
     if(window._soloLectura){ el.innerHTML = '<div class="ch-vacio">Se ven con conexión a internet.</div>'; return; }
-    const {data, error} = await sb.from('escritos').select('id,autor_id,titulo,tipo,expediente_id,visibilidad,nota,storage_key,archivo_nombre,archivo_tipo,tamanio,palabras,creado_at').eq('expediente_id', expId).order('creado_at',{ascending:false});
+    const {data, error} = await sb.from('escritos').select(COLS).eq('expediente_id', expId).order('creado_at',{ascending:false});
     const cont = $('es-carp-'+expId); if(!cont) return;
     if(error){ cont.closest('.full-card').style.display = 'none'; return; }
     (data||[]).forEach(r=>{ if(!lista.some(z=>z.id===r.id)) lista.push(r); });
-    cont.innerHTML = (data||[]).length ? data.map(x=>'<button class="es-row es-row-mini" onclick="escAbrir(\''+x.id+'\')">'+iconoArchivo(x)+'<span class="es-row-t"><b>'+h(x.titulo)+'</b><span>'+h([x.tipo, nombreDe(x.autor_id), fecha(x.creado_at)].join(' · '))+'</span></span></button>').join('')
-      : '<div class="ch-vacio">Todavía no hay escritos de esta carpeta.</div>';
+    cont.innerHTML = (data||[]).length ? data.map(x=>'<button class="es-row es-row-mini" onclick="escrAbrir(\''+x.id+'\')">'+iconoArchivo(x)+'<span class="es-row-t"><b>'+h(x.titulo)+'</b><span>'+h([x.tipo, nombreDe(x.autor_id), fechaHora(x.creado_at)].join(' · '))+'</span></span></button>').join('')
+      : '<div class="ch-vacio">Todavía no hay escritos de este expediente.</div>';
   }
   function escCarpetaRefrescar(expId){ if(expId && $('es-carp-'+expId)) pintarCarpeta(expId); }
   const _showDetailView6 = showDetailView;
   showDetailView = function(e){
     _showDetailView6(e);
-    $('exp-detail').insertAdjacentHTML('beforeend','<div class="full-card"><div class="es-carp-head"><div class="detail-card-title" style="margin-bottom:0">Escritos</div><button class="btn btn-outline btn-sm" onclick="escNuevo(\''+e.id+'\')">'+ico(I_MAS,13)+'Subir escrito</button></div><div id="es-carp-'+e.id+'"><div class="ch-vacio">Cargando</div></div></div>');
+    $('exp-detail').insertAdjacentHTML('beforeend','<div class="full-card"><div class="es-carp-head"><div class="detail-card-title" style="margin-bottom:0">Escritos</div><button class="btn btn-outline btn-sm" onclick="escrNuevo(\''+e.id+'\')">'+ico(I_MAS,13)+'Subir escrito</button></div><div id="es-carp-'+e.id+'"><div class="ch-vacio">Cargando</div></div></div>');
     pintarCarpeta(e.id);
+  };
+})();
+
+/* ===================== ARCHIVOS, BORRADORES Y ELIMINAR CARPETAS (v7) ===================== */
+(function(){
+  const $ = id => document.getElementById(id);
+  const ico = (p,s) => '<svg width="'+(s||15)+'" height="'+(s||15)+'" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">'+p+'</svg>';
+  const I_X = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+  const I_BASURA = '<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>';
+  const I_CLIP = '<path d="M21.4 11.1l-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/>';
+  const esJefe = () => currentPerfil?.rol==='jefe';
+  const plural = (n, s, p) => n+' '+(n===1 ? s : (p||s+'s'));
+  const norm = s => (s==null?'':String(s)).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  const ref = e => e.nroexp || '#'+String(e.id).slice(-6);
+  const ss = { get(k){ try{ return sessionStorage.getItem(k); }catch(_){ return null; } }, set(k,v){ try{ sessionStorage.setItem(k,v); }catch(_){ } }, del(k){ try{ sessionStorage.removeItem(k); }catch(_){ } } };
+  const ESTADOS = ['En trámite','Mediación','Juicio','Concluido'];
+
+  /* ============ Subida de archivos sin perder lo que se estaba haciendo ============ */
+  function cargando(txt){
+    const box = document.querySelector('#loading .loading-box');
+    if(box){ const sp = box.querySelector('.spinner'); box.textContent = ''; if(sp) box.appendChild(sp); box.appendChild(document.createTextNode(' '+(txt||'Cargando...'))); }
+  }
+  function refrescarArchivos(expId){
+    const e = expedientes.find(x=>x.id===expId), cont = $('arch-grid-'+expId);
+    if(!e || !cont) return false;
+    const card = cont.closest('.full-card');
+    const activo = card && card.querySelector('.arch-filtro.active');
+    const archivos = e.archivos||[];
+    cont.innerHTML = renderArchGrid(archivos, expId, activo ? (activo.dataset.tipo||'todos') : 'todos');
+    if(card){
+      const b = [...card.querySelectorAll('.badge')].find(x=>/archivo/.test(x.textContent)); if(b) b.textContent = archivos.length+' archivo'+(archivos.length!==1?'s':'');
+      const esc = card.querySelector('button[onclick^="escAbrir("]');
+      if(esc){ const hay = archivos.some(a=>a.tipo && a.tipo.startsWith('image')); esc.disabled = !hay; esc.style.opacity = hay ? '' : '.45'; }
+      card.querySelectorAll('input[type=file]').forEach(i=>{ try{ i.value = ''; }catch(_){ } });
+    }
+    return true;
+  }
+  async function subirA(expId, files){
+    const arr = Array.from(files||[]); if(!arr.length) return {ok:0, fallas:[]};
+    const filas = [], subidos = [], fallas = [];
+    for(let i=0; i<arr.length; i++){
+      const f = arr[i];
+      cargando('Subiendo '+(arr.length>1 ? (i+1)+' de '+arr.length : 'el archivo'));
+      if(f.size > 50*1024*1024){ fallas.push(f.name+' (supera 50 MB)'); continue; }
+      const safe = (f.name||'archivo').replace(/[^a-zA-Z0-9._-]/g,'_');
+      const key = expId+'/'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'_'+safe;
+      const {error} = await sb.storage.from('carpetas').upload(key, f, {contentType:f.type||'application/octet-stream', upsert:false});
+      if(error){ fallas.push(f.name); continue; }
+      subidos.push(key);
+      filas.push({expediente_id:expId, nombre:f.name, tipo:f.type, tamanio:fmtSize(f.size), fecha:new Date().toISOString().slice(0,10), storage_key:key});
+    }
+    if(filas.length){
+      const {error} = await sb.from('archivos').insert(filas);
+      if(error){ await sb.storage.from('carpetas').remove(subidos); return {ok:0, fallas:arr.map(f=>f.name), error:error.message}; }
+      await logHist(expId,'archivo', filas.length===1 ? 'Archivo agregado: '+filas[0].nombre : filas.length+' archivos agregados');
+    }
+    return {ok:filas.length, fallas};
+  }
+  procesarArchivos = async function(expId, files){
+    if(!files || !files.length) return;
+    if(!navigator.onLine){ showToast('Sin conexión: no se pueden subir archivos ahora', true); return; }
+    const lista = Array.from(files);
+    document.querySelectorAll('#exp-detail input[type=file]').forEach(i=>{ try{ i.value = ''; }catch(_){ } });
+    showLoading(true);
+    let r;
+    try{ r = await subirA(expId, lista); } finally { cargando('Cargando...'); }
+    await loadExpedientes();
+    if(!refrescarArchivos(expId)){ const e = expedientes.find(x=>x.id===expId); if(e) showDetailView(e); }
+    showLoading(false);
+    if(r.error) showToast('No se pudo guardar: '+r.error, true);
+    else if(r.fallas.length) showToast((r.ok ? plural(r.ok,'archivo subido','archivos subidos')+'. ' : '')+'No se pudo subir: '+r.fallas.join(', '), true);
+    else showToast(plural(r.ok,'archivo agregado','archivos agregados')+'. Podés seguir subiendo.');
+  };
+  subirArchivo = async function(expId, input){ const fs = Array.from(input.files||[]); try{ input.value = ''; }catch(_){ } await procesarArchivos(expId, fs); };
+  dzDrop = async function(ev, id){ ev.preventDefault(); const dz = $('dz-'+id); if(dz) dz.classList.remove('dz-active'); await procesarArchivos(id, ev.dataTransfer.files); };
+  eliminarArchivo = async function(archId, expId){
+    const e0 = expedientes.find(x=>x.id===expId), a = e0 && (e0.archivos||[]).find(x=>x.id===archId);
+    if(!confirm('¿Eliminar el archivo'+(a && a.nombre ? ' "'+a.nombre+'"' : '')+'? No se puede deshacer.')) return;
+    showLoading(true);
+    let key = a && a.storage_key || null;
+    if(!key){ const {data} = await sb.from('archivos').select('storage_key').eq('id',archId).single(); key = data && data.storage_key || null; }
+    const {error} = await sb.from('archivos').delete().eq('id',archId);
+    if(error){ showLoading(false); showToast('No se pudo eliminar el archivo', true); return; }
+    if(key) await sb.storage.from('carpetas').remove([key]);
+    await logHist(expId,'archivo','Archivo eliminado'+(a && a.nombre ? ': '+a.nombre : ''));
+    await loadExpedientes();
+    if(!refrescarArchivos(expId)){ const e = expedientes.find(x=>x.id===expId); if(e) showDetailView(e); }
+    showLoading(false); showToast('Archivo eliminado');
+  };
+
+  /* ============ Archivos al crear una carpeta ============ */
+  const secArch = document.querySelector('#ov-exp .modal-body');
+  if(secArch){
+    secArch.insertAdjacentHTML('beforeend',
+      '<div class="form-section nc-archivos" data-paso="0"><div class="form-section-title">Fotos y documentos (opcional)</div>'+
+      '<label class="es-drop" id="nc-drop">'+ico(I_CLIP,22)+'<b>Adjuntar fotos o documentos</b><span>DNI, cédula, póliza, denuncia, fotos del hecho. Se suben al guardar la carpeta.</span><input type="file" id="nc-file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt" style="display:none"></label>'+
+      '<div id="nc-lista"></div></div>');
+  }
+  let ncArchivos = [];
+  function ncPintar(){
+    const el = $('nc-lista'); if(!el) return;
+    el.innerHTML = ncArchivos.map((f,i)=>'<div class="nc-arch"><span>'+h(f.name)+'</span><em>'+fmtSize(f.size)+'</em><button type="button" class="close-btn" onclick="ncQuitar('+i+')" aria-label="Quitar">'+ico(I_X,14)+'</button></div>').join('');
+  }
+  window.ncQuitar = function(i){ ncArchivos.splice(i,1); ncPintar(); };
+  if($('nc-file')){
+    $('nc-file').addEventListener('change', ev=>{ ncArchivos.push(...Array.from(ev.target.files||[])); ev.target.value = ''; ncPintar(); });
+    const d = $('nc-drop');
+    d.addEventListener('dragover', ev=>{ ev.preventDefault(); d.classList.add('over'); });
+    d.addEventListener('dragleave', ()=>d.classList.remove('over'));
+    d.addEventListener('drop', ev=>{ ev.preventDefault(); d.classList.remove('over'); ncArchivos.push(...Array.from(ev.dataTransfer.files||[])); ncPintar(); });
+  }
+  let abrirLuego = null;
+  window._trasCrearCarpeta = async function(id){
+    abrirLuego = id;
+    if(!ncArchivos.length) return;
+    const r = await subirA(id, ncArchivos);
+    cargando('Cargando...');
+    if(r.fallas.length || r.error) setTimeout(()=>showToast('La carpeta se guardó, pero no se pudo subir: '+(r.fallas.join(', ')||'los archivos'), true), 900);
+    ncArchivos = []; ncPintar();
+  };
+  const _guardarExp7 = guardarExp;
+  guardarExp = async function(){
+    abrirLuego = null;
+    const r = await _guardarExp7.apply(this, arguments);
+    if(abrirLuego){ const id = abrirLuego; abrirLuego = null; ss.del('lena-bor-nueva'); goToDetail(id); }
+    return r;
+  };
+
+  /* ============ Borradores: lo escrito no se pierde si la pagina se recarga ============ */
+  const CAMPOS_DET = /^(notas-txt-|referido-|resumen-txt-)/;
+  document.addEventListener('input', ev=>{
+    const el = ev.target; if(!el || !el.id) return;
+    if(CAMPOS_DET.test(el.id) && el.closest('#exp-detail')) ss.set('lena-bor-'+el.id, el.value);
+    else if(el.closest('#ov-exp') && el.type!=='file') guardarForm('ov-exp','lena-bor-nueva');
+    else if(el.closest('#ov-editar') && el.type!=='file' && editandoId) guardarForm('ov-editar','lena-bor-editar-'+editandoId);
+  }, true);
+  document.addEventListener('change', ev=>{ const el = ev.target; if(!el || el.type==='file') return; if(el.closest && el.closest('#ov-exp')) guardarForm('ov-exp','lena-bor-nueva'); else if(el.closest && el.closest('#ov-editar') && editandoId) guardarForm('ov-editar','lena-bor-editar-'+editandoId); }, true);
+  function guardarForm(ovId, clave){
+    const datos = {}; document.querySelectorAll('#'+ovId+' input[id], #'+ovId+' select[id], #'+ovId+' textarea[id]').forEach(el=>{ if(el.type!=='file' && el.type!=='checkbox') datos[el.id] = el.value; else if(el.type==='checkbox') datos[el.id] = el.checked; });
+    ss.set(clave, JSON.stringify({ts:Date.now(), datos}));
+  }
+  function restaurarForm(clave){
+    let b = null; try{ b = JSON.parse(ss.get(clave)||'null'); }catch(_){ }
+    if(!b || !b.datos) return false;
+    let algo = false;
+    Object.keys(b.datos).forEach(id=>{ const el = $(id); if(!el) return; if(el.type==='checkbox') el.checked = !!b.datos[id]; else if(String(b.datos[id]||'')!==String(el.value||'')){ el.value = b.datos[id]; if(b.datos[id]) algo = true; } });
+    return algo;
+  }
+  const _openExpModal7 = openExpModal;
+  openExpModal = function(){
+    const r = _openExpModal7.apply(this, arguments);
+    if(restaurarForm('lena-bor-nueva')) showToast('Recuperamos los datos que estabas cargando');
+    ncPintar();
+    return r;
+  };
+  const _closeExpModal7 = closeExpModal;
+  closeExpModal = function(){ ss.del('lena-bor-nueva'); ncArchivos = []; ncPintar(); return _closeExpModal7.apply(this, arguments); };
+  let editandoId = null;
+  const _openEditarModal7 = openEditarModal;
+  openEditarModal = function(id){
+    editandoId = id;
+    const r = _openEditarModal7.apply(this, arguments);
+    if(restaurarForm('lena-bor-editar-'+id)) showToast('Recuperamos los cambios que no se habían guardado');
+    return r;
+  };
+  const _closeEditarModal7 = closeEditarModal;
+  closeEditarModal = function(){ if(editandoId) ss.del('lena-bor-editar-'+editandoId); editandoId = null; return _closeEditarModal7.apply(this, arguments); };
+
+  [['guardarNotas','notas-txt-','notas'],['guardarReferido','referido-','referido'],['guardarResumen','resumen-txt-','resumen']].forEach(([fn, pref, campo])=>{
+    const orig = window[fn]; if(typeof orig!=='function') return;
+    window[fn] = async function(id){
+      const r = await orig.apply(this, arguments);
+      const e = expedientes.find(x=>x.id===id), el = $(pref+id);
+      if(e && el && (e[campo]||'')===el.value) ss.del('lena-bor-'+pref+id);
+      return r;
+    };
+  });
+  guardarNotas = window.guardarNotas; guardarReferido = window.guardarReferido; guardarResumen = window.guardarResumen;
+
+  /* ============ Volver a la misma carpeta y al mismo lugar ============ */
+  function marcarUrl(id){
+    try{
+      const u = new URL(location.href);
+      if(id){ if(u.searchParams.get('exp')===id) return; u.searchParams.set('exp', id); }
+      else { if(!u.searchParams.has('exp')) return; u.searchParams.delete('exp'); }
+      history.replaceState(history.state, '', u.pathname+u.search+u.hash);
+    }catch(_){ }
+  }
+  const _showDetailView7 = showDetailView;
+  showDetailView = function(e){
+    const dv = $('exp-detail'), mismo = dv.classList.contains('open') && dv.dataset.exp===e.id;
+    let tipeado = [], y = 0;
+    if(mismo){
+      y = window.scrollY;
+      tipeado = [...dv.querySelectorAll('input[id], textarea[id]')].filter(el=>el.type!=='file' && el.type!=='checkbox' && el.value!==el.defaultValue).map(el=>[el.id, el.value]);
+    }
+    const r = _showDetailView7.apply(this, arguments);
+    dv.dataset.exp = e.id;
+    let recuperado = false;
+    dv.querySelectorAll('textarea[id], input[id]').forEach(el=>{
+      if(!CAMPOS_DET.test(el.id)) return;
+      const b = ss.get('lena-bor-'+el.id);
+      if(b!=null && b!==el.value){ el.value = b; recuperado = true; el.classList.add('con-borrador'); }
+      else if(b!=null) ss.del('lena-bor-'+el.id);
+    });
+    tipeado.forEach(([id, v])=>{ const el = $(id); if(el) el.value = v; });
+    if(mismo) requestAnimationFrame(()=>window.scrollTo(0, y));
+    if(recuperado && !mismo) showToast('Recuperamos texto que no se había guardado. Tocá Guardar para conservarlo.');
+    marcarUrl(e.id);
+    if(esJefe() && !dv.querySelector('.ex-borrar')){
+      dv.insertAdjacentHTML('beforeend','<div class="full-card ex-borrar"><div><div class="detail-card-title" style="margin-bottom:4px">Eliminar carpeta</div><div class="dt-texto" style="margin:0">La carpeta va a la papelera con todos sus datos. Se puede recuperar desde "Papelera y respaldo".</div></div>'+
+        '<button class="btn btn-danger" onclick="eliminarExp(\''+e.id+'\')">'+ico(I_BASURA,15)+'Eliminar esta carpeta</button></div>');
+    }
+    return r;
+  };
+  const _showListView7 = showListView;
+  showListView = function(){ marcarUrl(null); const dv = $('exp-detail'); if(dv) delete dv.dataset.exp; return _showListView7.apply(this, arguments); };
+  const _showView7 = showView;
+  showView = function(v){ if(v!=='expedientes') marcarUrl(null); return _showView7.apply(this, arguments); };
+
+  /* ============ Eliminar varias carpetas ============ */
+  const barra = document.querySelector('#exp-list .search-bar');
+  if(barra) barra.insertAdjacentHTML('beforeend','<button class="btn btn-outline exp-borrar-btn jefe-only" style="display:none" onclick="borrarAbrir()">'+ico(I_BASURA,15)+'Eliminar carpetas</button>');
+  document.body.insertAdjacentHTML('beforeend',
+    '<div class="overlay" id="ov-borrar" onclick="if(event.target.id===\'ov-borrar\')borrarCerrar()"><div class="modal" style="max-width:680px">'+
+    '<div class="modal-header"><div class="modal-title">Eliminar carpetas</div><button class="close-btn" onclick="borrarCerrar()" aria-label="Cerrar">'+ico(I_X,18)+'</button></div>'+
+    '<div class="modal-body">'+
+      '<div class="dt-texto">Elegí una por una las carpetas que querés eliminar. Van a la papelera y se pueden recuperar desde "Papelera y respaldo".</div>'+
+      '<div class="search-wrap"><svg class="search-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="search-input" id="bo-q" placeholder="Buscar por nombre, DNI, demandado, expediente" autocomplete="off"></div>'+
+      '<div class="xp-chips" id="bo-est"></div>'+
+      '<div class="xp-acciones"><button class="xp-link" onclick="borrarMarcar(true)">Marcar las que se ven</button><button class="xp-link" onclick="borrarMarcar(false)">Desmarcar las que se ven</button><button class="xp-link" onclick="borrarLimpiar()">Quitar todas</button><span class="xp-cuenta" id="bo-cuenta"></span></div>'+
+      '<div class="xp-lista" id="bo-lista"></div>'+
+    '</div>'+
+    '<div class="modal-footer"><button class="btn btn-outline" onclick="borrarCerrar()">Cancelar</button><button class="btn btn-danger" id="bo-btn" onclick="borrarConfirmar()"></button></div></div></div>');
+  const bo = {sel:new Set(), q:'', est:''};
+  function boVisibles(){ const q = norm(bo.q); return expedientes.filter(e=>(!bo.est || e.estado===bo.est) && (!q || [e.nombre,e.demandado,e.dni,e.seguro,e.nroexp,e.dominio,e.asignado && e.asignado.nombre].some(f=>norm(f).includes(q)))); }
+  function boPintar(){
+    $('bo-est').innerHTML = [''].concat(ESTADOS).map(s=>'<button class="xp-chip'+(bo.est===s?' on':'')+'" onclick="borrarEstado(\''+s+'\')">'+(s||'Todos los estados')+'</button>').join('');
+    const vis = boVisibles();
+    $('bo-lista').innerHTML = vis.length ? vis.map(e=>'<label class="xp-row'+(bo.sel.has(e.id)?' on':'')+'"><input type="checkbox" data-id="'+e.id+'"'+(bo.sel.has(e.id)?' checked':'')+'>'+
+      '<span class="xp-row-main"><b>'+h(e.nombre||'Sin nombre')+'</b><span>'+h([ref(e), e.demandado && ('c/ '+e.demandado), e.asignado && e.asignado.nombre].filter(Boolean).join(' · '))+'</span></span>'+estadoBadge(e.estado)+'</label>').join('')
+      : '<div class="cmdk-empty">Ninguna carpeta coincide con la búsqueda.</div>';
+    boContar();
+  }
+  function boContar(){
+    const n = bo.sel.size;
+    $('bo-cuenta').textContent = plural(n,'elegida','elegidas');
+    $('bo-btn').innerHTML = ico(I_BASURA,15)+(n ? 'Eliminar '+plural(n,'carpeta') : 'Elegí al menos una carpeta');
+    $('bo-btn').disabled = !n;
+  }
+  $('bo-q').addEventListener('input', ev=>{ bo.q = ev.target.value; boPintar(); });
+  $('bo-lista').addEventListener('change', ev=>{ const i = ev.target; if(!i.dataset.id) return; i.checked ? bo.sel.add(i.dataset.id) : bo.sel.delete(i.dataset.id); i.closest('.xp-row').classList.toggle('on', i.checked); boContar(); });
+  window.borrarAbrir = function(){
+    if(!esJefe()) return;
+    if(window._soloLectura || !navigator.onLine){ showToast('Para eliminar carpetas necesitás conexión', true); return; }
+    bo.sel.clear(); bo.q = ''; bo.est = ''; $('bo-q').value = '';
+    boPintar(); $('ov-borrar').classList.add('open');
+  };
+  window.borrarCerrar = function(){ $('ov-borrar').classList.remove('open'); };
+  window.borrarEstado = function(s){ bo.est = s; boPintar(); };
+  window.borrarMarcar = function(v){ boVisibles().forEach(e=> v ? bo.sel.add(e.id) : bo.sel.delete(e.id)); boPintar(); };
+  window.borrarLimpiar = function(){ bo.sel.clear(); boPintar(); };
+  window.borrarConfirmar = async function(){
+    const ids = [...bo.sel]; if(!ids.length) return;
+    const nombres = ids.map(id=>(expedientes.find(e=>e.id===id)||{}).nombre).filter(Boolean);
+    if(!confirm('¿Eliminar '+plural(ids.length,'carpeta')+'?\n\n'+nombres.slice(0,8).join('\n')+(nombres.length>8 ? '\ny '+(nombres.length-8)+' más' : '')+'\n\nVan a la papelera y se pueden recuperar.')) return;
+    const btn = $('bo-btn'); btn.disabled = true; btn.innerHTML = '<div class="spinner spinner-w"></div> Eliminando';
+    const ahora = new Date().toISOString();
+    let error = null;
+    for(let i=0; i<ids.length && !error; i+=50){
+      ({error} = await sb.from('expedientes').update({eliminado_at:ahora, eliminado_por:currentUser.id}).in('id', ids.slice(i,i+50)));
+    }
+    if(error){ boContar(); showToast('No se pudieron eliminar: '+error.message, true); return; }
+    ids.forEach(id=>logHist(id,'papelera','Carpeta enviada a la papelera'));
+    await loadExpedientes();
+    borrarCerrar(); bo.sel.clear();
+    if(currentView==='expedientes'){ const dv = $('exp-detail'); if(dv && dv.classList.contains('open') && ids.includes(dv.dataset.exp)) showListView(); else renderExp(); }
+    else if(currentView==='dashboard') renderDashboard();
+    showToast(plural(ids.length,'carpeta enviada','carpetas enviadas')+' a la papelera');
   };
 })();
 </script>
