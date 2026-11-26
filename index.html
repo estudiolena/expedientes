@@ -1398,6 +1398,10 @@ body.ed-abierto{overflow:hidden}
 }
 [data-mode=dark] .ed-hoja{background:#fff;color:#1a1a1a}
 [data-mode=dark] .es-carp-ico{color:var(--gold-light)}
+
+/* visor: boton Volver */
+.docview-back{background:#c9a84c;color:#04050c;border-color:#c9a84c;flex-shrink:0}
+.docview-back:hover{background:#d8b95c}
 </style>
 </head>
 <body>
@@ -1987,7 +1991,8 @@ body.ed-abierto{overflow:hidden}
 </div>
 <div class="docview" id="docview">
   <div class="docview-bar">
-    <div class="docview-title" id="docview-title"></div>
+    <button class="docview-btn docview-back" onclick="cerrarDoc()" aria-label="Volver al expediente"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Volver</button>
+    <div class="docview-title" id="docview-title" style="flex:1;min-width:0"></div>
     <div class="docview-actions">
       <button class="docview-btn" id="docview-dl" onclick="descargarDocActual()">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -3312,6 +3317,7 @@ function abrirFoto(src, nombre, expId, archId) {
   const dl = document.getElementById('lightbox-download');
   if(dl) dl.style.display = _fotoActual ? '' : 'none';
   document.getElementById('lightbox').classList.add('open');
+  visorPush();
 }
 function descargarFotoActual(){ if(_fotoActual) descargarArchivo(_fotoActual.expId, _fotoActual.archId); }
 function verImagen(expId, archId){
@@ -3344,6 +3350,7 @@ async function verArchivo(expId, archId){
   document.getElementById('docview-title').textContent=a.nombre||'Documento';
   const body=document.getElementById('docview-body');
   document.getElementById('docview').classList.add('open');
+  visorPush();
   body.innerHTML='<div class="docview-spin"><div class="sp"></div>Abriendo…</div>';
   try{
     if(tipo.includes('pdf')||nombre.endsWith('.pdf')){
@@ -3371,7 +3378,7 @@ async function verArchivo(expId, archId){
     body.innerHTML='<div class="docview-msg">No se pudo generar la vista previa. Podés descargar el archivo con el botón de arriba.</div>';
   }
 }
-function cerrarDoc(){ document.getElementById('docview').classList.remove('open'); document.getElementById('docview-body').innerHTML=''; _docActual=null; }
+function cerrarDoc(desdeAtras){ if(!desdeAtras && !document.getElementById('lightbox').classList.contains('open')) visorPop(); document.getElementById('docview').classList.remove('open'); document.getElementById('docview-body').innerHTML=''; _docActual=null; }
 function descargarDocActual(){ if(_docActual) descargarArchivo(_docActual.expId,_docActual.archId); }
 async function descargarArchivo(expId, archId){
   const e = expedientes.find(x=>x.id===expId);
@@ -3390,7 +3397,12 @@ async function descargarArchivo(expId, archId){
     document.body.appendChild(link); link.click(); link.remove();
   }catch(err){ showToast('No se pudo descargar el archivo.'); }
 }
-function cerrarFoto() {
+var _visorHist=false;
+function visorPush(){ if(_visorHist) return; try{ history.pushState({visor:1},'',location.href); _visorHist=true; }catch(_){ } }
+function visorPop(){ if(!_visorHist) return; _visorHist=false; try{ history.back(); }catch(_){ } }
+window.addEventListener('popstate', ()=>{ if(_visorHist){ _visorHist=false; cerrarFoto(true); cerrarDoc(true); } });
+function cerrarFoto(desdeAtras) {
+  if(!desdeAtras && !document.getElementById('docview').classList.contains('open')) visorPop();
   document.getElementById('lightbox').classList.remove('open');
   document.getElementById('lightbox-img').src = '';
 }
