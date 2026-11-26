@@ -1,5 +1,5 @@
 /* Estudio Lena & Asociados: uso sin conexion */
-const V = 'lena-v1';
+const V = 'lena-v2';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './assets/icono-app-192.png', './assets/icono-app-512.png'];
 const CDN = ['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'];
 const ES_CDN = /(^|\.)(cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com|fonts\.googleapis\.com|fonts\.gstatic\.com)$/;
